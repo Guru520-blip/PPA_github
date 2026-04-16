@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "name": "CleanSpark – AI Pivot Infrastructure",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 200,
+    "preferredRegions": ["Texas Permian", "Texas West ERCOT", "North Dakota Bakken"],
+    "keyPain": "Post-halving BTC economics require AI co-location or HPC to justify existing power contracts; 12-month window to transition before shareholder pressure peaks.",
+    "contactEmail": "ir@cleanspark.com",
+    "contactPhone": "+1 702-851-7250",
+    "website": "https://www.cleanspark.com",
+    "notes": "Operates 20+ sites across US. Existing power contracts 3.5-5¢. Seeking GPU co-lo partners or AI inference infrastructure deals. Has operational expertise in managing modular compute at scale. Publicly traded – transparent about AI pivot."
+  },
+  {
+    "id": 2,
+    "name": "Microsoft Azure – Hyperscale Data Centers",
+    "type": "AI Hyperscaler",
+    "neededMW": 1000,
+    "preferredRegions": ["Texas Permian", "Texas West ERCOT", "Paraguay Itaipu", "Ethiopia GERD", "Iceland Reykjavik"],
+    "keyPain": "AI infrastructure demand (Copilot, OpenAI partnership) requires 5-10 GW of new capacity by 2027; MISO/PJM/ERCOT interconnection queues 3-5 years; needs alternative fast-track paths.",
+    "contactEmail": "datacenterdev@microsoft.com",
+    "contactPhone": "+1 425-882-8080",
+    "website": "https://www.microsoft.com/en-us/datacenters",
+    "notes": "Signed multiple nuclear PPAs (Constellation). Actively exploring sovereign/international power deals. ESG constraints: prefers renewable or carbon-neutral. Willing to fund infrastructure capex for long-term PPA (10-20 years). Decision cycle: 6-18 months for new regions."
+  },
+  {
+    "id": 3,
+    "name": "Google Cloud – Infrastructure Division",
+    "type": "AI Hyperscaler",
+    "neededMW": 800,
+    "preferredRegions": ["Paraguay Itaipu", "Iceland Reykjavik", "Ethiopia GERD", "Texas West ERCOT"],
+    "keyPain": "Gemini AI training requires massive new GPU clusters; 24/7 carbon-free energy commitment limits options; international markets with renewable surplus increasingly attractive.",
+    "contactEmail": "energy-infra@google.com",
+    "contactPhone": "+1 650-253-0000",
+    "website": "https://cloud.google.com/infrastructure",
+    "notes": "CFE (Carbon-Free Energy) 24/7 mandate: prefers hydro/renewable. Has sovereign partnerships in multiple countries. Willing to co-develop grid infrastructure. Paraguay and Ethiopia hydro align with CFE goals. Timeline: needs power by 2027 for next AI generation."
+  },
+  {
+    "id": 4,
+    "name": "Meta – AI Research & Infrastructure",
+    "type": "AI Hyperscaler",
+    "neededMW": 600,
+    "preferredRegions": ["Texas Permian", "Texas West ERCOT", "Paraguay Itaipu"],
+    "keyPain": "Llama model training and inference requires rapid compute expansion; North American power costs eating into margins; exploring international low-cost power zones.",
+    "contactEmail": "infra-partnerships@meta.com",
+    "contactPhone": "+1 650-543-4800",
+    "website": "https://about.meta.com/metaverse/",
+    "notes": "Building 5 GW+ of new AI infrastructure globally. Less constrained by 100% renewable than Google. Open to BTM gas if cost competitive. Paraguay hydro attractive for Latin America training deployments. Decision cycle: faster than Microsoft, more pragmatic."
+  },
+  {
+    "id": 5,
+    "name": "HIVE Digital – Paraguay AI Expansion",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 150,
+    "preferredRegions": ["Paraguay Itaipu"],
+    "keyPain": "AI GPU hosting business rapidly growing; current ANDE power block insufficient for expansion; needs additional hydro allocation urgently to capture AI co-lo market.",
+    "contactEmail": "investors@hivedigital.com",
+    "contactPhone": "+1 604-681-8900",
+    "website": "https://www.hivedigital.com",
+    "notes": "Already operating in Paraguay – fastest to expand. Has existing land, fiber, cooling infrastructure. AI GPU hosting revenues 3-5x BTC mining. Needs 100-200 MW additional ANDE allocation. Well-connected with ANDE officials. Best-fit partner for ANDE surplus blocks."
+  },
+  {
+    "id": 6,
+    "name": "TeraWulf – Nuclear & Hydro Power Seeker",
+    "type": "Hybrid Compute",
+    "neededMW": 300,
+    "preferredRegions": ["Texas West ERCOT", "Alberta Canada", "North Dakota Bakken"],
+    "keyPain": "Operational nuclear-adjacent sites need additional low-cost power for AI/HPC expansion; existing Nautilus joint venture model to replicate with hydro/gas sources.",
+    "contactEmail": "ir@terawulf.com",
+    "contactPhone": "+1 800-841-9249",
+    "website": "https://www.terawulf.com",
+    "notes": "Publicly traded. Strong ESG story with nuclear. Actively seeking 300+ MW for HPC/AI expansion in 2026. Open to gas BTM if bundled with renewable credits. Prefers North America for regulatory comfort. Board-approved AI pivot strategy."
+  },
+  {
+    "id": 7,
+    "name": "Applied Digital – HPC Data Center Operator",
+    "type": "Hybrid Compute",
+    "neededMW": 400,
+    "preferredRegions": ["Texas Permian", "North Dakota Bakken", "Alberta Canada"],
+    "keyPain": "Rapid HPC/AI data center growth requires sub-5¢ power; ERCOT congestion in target zones delaying projects; North Dakota and Texas Permian BTM gas ideal fit for modular deployments.",
+    "contactEmail": "ir@applieddigital.com",
+    "contactPhone": "+1 214-489-4488",
+    "website": "https://www.applieddigital.com",
+    "notes": "Specialty: modular AI data centers at energy source. Business model aligned with BTM gas operators. Currently building 100 MW HPC clusters. Seeking 3-5 more sites in 2026. Strong balance sheet post-NVIDIA GPU demand. Fast decision cycle (3-6 months)."
+  },
+  {
+    "id": 8,
+    "name": "Core Scientific – AI Infrastructure Post-BTC",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 250,
+    "preferredRegions": ["Texas Permian", "Texas West ERCOT", "Texas South"],
+    "keyPain": "Chapter 11 exit focused on CoreWeave HPC hosting deals; needs low-cost power to be competitive on AI co-location margins; existing Texas sites face high ERCOT prices.",
+    "contactEmail": "ir@corescientific.com",
+    "contactPhone": "+1 512-402-5233",
+    "website": "https://www.corescientific.com",
+    "notes": "CoreWeave partnership: 12-year HPC hosting deal confirmed. Needs 500+ MW total; 250 MW urgently needed at sub-5¢. Texas BTM gas ideal – avoids ERCOT spot price volatility. Willing to bring own GPU infrastructure; just needs the power. Fast-track decision: Q2 2026."
+  },
+  {
+    "id": 9,
+    "name": "Iris Energy – Renewables-First AI Computing",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 180,
+    "preferredRegions": ["Alberta Canada", "Iceland Reykjavik", "Paraguay Itaipu"],
+    "keyPain": "100% renewable mandate for ESG reporting; existing renewable sites near capacity; seeking new international hydro/wind PPA for AI compute expansion.",
+    "contactEmail": "ir@irisenergy.co",
+    "contactPhone": "+1 604-806-5800",
+    "website": "https://www.irisenergy.co",
+    "notes": "Strong ESG profile: only renewable power. AI GPU hosting business growing 200% YoY. Ideal fit for Iceland, Paraguay, or Alberta renewable surplus. Has experienced team for international power deals. Open to JV structure if power provider invests in infrastructure."
+  },
+  {
+    "id": 10,
+    "name": "Crusoe Energy – Flare Gas to AI Pioneer",
+    "type": "Hybrid Compute",
+    "neededMW": 120,
+    "preferredRegions": ["Texas Permian", "North Dakota Bakken"],
+    "keyPain": "Own flare gas model partially fills need; seeking additional gas sites for AI training cluster expansion beyond current captive wells; wants third-party gas supply agreements.",
+    "contactEmail": "info@crusoecloud.com",
+    "contactPhone": "+1 720-370-1633",
+    "website": "https://www.crusoecloud.com",
+    "notes": "Pioneered BTM flare gas computing. Has proprietary tech for modular mobile data centers. Actively seeking additional gas well partnerships for 120+ MW expansion. Model: pay gas operators per MMBtu + revenue share. Can deploy in 6-9 months. Best fit for Permian/Bakken stranded gas."
+  }
+]
