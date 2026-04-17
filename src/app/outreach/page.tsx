@@ -72,9 +72,9 @@ function OutreachContent() {
         <p className="text-gray-400 text-sm mt-0.5">Personalized emails, LinkedIn messages, and call scripts for both sides</p>
       </div>
 
-      <div className="flex items-start gap-2 rounded-lg bg-amber-900/20 border border-amber-800/40 p-3">
-        <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
-        <p className="text-xs text-amber-300">All contact details are placeholders only. Verify all emails/phones officially before outreach. This tool generates templates for broker guidance only.</p>
+      <div className="flex items-start gap-2 rounded-lg bg-blue-900/20 border border-blue-800/40 p-3">
+        <AlertTriangle className="h-4 w-4 text-blue-400 shrink-0 mt-0.5" />
+        <p className="text-xs text-blue-300">Contacts are researched from public sources (LinkedIn, IR pages, official websites). Verify before outreach — decision-makers change. Templates use real buyer-type pricing intelligence, not generic thresholds. Engage attorneys before any commitment.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

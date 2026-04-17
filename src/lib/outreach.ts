@@ -1,171 +1,277 @@
-import { Supplier, Seeker, OutreachTemplate } from "./types";
+import { Supplier, Seeker, OutreachTemplate, BUYER_PRICING } from "./types";
 
 const BROKER_NAME = "PowerMatch Advisors";
 const BROKER_EMAIL = "deals@powermatch.io";
 
+// --- Urgency triggers mapped to supplier type / region (dynamic, not hardcoded) ---
+function urgencyTrigger(supplier: Supplier): string {
+  if (supplier.type.includes("BTM") && supplier.region.includes("Permian"))
+    return "EPA flaring cap enforcement beginning Q3 2026 creates a narrow window before regulatory fines and potential well shut-ins";
+  if (supplier.type.includes("BTM") && supplier.region.includes("Bakken"))
+    return "NDIC flaring regulations with production shut-in threats make Q2 2026 a critical monetization window";
+  if (supplier.type.includes("Hydro") && supplier.region.includes("Paraguay"))
+    return "Paraguay's Law 6.207 data-center tariff window is active — first-mover advantage before competing allocations are committed";
+  if (supplier.type.includes("Hydro") && supplier.region.includes("Ethiopia"))
+    return "GERD reservoir surplus peaks in 2026 — USD-denominated off-take agreements are being prioritized by EEP before domestic demand absorbs the capacity";
+  if (supplier.type.includes("Hydro") && supplier.region.includes("Iceland"))
+    return "Aluminum smelter offtake contracts expiring 2027 — replacement industrial load must be contracted by Q4 2026 to maintain project economics";
+  if (supplier.type.includes("Curtailment"))
+    return "Curtailment penalties and congestion pricing are at record levels — a committed industrial load eliminates negative pricing exposure immediately";
+  if (supplier.type.includes("Substation"))
+    return "Stranded substation carrying costs increase every quarter without an anchor tenant — each month without offtake erodes asset book value";
+  return "Grid interconnection queues are running 36-60 months — existing permitted infrastructure is the only fast-track path available to buyers in 2026";
+}
+
+// Dynamic pricing context based on buyer tier
+function pricingContext(seeker: Seeker, supplier: Supplier): string {
+  const profile = BUYER_PRICING[seeker.type] ?? BUYER_PRICING["Hybrid Compute"];
+  if (profile.tier === "hyperscaler")
+    return `${supplier.estimatedAllInCents}¢/kWh all-in — competitive vs. the 4-8¢ range hyperscalers are currently paying for fast-deployment renewable capacity globally`;
+  if (profile.tier === "miner")
+    return `${supplier.estimatedAllInCents}¢/kWh all-in — within the 2.5-4¢ band required for post-halving AI co-location economics`;
+  return `${supplier.estimatedAllInCents}¢/kWh all-in — aligned with HPC market comps of 3.5-5¢ seen in Applied Digital, TeraWulf, and CoreWeave deals`;
+}
+
+// What the seeker's AI/mining pivot means in revenue terms — makes it tangible
+function seekerRevenueContext(seeker: Seeker, supplier: Supplier): string {
+  const mw = Math.min(supplier.availableMW, seeker.neededMW);
+  if (seeker.type === "AI Hyperscaler")
+    return `${mw} MW of dedicated compute capacity, generating the equivalent of ${Math.round(mw * 8)}–${Math.round(mw * 12)} petaFLOP/s of training throughput for your AI workloads`;
+  if (seeker.type.includes("Miner"))
+    return `${mw} MW powering AI GPU co-location at $${(mw * 2.5).toFixed(0)}–$${(mw * 4).toFixed(0)}M annual revenue — versus $${(mw * 0.06).toFixed(0)}–$${(mw * 0.08).toFixed(0)}M from BTC mining at current prices`;
+  return `${mw} MW of HPC capacity generating $${(mw * 2.5).toFixed(0)}–$${(mw * 3.5).toFixed(0)}M annually at market GPU co-location rates`;
+}
+
+// ─────────────────────────────────────────────
+// OUTREACH TO SUPPLIER
+// ─────────────────────────────────────────────
 export function generateOutreachToSupplier(
   supplier: Supplier,
   seeker: Seeker,
   template: OutreachTemplate
 ): string {
-  const firstName = supplier.name.split("–")[0].trim().split(" ")[0];
+  const urgency = urgencyTrigger(supplier);
+  const pricing = pricingContext(seeker, supplier);
+  const mw = Math.min(supplier.availableMW, seeker.neededMW);
+  const contactName = supplier.keyContact?.split("–")[0].trim() ?? "Team";
 
   if (template === "cold-email") {
-    return `Subject: Long-Term Power Offtake Partnership – ${seeker.neededMW} MW Flexible Load for ${supplier.region}
+    return `Subject: ${mw} MW Offtake Ready – ${seeker.name} | ${supplier.region} | 90-Day Close
 
-Dear ${firstName} Team,
+Hi ${contactName},
 
-I hope this message finds you well. I am reaching out on behalf of ${BROKER_NAME} regarding a potential long-term power offtake arrangement that may directly address your current situation in ${supplier.region}.
+${urgency}.
 
-We represent a controlled high-density compute client — ${seeker.name} (${seeker.type}) — seeking ${seeker.neededMW} MW of firm or flexible power capacity with all-in pricing at or below ${supplier.estimatedAllInCents + 1}¢/kWh.
+We represent ${seeker.name} (${seeker.type}), a creditworthy operator with board-approved capex actively seeking ${seeker.neededMW} MW in ${seeker.preferredRegions.slice(0, 2).join(" / ")}. Your ${supplier.name} position is a direct match.
 
-**Why This Partnership Makes Sense for You:**
-Your current situation — ${supplier.keyPain} — presents a clear monetization opportunity through a structured Power Purchase Agreement (PPA). Our client offers:
-• Long-term offtake: 7–15 year agreement with price stability
-• Flexible/interruptible load profile: demand response capability adds grid value
-• Rapid deployment: modular compute infrastructure deployable within 12–18 months
-• No heavy capex requirement from your side
+What we're bringing to your table:
+• Committed offtaker: ${seeker.name} — ${seeker.notes.split(".")[0]}
+• Pricing: ${pricing}
+• Term: 10-year take-or-pay PPA (or gas supply agreement for BTM assets)
+• Load profile: Flexible/interruptible with demand response — adds grid value and curtailment protection
+• Timeline: Offtaker targets energization within 18 months of NCND — they have the capex, you provide the asset
 
-**About Our Client:**
-${seeker.notes}
+Your current situation — ${supplier.keyPain.split(";")[0]} — is exactly what this structure resolves: stable long-term offtake revenue without heavy new capex on your side.
 
-We are prepared to execute an NCND and proceed to a Site Teaser / LOI within 2 weeks of initial dialogue.
+Next step: We can send a one-page deal summary and NCND within 24 hours. No obligation until you've reviewed the counterparty details.
 
-Would you be available for a 30-minute call this week to explore fit?
-
-Best regards,
-${BROKER_NAME} Team
-${BROKER_EMAIL}
-
----
-DISCLAIMER: This is a guidance and introductory communication tool. All data, contacts, and tariff information should be independently verified. Engage licensed attorneys and engineers before executing any agreement.`;
-  }
-
-  if (template === "linkedin") {
-    return `Hi [Contact Name],
-
-I lead infrastructure partnerships at ${BROKER_NAME} and am reaching out because of your team's position in ${supplier.region}.
-
-Given ${supplier.keyPain.toLowerCase()}, I believe we have a highly relevant opportunity: a ${seeker.neededMW} MW flexible compute load client (${seeker.name}) actively seeking a long-term PPA in your region at competitive all-in pricing.
-
-This isn't speculative — our client has board-approved capital and a 12-month deployment mandate.
-
-Would a brief call make sense? Happy to share a one-page deal summary under NDA.
-
-— ${BROKER_NAME} | ${BROKER_EMAIL}
-
-[DISCLAIMER: Verify all details independently. Guidance tool only.]`;
-  }
-
-  // call-script
-  return `CALL SCRIPT – Outreach to ${supplier.name}
-Target Contact: Business Development / CEO / CFO
-Duration: 10–15 minutes
-
-OPENING (30 sec):
-"Good [morning/afternoon], this is [Your Name] from ${BROKER_NAME}. I'm reaching out specifically because of your operations in ${supplier.region} — I believe we have a time-sensitive opportunity that directly addresses [${supplier.keyPain.split(";")[0]}]. Do you have 5 minutes?"
-
-VALUE HOOK (1 min):
-"We represent ${seeker.name}, a ${seeker.type} actively seeking ${seeker.neededMW} MW of power capacity in your region. They have a board-approved mandate and capital to deploy — they're not waiting on committee approvals. The ask is simple: a 7–15 year PPA at pricing that works for both sides."
-
-PAIN ACKNOWLEDGMENT (1 min):
-"I understand your situation: ${supplier.keyPain}. This deal solves that — stable long-term offtake revenue, no heavy capex on your end, and a credible counterparty with real deployment experience."
-
-ASK:
-"Can we schedule a 30-minute call with your BD/legal team this week? I'll send over an NCND and one-page deal summary today."
-
-OBJECTION HANDLING:
-- "We already have customers": "Understood — our client can absorb surplus beyond existing commitments."
-- "What's your fee?": "Success-based only. We earn a fee per MW closed, disclosed in our MFPA. No upfront cost to you."
-- "Send email first": "Absolutely — what's the best email for your BD lead?"
-
-CLOSE:
-"Great. Expect our NCND and deal summary within the hour. Looking forward to connecting your team with ours."
-
----
-DISCLAIMER: This script is a guidance tool. Verify all representations. Engage legal counsel before commitments.`;
-}
-
-export function generateOutreachToSeeker(
-  supplier: Supplier,
-  seeker: Seeker,
-  template: OutreachTemplate
-): string {
-  const firstName = seeker.name.split("–")[0].trim().split(" ")[0];
-
-  if (template === "cold-email") {
-    return `Subject: Exclusive Power Access – ${supplier.availableMW} MW at ${supplier.estimatedAllInCents}¢/kWh | ${supplier.region} | <12 Month Deployment
-
-Dear ${firstName} Infrastructure Team,
-
-I am writing from ${BROKER_NAME} with an opportunity that may directly address your stated challenge: ${seeker.keyPain}.
-
-We have exclusive brokerage access to a ${supplier.type} power opportunity in ${supplier.region} — ${supplier.name} — offering:
-• ${supplier.availableMW} MW of available capacity (expandable)
-• All-in pricing: ${supplier.estimatedAllInCents}¢/kWh (below your 5¢ target)
-• Type: ${supplier.type}
-• Deployment timeline: Under 12–18 months (bypasses interconnection queue)
-• Infrastructure: Existing substation/generation assets — no greenfield queue
-
-**Why Now:**
-${supplier.keyPain} — this creates a seller's urgency that gives you negotiating leverage for long-term pricing. This window won't last.
-
-**About You:**
-We understand ${seeker.notes.split(".")[0]}. This opportunity aligns directly with that mandate.
-
-We can provide a full Site Teaser (non-circumventing) and execute NCND within days.
-
-Are you the right contact for power infrastructure partnerships, or should I reach your facilities/infrastructure team directly?
+Worth a 15-minute call this week?
 
 Best,
 ${BROKER_NAME}
 ${BROKER_EMAIL}
 
 ---
-DISCLAIMER: Guidance tool only. All pricing, capacity, and contact details must be independently verified. Engage licensed engineers and legal counsel before any commitment.`;
+DISCLAIMER: Guidance tool only. All data, contacts, pricing, and counterparty details must be independently verified. Engage licensed attorneys and engineers before any commitment. PowerMatch Advisors earns a success-based fee upon closing, disclosed in our MFPA.`;
   }
 
   if (template === "linkedin") {
-    return `Hi [Contact Name],
+    return `Hi ${contactName},
 
-${BROKER_NAME} here — I'm reaching out because your team's power infrastructure challenge is one I think we can help solve.
+I'm reaching out specifically because of your position in ${supplier.region} — ${urgency.split("—")[0].trim()}.
 
-We have access to ${supplier.availableMW} MW in ${supplier.region} at ${supplier.estimatedAllInCents}¢/kWh all-in — ${supplier.type}. Existing infrastructure, no grid queue, 12–18 month deployment path.
+We represent ${seeker.name}, a ${seeker.type} with board approval for ${seeker.neededMW} MW. Their requirement matches your asset almost exactly:
+→ ${mw} MW | ${supplier.estimatedAllInCents}¢/kWh | 10-year take-or-pay | 18-month energization
 
-Given ${seeker.keyPain.toLowerCase()}, the timing makes sense to explore this now.
+Not a cold inquiry — we have the NCND and deal summary ready to send today.
 
-Would a brief intro call work? I can share a site teaser under NDA within 24 hours.
+Worth a quick 15 min to see if the economics work for your team?
 
-— ${BROKER_NAME} | ${BROKER_EMAIL}
+${BROKER_NAME} | ${BROKER_EMAIL}
 
-[DISCLAIMER: All data subject to independent verification. Guidance tool only.]`;
+[Note: All data subject to independent verification.]`;
   }
 
   // call-script
-  return `CALL SCRIPT – Outreach to ${seeker.name}
-Target Contact: VP Infrastructure / Head of Data Centers / CTO Office
+  return `CALL SCRIPT — Outreach to ${supplier.name}
+Target: ${supplier.keyContact ?? "Business Development / CEO / CFO"}
+Best contact: ${supplier.contactPhone}
 Duration: 10–15 minutes
 
 OPENING (30 sec):
-"Hi, this is [Your Name] from ${BROKER_NAME}. I'm reaching out specifically about your power infrastructure expansion — we have an exclusive opportunity that bypasses the interconnection queue entirely. Do you have 5 minutes?"
+"Hi ${contactName}, this is [Your Name] from ${BROKER_NAME}.
+I'm calling specifically about your ${supplier.region} operations — ${urgency.split("—")[0].trim()}.
+Do you have 5 minutes?"
 
-VALUE HOOK (1 min):
-"We have ${supplier.availableMW} MW of ${supplier.type} capacity in ${supplier.region} at ${supplier.estimatedAllInCents}¢/kWh all-in. Existing infrastructure — no 3-year grid queue. Timeline: 12–18 months to energize. Given your stated need for rapid deployment at scale, this could be exactly what you're looking for."
+[If hesitant:] "I'll be brief — just want to see if a deal structure we have is relevant to you. If not, I'll let you go."
 
-PAIN ACKNOWLEDGMENT (1 min):
-"I know the challenge you're facing: ${seeker.keyPain}. The traditional utility queue path takes 3–5 years. This is different — existing assets, existing permits, motivated seller."
+VALUE HOOK (45 sec):
+"We represent ${seeker.name} — ${seeker.type}, board-approved capex, actively seeking ${seeker.neededMW} MW.
 
-ASK:
-"Can I send over a brief site teaser under NCND? It takes 10 minutes to review and will tell you quickly if this is worth a deeper conversation."
+They want: ${mw} MW from an asset like yours, 10-year take-or-pay, ${pricing}.
+They bring: All generation capex. You just provide the asset/gas stream.
+Timeline: 18 months to first MW. NCND this week, LOI within 60 days."
 
-OBJECTION HANDLING:
-- "We have a process": "Of course — this would go through your normal diligence. I just want to get you the teaser so your team can evaluate."
-- "We need X MW, you only have Y": "The site is expandable — let's discuss the full capacity roadmap on a call."
-- "What's your fee?": "Success-based, paid by the power provider. Zero cost to you."
+PAIN ACKNOWLEDGMENT (45 sec):
+"I understand your challenge: ${supplier.keyPain.split(";")[0]}.
+This deal structure solves that directly — ${seeker.name} absorbs your surplus,
+takes on generation capex, and signs long-term. Your revenue stabilizes without a new build."
+
+ASK (30 sec):
+"Two asks:
+1) Can I send you a one-page deal summary under NCND today?
+2) Who on your commercial/legal team should review it alongside you?"
+
+OBJECTIONS:
+Q: "We're not looking for power offtake right now"
+A: "Understood. This isn't requiring any investment from you — it's a buyer taking your existing surplus/gas stream at better economics than your current alternative. Just worth reviewing the one-pager."
+
+Q: "What's your fee?"
+A: "Success-based only. We earn a disclosed fee per MW upon closing — paid by the transaction, not upfront from you. Zero cost to your team until a deal closes."
+
+Q: "Send an email first"
+A: "Absolutely. What's the best email for your VP Commercial or CEO? I'll have NCND + summary over within 2 hours."
 
 CLOSE:
-"I'll send the NCND and teaser within the hour. Who on your legal team handles NDAs?"
+"I'll send the NCND and one-pager to [email] by [time today].
+Assuming it passes your first look — when would you have 30 minutes for a deeper dive?"
+[Write down: name, email, call-back time]
 
 ---
-DISCLAIMER: Script is a guidance tool only. Verify all representations independently.`;
+DISCLAIMER: Script is a guidance tool. Verify all representations. Engage legal counsel before commitments.`;
+}
+
+// ─────────────────────────────────────────────
+// OUTREACH TO SEEKER
+// ─────────────────────────────────────────────
+export function generateOutreachToSeeker(
+  supplier: Supplier,
+  seeker: Seeker,
+  template: OutreachTemplate
+): string {
+  const mw = Math.min(supplier.availableMW, seeker.neededMW);
+  const pricing = pricingContext(seeker, supplier);
+  const revenue = seekerRevenueContext(seeker, supplier);
+  const contactName = seeker.keyContact?.split("–")[0].trim() ?? "Team";
+  const profile = BUYER_PRICING[seeker.type] ?? BUYER_PRICING["Hybrid Compute"];
+
+  if (template === "cold-email") {
+    // Different angle by buyer type
+    const subjectLine = profile.tier === "hyperscaler"
+      ? `${supplier.availableMW} MW ${supplier.type} | ${supplier.region} | Bypasses Grid Queue | ${supplier.estimatedAllInCents}¢/kWh`
+      : profile.tier === "miner"
+      ? `${supplier.availableMW} MW @ ${supplier.estimatedAllInCents}¢ | ${supplier.region} | BTM Structure | AI Co-lo Ready`
+      : `Off-Market: ${mw} MW ${supplier.type} | ${supplier.region} | ${supplier.estimatedAllInCents}¢ All-In`;
+
+    return `Subject: ${subjectLine}
+
+Hi ${contactName},
+
+Your team's challenge is clear: ${seeker.keyPain.split(";")[0]}.
+
+We have exclusive brokerage access to an off-market power opportunity that addresses this directly:
+
+Asset: ${supplier.name}
+Region: ${supplier.region}
+Available: ${supplier.availableMW} MW (${supplier.type})
+Pricing: ${pricing}
+Deployment: Existing permitted infrastructure — energization in 12–18 months
+Grid queue: None. BTM or direct interconnect to existing substation.
+
+Why this is different from what you've already reviewed:
+The asset is operational or near-operational — not a 3-year development project. The power provider is motivated: ${supplier.keyPain.split(";")[0]}. That urgency gives you pricing leverage and execution certainty.
+
+What this delivers for your operations: ${revenue}.
+
+We can provide a full confidential site teaser (non-circumventing) and execute NCND within 48 hours. The supplier is holding exclusivity discussions for the next 60 days.
+
+Are you the right contact for power infrastructure partnerships, or should I connect with your facilities/infrastructure lead directly?
+
+${BROKER_NAME}
+${BROKER_EMAIL}
+
+---
+DISCLAIMER: Guidance tool only. All pricing, capacity, and contacts must be independently verified. This is not a solicitation or binding offer. Engage licensed engineers and legal counsel before any commitment.`;
+  }
+
+  if (template === "linkedin") {
+    return `Hi ${contactName},
+
+Your ${seeker.neededMW} MW requirement and ${seeker.keyPain.split(";")[0].toLowerCase()} — we may have a direct solution.
+
+We have access to ${supplier.availableMW} MW in ${supplier.region}:
+→ ${pricing}
+→ ${supplier.type} — existing infrastructure, no grid queue
+→ 12–18 month energization vs. 36–60 months via traditional interconnection
+
+${profile.tier === "hyperscaler" ? "100% renewable hydro — aligns with your CFE mandate." : profile.tier === "miner" ? "BTM structure: no ERCOT exposure, flexible load capability — ideal for your AI co-location model." : "Modular deployment-ready: your team can be operational within 18 months."}
+
+Not speculative — the supplier is actively seeking offtake and can move to NCND this week.
+
+Worth a 20-minute intro call?
+
+${BROKER_NAME} | ${BROKER_EMAIL}
+
+[Data subject to independent verification.]`;
+  }
+
+  // call-script
+  return `CALL SCRIPT — Outreach to ${seeker.name}
+Target: ${seeker.keyContact ?? "VP Infrastructure / Head of Data Centers / CTO Office"}
+Best contact: ${seeker.contactPhone}
+Duration: 10–15 minutes
+
+OPENING (30 sec):
+"Hi ${contactName}, this is [Your Name] from ${BROKER_NAME}.
+I'm reaching out because your team's power infrastructure expansion — specifically ${seeker.keyPain.split(";")[0].toLowerCase()} — is something we can help solve with an off-market asset.
+Do you have 5 minutes?"
+
+VALUE HOOK (60 sec):
+"We have brokerage access to ${supplier.availableMW} MW of ${supplier.type} in ${supplier.region}.
+
+The numbers: ${pricing}.
+The advantage: Existing infrastructure, no 36-month grid queue. Energization in 12–18 months.
+The seller situation: ${supplier.keyPain.split(";")[0]} — which gives you pricing leverage and execution certainty.
+
+For your operations: ${revenue}."
+
+PAIN ACKNOWLEDGMENT (45 sec):
+"I know the constraint you're navigating: ${seeker.keyPain.split(";")[0]}.
+Traditional utility paths are 3-5 years minimum. This is different — existing permitted asset, motivated seller, structured deal.
+${profile.tier === "hyperscaler" ? "And it's renewable — aligns with your 24/7 CFE reporting requirements." : profile.tier === "miner" ? "BTM structure means no ERCOT spot exposure — your AI co-location margins stay protected." : "Modular deployment means your GPU fleet is live before your competition finishes their grid application."}"
+
+ASK (30 sec):
+"Can I send you a two-page confidential site teaser today?
+It's non-circumventing, takes 10 minutes to review, and will tell you immediately whether this fits your criteria."
+
+OBJECTIONS:
+Q: "We have a process / existing pipeline"
+A: "Understood — this would go through your normal diligence. I want to get the teaser in your pipeline so your team can evaluate. Worst case, you have one more option. Best case, it fills a gap in your 2026 deployment roadmap."
+
+Q: "We need more than ${supplier.availableMW} MW"
+A: "The site is expandable — let's discuss the full capacity roadmap on a call. The initial block is ${supplier.availableMW} MW but the operator has adjacent capacity under discussion."
+
+Q: "What's your fee?"
+A: "Success-based, paid by the power provider when the deal closes. Zero cost to your team — you get best-efforts brokerage access at no charge."
+
+Q: "Send an email first"
+A: "Absolutely. Who on your legal team handles NDAs? I'll send the NCND and site teaser within 2 hours."
+
+CLOSE:
+"I'll send the NCND and teaser to [email] today.
+If your team sees fit — when would you have 45 minutes to discuss terms with our commercial team and the seller?"
+[Write down: name, email, call-back commitment with date/time]
+
+---
+DISCLAIMER: Script is a guidance tool. Verify all representations. Engage legal counsel before commitments.`;
 }
