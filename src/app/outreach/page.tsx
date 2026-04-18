@@ -8,7 +8,7 @@ import { generateOutreachToSupplierMulti, generateOutreachToSeekerMulti } from "
 import { matchSeekersToSupplier, matchSuppliersToSeeker } from "@/lib/matching";
 import { Button } from "@/components/ui/button";
 import { Toast, useToast } from "@/components/ui/toast";
-import { Mail, Link2, Phone, Copy, Download, AlertTriangle, Search, ExternalLink, CheckSquare, Square } from "lucide-react";
+import { Mail, Link2, Phone, Copy, Download, AlertTriangle, Search, ExternalLink, CheckSquare, Square, User } from "lucide-react";
 import { generatePDF } from "@/lib/pdfGenerator";
 
 const suppliers = suppliersData as Supplier[];
@@ -81,6 +81,70 @@ function ScoutPanel({ name, domain, company }: { name: string; domain: string; c
   );
 }
 
+function ContactCard({
+  entity,
+  label,
+  onCopy,
+}: {
+  entity: Supplier | Seeker;
+  label: string;
+  onCopy: (text: string, msg: string) => void;
+}) {
+  const parts = (entity.keyContact ?? "").split(/[–—]/);
+  const name = parts[0].trim() || entity.name;
+  const title = parts.slice(1).join("—").trim();
+  const email = (entity as Supplier).contactEmail ?? (entity as Seeker).contactEmail ?? "";
+  const altEmail = (entity as Supplier).contactEmailAlt ?? (entity as Seeker).contactEmailBD ?? "";
+  const phone = entity.contactPhone ?? "";
+  const linkedin = entity.keyContactLinkedIn ?? "";
+
+  return (
+    <div className="rounded-lg border border-yellow-700/40 bg-yellow-900/10 p-3 space-y-2">
+      <div className="flex items-center gap-1.5">
+        <User className="h-3.5 w-3.5 text-yellow-400 shrink-0" />
+        <span className="text-[10px] font-semibold text-yellow-300 uppercase tracking-wider">{label}</span>
+      </div>
+      <div>
+        <p className="text-sm font-semibold text-white leading-tight">{name}</p>
+        {title && <p className="text-[11px] text-gray-400 mt-0.5">{title}</p>}
+      </div>
+      <div className="space-y-1">
+        {email && (
+          <div className="flex items-center gap-1.5 min-w-0">
+            <Mail className="h-3 w-3 text-gray-500 shrink-0" />
+            <a href={`mailto:${email}`} className="text-xs text-blue-400 hover:underline font-mono truncate flex-1">{email}</a>
+            <button onClick={() => onCopy(email, "Email copied!")} className="text-gray-600 hover:text-gray-300 shrink-0 transition-colors">
+              <Copy className="h-3 w-3" />
+            </button>
+          </div>
+        )}
+        {altEmail && (
+          <div className="flex items-center gap-1.5 min-w-0">
+            <Mail className="h-3 w-3 text-gray-600 shrink-0" />
+            <a href={`mailto:${altEmail}`} className="text-[11px] text-gray-500 hover:underline font-mono truncate flex-1">{altEmail}</a>
+            <button onClick={() => onCopy(altEmail, "Alt email copied!")} className="text-gray-600 hover:text-gray-300 shrink-0 transition-colors">
+              <Copy className="h-3 w-3" />
+            </button>
+          </div>
+        )}
+        {phone && (
+          <div className="flex items-center gap-1.5">
+            <Phone className="h-3 w-3 text-gray-500 shrink-0" />
+            <a href={`tel:${phone}`} className="text-xs text-gray-400 hover:underline font-mono">{phone}</a>
+          </div>
+        )}
+        {linkedin && (
+          <div className="flex items-center gap-1.5">
+            <Link2 className="h-3 w-3 text-gray-500 shrink-0" />
+            <a href={linkedin} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:underline truncate">LinkedIn Profile</a>
+            <ExternalLink className="h-2.5 w-2.5 text-gray-600 shrink-0" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function OutreachContent() {
   const searchParams = useSearchParams();
   const { toast, show, dismiss } = useToast();
@@ -140,6 +204,11 @@ function OutreachContent() {
   async function handleCopy() {
     await navigator.clipboard.writeText(generated);
     show("Copied to clipboard!", "success");
+  }
+
+  async function handleCopyText(text: string, msg: string) {
+    await navigator.clipboard.writeText(text);
+    show(msg, "success");
   }
 
   async function handleDownloadPDF() {
@@ -281,6 +350,11 @@ function OutreachContent() {
 
         {/* Output */}
         <div className="lg:col-span-2 space-y-3">
+          <ContactCard
+            entity={recipient === "supplier" ? supplier : seeker}
+            label={recipient === "supplier" ? "Sending To — Supplier Contact" : "Sending To — Seeker Contact"}
+            onCopy={handleCopyText}
+          />
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-white text-sm">
               {TEMPLATES.find((t) => t.value === template)?.label}

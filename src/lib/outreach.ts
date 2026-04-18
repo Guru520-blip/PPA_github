@@ -3,54 +3,95 @@ import { Supplier, Seeker, OutreachTemplate, BUYER_PRICING } from "./types";
 const BROKER_NAME = "PowerMatch Advisors";
 const BROKER_EMAIL = "deals@powermatch.io";
 
-// ─── Urgency triggers ───────────────────────────────────────────────────────
+function firstName(contact: string | undefined): string {
+  return contact?.split("–")[0].split("—")[0].trim().split(/\s+/)[0] ?? "there";
+}
+
+// ─── Urgency triggers ──────────────────────────────────────────────────────
 function urgencyTrigger(supplier: Supplier): string {
-  if (supplier.type.includes("BTM") && supplier.region.includes("Permian"))
-    return "EPA flaring cap enforcement beginning Q3 2026 creates a narrow window before regulatory fines and potential well shut-ins";
-  if (supplier.type.includes("BTM") && supplier.region.includes("Bakken"))
-    return "NDIC flaring regulations with production shut-in threats make Q2 2026 a critical monetization window";
-  if (supplier.type.includes("BTM") && supplier.region.includes("Appalachia"))
-    return "EPA methane fee escalating quarterly — venting penalty exposure grows every month without a committed offtake partner";
-  if (supplier.type.includes("Hydro") && supplier.region.includes("Paraguay"))
-    return "Paraguay's Law 6.207 data-center tariff window is active — first-mover advantage before competing allocations are committed";
-  if (supplier.type.includes("Hydro") && supplier.region.includes("Ethiopia"))
-    return "GERD reservoir surplus peaks in 2026 — USD-denominated off-take agreements are being prioritized by EEP before domestic demand absorbs the capacity";
-  if (supplier.type.includes("Hydro") && supplier.region.includes("Iceland"))
+  const t = supplier.type.toLowerCase();
+  const r = supplier.region.toLowerCase();
+  if (t.includes("btm") && r.includes("permian"))
+    return "EPA flaring enforcement tightening Q3 2026 creates a closing window before shut-in risk materializes";
+  if (t.includes("btm") && r.includes("bakken"))
+    return "NDIC flaring regulations with production shut-in provisions make Q2 2026 a critical monetization window";
+  if (t.includes("btm") && r.includes("appalachia"))
+    return "EPA methane fee escalating quarterly — venting penalty exposure grows each month without committed offtake";
+  if (t.includes("hydro") && r.includes("paraguay"))
+    return "Paraguay's Law 6.207 data-center tariff window is active — first-mover allocation advantage closes before year-end";
+  if (t.includes("hydro") && r.includes("ethiopia"))
+    return "GERD reservoir surplus peaks in 2026 — USD-denominated agreements are being prioritized before domestic demand absorbs available capacity";
+  if (t.includes("hydro") && r.includes("iceland"))
     return "Aluminum smelter offtake contracts expiring 2027 — replacement industrial load must be contracted by Q4 2026 to maintain project economics";
-  if (supplier.type.includes("Hydro") && supplier.region.includes("Malaysia"))
-    return "RECODA's SCORE corridor industrial allocation windows close Q3 2026 — anchor tenant slots for 2027 energization are being assigned now";
-  if (supplier.type.includes("Hydro") && supplier.region.includes("Bhutan"))
-    return "Royal Government of Bhutan's 25-year PPA offer window is limited — carbon-negative ESG premium is only available to early committed counterparties";
-  if (supplier.type.includes("Hydro") && supplier.region.includes("Kenya"))
-    return "KenGen's industrial PPA window opens Q2 2026 ahead of the Olkaria IV expansion — early movers get preferential USD tariff terms";
-  if (supplier.type.includes("Curtailment"))
-    return "Curtailment penalties and congestion pricing are at record levels — a committed industrial load eliminates negative pricing exposure immediately";
-  if (supplier.type.includes("Substation"))
-    return "Stranded substation carrying costs increase every quarter without an anchor tenant — each month without offtake erodes asset book value";
-  return "Grid interconnection queues are running 36-60 months — existing permitted infrastructure is the only fast-track path available to buyers in 2026";
+  if (t.includes("hydro") && r.includes("malaysia"))
+    return "RECODA's SCORE corridor industrial allocation windows close Q3 2026 — anchor tenant slots for 2027 energization are being committed now";
+  if (t.includes("hydro") && r.includes("bhutan"))
+    return "Royal Government of Bhutan's PPA window is limited — ESG premium terms are reserved for early committed counterparties";
+  if (t.includes("hydro") && r.includes("kenya"))
+    return "KenGen's industrial PPA window opens Q2 2026 ahead of the Olkaria IV expansion — early movers secure preferential USD tariff terms";
+  if (t.includes("curtailment"))
+    return "Curtailment penalties and negative pricing events are at record levels — an anchor industrial load eliminates this exposure immediately";
+  if (t.includes("substation"))
+    return "Stranded substation carrying costs increase each quarter without an anchor tenant — each month of vacancy erodes asset book value";
+  return "Grid interconnection queues are running 36–60 months — existing permitted infrastructure is the only fast-track path to capacity before 2028";
 }
 
-// ─── Pricing context by buyer tier ─────────────────────────────────────────
-function pricingContext(seeker: Seeker, supplier: Supplier): string {
-  const profile = BUYER_PRICING[seeker.type] ?? BUYER_PRICING["Hybrid Compute"];
-  if (profile.tier === "hyperscaler")
-    return `${supplier.estimatedAllInCents}¢/kWh all-in — competitive vs. the 4-8¢ range hyperscalers are currently paying for fast-deployment renewable capacity globally`;
-  if (profile.tier === "miner")
-    return `${supplier.estimatedAllInCents}¢/kWh all-in — within the 2.5-4¢ band required for post-halving AI co-location economics`;
-  return `${supplier.estimatedAllInCents}¢/kWh all-in — aligned with HPC market comps of 3.5-5¢ seen in Applied Digital, TeraWulf, and CoreWeave deals`;
+// ─── Buyer pool description — NO namedropping in cold email ───────────────
+function buyerPoolDescription(seekers: Seeker[]): string {
+  const listed = new Set([
+    "CleanSpark","Microsoft","Google","Meta","TeraWulf","Applied Digital",
+    "Core Scientific","IREN","Amazon","Riot Platforms","Marathon Digital",
+    "Bit Digital","Cipher Mining","CoreWeave","Equinix","Hut 8","Stronghold Digital","Nebius",
+  ]);
+  const listedArr = Array.from(listed);
+  const isListed = (s: Seeker) => listedArr.some(n => s.name.includes(n));
+
+  const hyperscalers = seekers.filter(s => /hyperscaler|cloud/i.test(s.type));
+  const miners = seekers.filter(s => /miner|mining|btc|crypto/i.test(s.type));
+  const hpc = seekers.filter(s => /hpc|data.?center|compute|colocation/i.test(s.type));
+  const others = seekers.filter(s => !hyperscalers.includes(s) && !miners.includes(s) && !hpc.includes(s));
+
+  const parts: string[] = [];
+  if (hyperscalers.length) {
+    const n = hyperscalers.filter(isListed).length;
+    parts.push(`${hyperscalers.length === 1 ? "one" : hyperscalers.length}${n > 0 ? " publicly listed" : ""} AI hyperscaler${hyperscalers.length > 1 ? "s" : ""}`);
+  }
+  if (miners.length) {
+    const n = miners.filter(isListed).length;
+    parts.push(`${miners.length}${n > 0 ? " NASDAQ-listed" : ""} crypto miner${miners.length > 1 ? "s" : ""} pivoting to AI compute`);
+  }
+  if (hpc.length) {
+    parts.push(`${hpc.length} HPC ${hpc.length > 1 ? "and data center operators" : "data center operator"}`);
+  }
+  if (others.length) {
+    parts.push(`${others.length} additional qualified operator${others.length > 1 ? "s" : ""}`);
+  }
+  if (!parts.length) return `${seekers.length} qualified operators`;
+  if (parts.length === 1) return parts[0];
+  if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
+  return parts.slice(0, -1).join(", ") + `, and ${parts[parts.length - 1]}`;
 }
 
-// ─── Revenue context for seekers ────────────────────────────────────────────
-function seekerRevenueContext(seeker: Seeker, supplier: Supplier): string {
-  const mw = Math.min(supplier.availableMW, seeker.neededMW);
-  if (seeker.type === "AI Hyperscaler")
-    return `${mw} MW of dedicated compute capacity, generating the equivalent of ${Math.round(mw * 8)}–${Math.round(mw * 12)} petaFLOP/s of training throughput`;
-  if (seeker.type.includes("Miner"))
-    return `${mw} MW powering AI GPU co-location at $${(mw * 2.5).toFixed(0)}–$${(mw * 4).toFixed(0)}M annual revenue — vs. $${(mw * 0.06).toFixed(0)}–$${(mw * 0.08).toFixed(0)}M from BTC mining at current prices`;
-  return `${mw} MW of HPC capacity generating $${(mw * 2.5).toFixed(0)}–$${(mw * 3.5).toFixed(0)}M annually at market GPU co-location rates`;
+// ─── Power portfolio description — NO specific ¢/kWh in cold email ────────
+function powerPortfolioDescription(suppliers: Supplier[]): string {
+  const btm = suppliers.filter(s => /btm/i.test(s.type)).length;
+  const hydro = suppliers.filter(s => /hydro/i.test(s.type)).length;
+  const solar = suppliers.filter(s => /solar/i.test(s.type)).length;
+  const curtail = suppliers.filter(s => /curtailment/i.test(s.type)).length;
+  const others = suppliers.length - btm - hydro - solar - curtail;
+  const regions = Array.from(new Set(suppliers.map(s => s.region.split(",")[0].trim()))).slice(0, 3).join(", ");
+
+  const parts: string[] = [];
+  if (btm > 0) parts.push(`${btm} behind-the-meter gas ${btm === 1 ? "asset" : "assets"}`);
+  if (hydro > 0) parts.push(`${hydro} hydroelectric ${hydro === 1 ? "site" : "sites"}`);
+  if (solar > 0) parts.push(`${solar} solar ${solar === 1 ? "project" : "projects"}`);
+  if (curtail > 0) parts.push(`${curtail} curtailment-zone ${curtail === 1 ? "asset" : "assets"}`);
+  if (others > 0) parts.push(`${others} additional ${others === 1 ? "site" : "sites"}`);
+  const typeStr = parts.length ? parts.join(", ") : `${suppliers.length} power assets`;
+  return `${typeStr} across ${regions}`;
 }
 
-// ─── Public ticker helper ────────────────────────────────────────────────────
+// ─── Ticker lookup — used in LinkedIn + call scripts only ─────────────────
 function publicTicker(name: string): string {
   const map: Record<string, string> = {
     "CleanSpark": "NASDAQ: CLSK", "Microsoft": "NASDAQ: MSFT", "Google": "NASDAQ: GOOG",
@@ -60,277 +101,262 @@ function publicTicker(name: string): string {
     "Cipher Mining": "NASDAQ: CIFR", "CoreWeave": "NASDAQ: CRWV", "Equinix": "NASDAQ: EQIX",
     "Hut 8": "NASDAQ: HUT", "Stronghold Digital": "NASDAQ: SDIG", "Nebius": "NASDAQ: NBIS",
   };
-  for (const [k, v] of Object.entries(map)) {
-    if (name.includes(k)) return v;
-  }
+  for (const [k, v] of Object.entries(map)) if (name.includes(k)) return v;
   return "";
 }
 
+// ─── Pricing coaching — FOR CALL SCRIPTS ONLY, never in cold outreach ─────
+function callScriptPricingCoach(supplier: Supplier, seekers: Seeker[]): string {
+  const profile = BUYER_PRICING[seekers[0]?.type] ?? BUYER_PRICING["Hybrid Compute"];
+  const comps = profile.tier === "hyperscaler"
+    ? "Public comps: Google/MS renewable PPAs ~4.5–6¢ (2024 SEC disclosures). Asset is competitive."
+    : profile.tier === "miner"
+    ? "Public comps: Applied Digital ~4¢ (Q2 2024 10-Q), TeraWulf <$25/MWh (public guidance), Cipher Mining ~3.5¢. Lead with timeline advantage, anchor to these benchmarks."
+    : "Public comps: Applied Digital ~4¢ (Q2 2024), CoreWeave HPC deals ~4–5¢ reported. Position as competitive; emphasize no grid queue.";
+  return `[PRICING — REFERENCE ONLY — DO NOT DISCLOSE IN COLD OUTREACH]\nAsset: ${supplier.estimatedAllInCents}¢/kWh all-in\n${comps}\n`;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
-// MULTI-PARTY: OUTREACH TO SUPPLIER (broker has a buyer pool)
+// MULTI-PARTY: TO SUPPLIER (broker presents qualified buyer pool)
 // ─────────────────────────────────────────────────────────────────────────────
 export function generateOutreachToSupplierMulti(
   supplier: Supplier,
   seekers: Seeker[],
   template: OutreachTemplate
 ): string {
-  if (seekers.length === 0) return "No seekers selected. Add at least one to generate outreach.";
+  if (seekers.length === 0) return "Select at least one buyer to generate outreach.";
 
+  const fn = firstName(supplier.keyContact);
   const urgency = urgencyTrigger(supplier);
-  const contactName = supplier.keyContact?.split("–")[0].split("—")[0].trim() ?? "Team";
-  const totalDemandMW = seekers.reduce((sum, s) => sum + s.neededMW, 0);
-  const primarySeeker = seekers[0];
-  const pricing = pricingContext(primarySeeker, supplier);
-  const mw = supplier.availableMW;
-
-  const seekerBullets = seekers.map((s, i) => {
-    const ticker = publicTicker(s.name);
-    const pain = s.keyPain.split(";")[0].split(".")[0].slice(0, 80);
-    return `${i + 1}. ${s.name}${ticker ? ` (${ticker})` : ""} — ${s.neededMW} MW | ${s.type} | ${pain}`;
-  }).join("\n");
+  const totalMW = seekers.reduce((sum, s) => sum + s.neededMW, 0);
+  const buyerDesc = buyerPoolDescription(seekers);
 
   if (template === "cold-email") {
-    return `Subject: ${seekers.length} Qualified Buyers – ${mw} MW | ${supplier.region} | 90-Day Close
+    return `Subject: ${seekers.length} Qualified Power Buyers — ${supplier.region} — Intro
 
-Hi ${contactName},
+Hi ${fn},
 
 ${urgency}.
 
-We actively represent ${seekers.length} board-approved operators with a combined ${totalDemandMW} MW requirement. Your ${supplier.name} asset is a direct match for all of them:
+We represent ${buyerDesc} — ${totalMW} MW combined requirement — each board-approved with committed deployment capital. Your ${supplier.availableMW} MW ${supplier.region} asset matches the full group by capacity, geography, and timeline.
 
-${seekerBullets}
+We work across multiple counterparties simultaneously, which means you review all buyer profiles before selecting a preferred party — preserving your pricing leverage through every stage.
 
-Your ${mw} MW can be placed with the first qualifying counterparty. We do not offer exclusivity to any single buyer until you select a preferred counterparty — giving you full leverage on price and terms.
+Terms are structured within the range of comparable recent transactions; specifics follow under a single NCND.
 
-What this delivers for you:
-• Pricing: ${pricing}
-• Term: 10-year take-or-pay PPA (or gas supply agreement for BTM assets)
-• Capex: Buyers provide all generation equipment — zero new build on your side
-• Timeline: NCND this week → LOI in 60 days → energization in 18 months
-• Competitive dynamic: Multiple qualified buyers = you hold the cards on price and counterparty selection
+Worth 15 minutes this week to review the buyer profiles?
 
-Your current situation — ${supplier.keyPain.split(";")[0]} — is exactly what this buyer pool resolves.
-
-Next step: We can send you a confidential one-pager on each of the ${seekers.length} buyers under a single NCND within 24 hours. No obligation until you've reviewed and selected a preferred counterparty.
-
-Worth a 15-minute call this week?
-
-Best,
 ${BROKER_NAME}
 ${BROKER_EMAIL}
 
 ---
-DISCLAIMER: Guidance tool only. All data, contacts, pricing, and counterparty details must be independently verified. Engage licensed attorneys and engineers before any commitment. PowerMatch Advisors earns a success-based fee upon closing, disclosed in our MFPA.`;
+Informational introduction only. All details require independent verification. Engage legal counsel before any commitment.`;
   }
 
   if (template === "linkedin") {
-    const topTwo = seekers.slice(0, 2).map(s => {
+    const top2 = seekers.slice(0, 2).map(s => {
       const ticker = publicTicker(s.name);
-      return `→ ${s.name}${ticker ? ` (${ticker})` : ""}: ${s.neededMW} MW | ${s.type}`;
+      return `→ ${s.name}${ticker ? ` (${ticker})` : ""} — ${s.neededMW} MW | ${s.type}`;
     }).join("\n");
-    return `Hi ${contactName},
+    return `Hi ${fn},
 
-I'm reaching out specifically about your ${supplier.region} position — ${urgency.split("—")[0].trim()}.
+Reaching out specifically about your ${supplier.region} position — ${urgency.split("—")[0].trim()}.
 
-We currently represent ${seekers.length} board-approved buyers with a combined ${totalDemandMW} MW demand. Two examples:
+We represent ${seekers.length} board-approved power buyers with ${totalMW} MW combined. Two examples:
 
-${topTwo}
-${seekers.length > 2 ? `→ + ${seekers.length - 2} more qualified operator${seekers.length - 2 > 1 ? "s" : ""}` : ""}
+${top2}
+${seekers.length > 2 ? `→ +${seekers.length - 2} more qualified operator${seekers.length - 2 > 1 ? "s" : ""}` : ""}
 
-Your ${mw} MW matches all of them. We have NCND + deal summaries ready to send today — no exclusivity required until you've reviewed the counterparties.
+Your ${supplier.availableMW} MW matches all of them. NCND + buyer profiles ready to send today — no exclusivity required until you've selected a preferred counterparty.
 
-Worth a 15-minute call to see which buyer fits best?
+15-minute call this week?
 
 ${BROKER_NAME} | ${BROKER_EMAIL}
-
-[All data subject to independent verification.]`;
+[Subject to independent verification.]`;
   }
 
   // call-script
-  const topThree = seekers.slice(0, 3).map(s => `• ${s.name}: ${s.neededMW} MW, ${s.type}`).join("\n");
+  const coach = callScriptPricingCoach(supplier, seekers);
+  const seekerLines = seekers.slice(0, 5).map((s, i) => {
+    const ticker = publicTicker(s.name);
+    return `  ${i + 1}. ${s.name}${ticker ? ` (${ticker})` : ""} — ${s.neededMW} MW | ${s.type}`;
+  }).join("\n");
   return `CALL SCRIPT — Multi-Buyer Outreach to ${supplier.name}
-Target: ${supplier.keyContact ?? "Business Development / CEO / CFO"}
-Best contact: ${supplier.contactPhone}
+Target: ${supplier.keyContact ?? "VP Commercial / CEO / CFO"}
+Phone: ${supplier.contactPhone}
 Duration: 10–15 minutes
 
+${coach}
 OPENING (30 sec):
-"Hi ${contactName}, this is [Your Name] from ${BROKER_NAME}.
+"Hi ${fn}, this is [Your Name] from ${BROKER_NAME}.
 I'm calling about your ${supplier.region} operations — ${urgency.split("—")[0].trim()}.
-We represent ${seekers.length} qualified buyers specifically looking for assets like yours.
-Do you have 5 minutes?"
+We represent ${seekers.length} qualified buyers looking for assets like yours. Five minutes?"
 
-[If hesitant:] "I'll be brief — I just want to share who we're representing. If none of them fit, I'll let you go."
+[If hesitant:] "I'll be brief — I just want to share who we're representing. If there's no fit, I'll let you go."
 
 VALUE HOOK (60 sec):
-"Our current buyer pool includes:
-${topThree}
-${seekers.length > 3 ? `...and ${seekers.length - 3} more — combined ${totalDemandMW} MW demand.` : `Combined ${totalDemandMW} MW demand.`}
+"Our active buyer pool includes:
+${seekerLines}${seekers.length > 5 ? `\n  ...and ${seekers.length - 5} more. Combined demand: ${totalMW} MW.` : `\nCombined demand: ${totalMW} MW.`}
 
-Each is board-approved with committed capex. Your ${mw} MW can be placed with the first qualifying counterparty within 90 days.
-We don't lock you into one buyer — you review all profiles and choose. That's your pricing leverage."
+Each is board-approved with committed capex. You review all profiles before committing — that's your pricing leverage."
 
 PAIN ACKNOWLEDGMENT (45 sec):
 "I know your challenge: ${supplier.keyPain.split(";")[0]}.
-This structure solves it — multiple buyers competing for your asset, you provide the site/gas stream, they bring all generation capex and sign long-term."
+This structure addresses it directly — multiple buyers competing for your asset, they provide all generation capex, you provide the site or gas stream."
 
-ASK (30 sec):
-"Two asks:
-1) Can I send you a one-page profile on each of our ${seekers.length} buyers under a single NCND today?
-2) Who on your commercial/legal team should review it alongside you?"
+ASK:
+"Can I send you a buyer profile for each of the ${seekers.length} counterparties under a single NCND today?
+And who on your commercial or legal team should review alongside you?"
 
 OBJECTIONS:
-Q: "We're not looking for power offtake right now"
-A: "These buyers bring their own capex — it's not investment from you, it's revenue from them. Just worth reviewing the one-pager to see if the economics work."
+Q: "We're not looking for offtake right now"
+A: "These buyers provide their own capex — it's revenue to you, not cost. Worth seeing if the economics work."
 
-Q: "We already have something in discussion"
-A: "Understood. Having additional qualified counterparties gives you negotiating leverage on whatever you're currently exploring. No harm in knowing who else is interested."
+Q: "We have something in discussion"
+A: "Having additional qualified counterparties strengthens your negotiating position. Low friction to see who else is interested."
 
 Q: "What's your fee?"
-A: "Success-based only — disclosed in our MFPA, paid per MW upon closing. Zero cost to your team until a deal closes."
+A: "Success-based, disclosed in our MFPA, paid per MW at closing. Zero cost until a deal closes."
 
 CLOSE:
-"I'll send the NCND and buyer profiles to [email] by [time today].
-When would you have 30 minutes to discuss which counterparty fits best?"
-[Write down: name, email, callback time]
+"I'll send the NCND and buyer profiles to [email] today.
+When would you have 30 minutes to review which counterparty fits best?"
+[Note: name, email, callback time]
 
 ---
-DISCLAIMER: Script is a guidance tool. Verify all representations. Engage legal counsel before commitments.`;
+Script is a guidance tool only. Verify all representations. Engage legal counsel before any commitment.`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MULTI-PARTY: OUTREACH TO SEEKER (broker has a power menu)
+// MULTI-PARTY: TO SEEKER (broker presents off-market power menu)
 // ─────────────────────────────────────────────────────────────────────────────
 export function generateOutreachToSeekerMulti(
   suppliers: Supplier[],
   seeker: Seeker,
   template: OutreachTemplate
 ): string {
-  if (suppliers.length === 0) return "No suppliers selected. Add at least one to generate outreach.";
+  if (suppliers.length === 0) return "Select at least one power source to generate outreach.";
 
-  const contactName = seeker.keyContact?.split("–")[0].split("—")[0].trim() ?? "Team";
+  const fn = firstName(seeker.keyContact);
+  const totalMW = suppliers.reduce((sum, s) => sum + s.availableMW, 0);
   const profile = BUYER_PRICING[seeker.type] ?? BUYER_PRICING["Hybrid Compute"];
-  const totalAvailMW = suppliers.reduce((sum, s) => sum + s.availableMW, 0);
-  const primarySupplier = suppliers[0];
-  const minPrice = Math.min(...suppliers.map(s => s.estimatedAllInCents));
-  const maxPrice = Math.max(...suppliers.map(s => s.estimatedAllInCents));
-  const priceRange = minPrice === maxPrice ? `${minPrice}¢` : `${minPrice}–${maxPrice}¢`;
-  const revenue = seekerRevenueContext(seeker, primarySupplier);
-
-  const supplierBullets = suppliers.map((s, i) => {
-    const urgencyHook = s.keyPain.split(";")[0].split(".")[0].slice(0, 70);
-    return `${i + 1}. ${s.name} — ${s.availableMW} MW | ${s.region} | ${s.estimatedAllInCents}¢/kWh | ${s.type}\n   Seller situation: ${urgencyHook}`;
-  }).join("\n\n");
+  const portfolioDesc = powerPortfolioDescription(suppliers);
+  const painShort = seeker.keyPain.split(";")[0].split(".")[0];
 
   if (template === "cold-email") {
-    const subjectPrefix = profile.tier === "hyperscaler"
-      ? `${suppliers.length} Off-Market Renewable Sites | ${priceRange}/kWh | Bypass Grid Queue`
+    const tierContext = profile.tier === "hyperscaler"
+      ? "All sites are renewable or low-carbon — CFE-aligned and ESG-reportable."
       : profile.tier === "miner"
-      ? `${suppliers.length} BTM Power Sites | ${priceRange}/kWh | ${suppliers.map(s => s.region).slice(0, 2).join(" / ")} | AI Co-lo Ready`
-      : `Power Menu: ${suppliers.length} Sites | ${priceRange}/kWh | ${totalAvailMW} MW Total`;
+      ? "BTM structures available — no grid exposure, flexible load scheduling for AI co-location margins."
+      : "Existing permitted infrastructure — your compute fleet is live before competitors finish their interconnection application.";
 
-    return `Subject: ${subjectPrefix}
+    return `Subject: Off-Market Power Menu — ${suppliers.length} Sites — ${totalMW} MW — No Grid Queue
 
-Hi ${contactName},
+Hi ${fn},
 
-Your team's constraint is clear: ${seeker.keyPain.split(";")[0]}.
+${painShort} — we have a direct solution.
 
-We have exclusive brokerage access to ${suppliers.length} off-market power assets that collectively address this — each operational or near-operational, no grid queue:
+We hold exclusive brokerage mandates on ${suppliers.length} off-market power assets: ${portfolioDesc}. Total capacity: ${totalMW} MW. Each site has existing permits and motivated sellers — no interconnection queue, 12–18 months to energization.
 
-${supplierBullets}
+${tierContext}
 
-Why this matters for your timeline:
-• Combined available capacity: ${totalAvailMW} MW across ${suppliers.length} sites — your ${seeker.neededMW} MW need is covered with redundancy
-• Price range: ${priceRange}/kWh all-in — ${profile.tier === "hyperscaler" ? "competitive with Google/Microsoft's fast-track renewable deals globally" : profile.tier === "miner" ? "within post-halving AI co-location viability range" : "aligned with Applied Digital and TeraWulf market comps"}
-• Each seller is motivated: urgency situations listed above give you pricing leverage and execution certainty
-• Energization: 12–18 months across all sites — vs. 36–60 months via traditional interconnect
+Pricing is competitive with current market transactions; specifics are shared under NDA. Your ${seeker.neededMW} MW need is covered with redundancy across the portfolio.
 
-What this delivers for your operations: ${revenue}.
-
-A single NCND covers all ${suppliers.length} sites. We can have confidential site teasers for every asset on your desk within 48 hours — 10 minutes to review, and you'll immediately see which fit your 2026 deployment roadmap.
-
-Are you the right contact for power infrastructure decisions, or should I connect with your facilities/infrastructure lead?
+A single NCND unlocks confidential site teasers for all ${suppliers.length} assets. Are you the right contact for infrastructure decisions, or should I reach your facilities lead?
 
 ${BROKER_NAME}
 ${BROKER_EMAIL}
 
 ---
-DISCLAIMER: Guidance tool only. All pricing, capacity, and contacts must be independently verified. This is not a solicitation or binding offer. Engage licensed engineers and legal counsel before any commitment.`;
+Informational introduction only. All details require independent verification. Engage legal counsel before any commitment.`;
   }
 
   if (template === "linkedin") {
-    const topTwo = suppliers.slice(0, 2).map(s =>
-      `→ ${s.name}: ${s.availableMW} MW | ${s.region} | ${s.estimatedAllInCents}¢/kWh | ${s.type}`
+    const top2 = suppliers.slice(0, 2).map(s =>
+      `→ ${s.name} — ${s.availableMW} MW | ${s.region} | ${s.type}`
     ).join("\n");
-    return `Hi ${contactName},
+    const tierHook = profile.tier === "hyperscaler"
+      ? "All renewable/low-carbon — CFE-aligned."
+      : profile.tier === "miner"
+      ? "BTM structures available — no grid exposure, ideal for AI co-location economics."
+      : "Existing permitted infrastructure — 12–18 months to energization, no queue.";
+    return `Hi ${fn},
 
-${seeker.neededMW} MW requirement, ${seeker.keyPain.split(";")[0].toLowerCase()} — we may have a direct solution.
+${seeker.neededMW} MW power requirement, ${painShort.toLowerCase()} — we may have a direct solution.
 
-We have exclusive access to ${suppliers.length} off-market power sites (${priceRange}/kWh, ${totalAvailMW} MW total):
+We hold exclusive access to ${suppliers.length} off-market power sites (${totalMW} MW total):
 
-${topTwo}
-${suppliers.length > 2 ? `→ + ${suppliers.length - 2} more site${suppliers.length - 2 > 1 ? "s" : ""}` : ""}
+${top2}
+${suppliers.length > 2 ? `→ +${suppliers.length - 2} more site${suppliers.length - 2 > 1 ? "s" : ""}` : ""}
 
-All are existing infrastructure — 12–18 month energization, no grid queue, motivated sellers. A single NCND covers all sites.
+${tierHook} Motivated sellers across all sites — your timeline pressure becomes pricing leverage.
 
-${profile.tier === "hyperscaler" ? "All renewable/low-carbon — aligns with your CFE mandate." : profile.tier === "miner" ? "BTM structures available: no grid exposure, flexible load scheduling — ideal for AI co-location margins." : "Modular deployment-ready across all sites — your GPU fleet is live before your competition finishes their grid application."}
-
-Worth a 20-minute intro call to walk through the site menu?
+A single NCND covers all site teasers. Worth a 20-minute intro call?
 
 ${BROKER_NAME} | ${BROKER_EMAIL}
-
-[All data subject to independent verification.]`;
+[Subject to independent verification.]`;
   }
 
   // call-script
-  const topThree = suppliers.slice(0, 3).map(s => `• ${s.name}: ${s.availableMW} MW | ${s.region} | ${s.estimatedAllInCents}¢/kWh`).join("\n");
+  const coach = callScriptPricingCoach(suppliers[0], [seeker]);
+  const minCents = Math.min(...suppliers.map(s => s.estimatedAllInCents));
+  const maxCents = Math.max(...suppliers.map(s => s.estimatedAllInCents));
+  const priceRange = minCents === maxCents ? `${minCents}¢` : `${minCents}–${maxCents}¢`;
+  const siteLines = suppliers.slice(0, 5).map((s, i) =>
+    `  ${i + 1}. ${s.name} — ${s.availableMW} MW | ${s.region} | ${s.estimatedAllInCents}¢/kWh | ${s.type}`
+  ).join("\n");
+
   return `CALL SCRIPT — Multi-Site Outreach to ${seeker.name}
 Target: ${seeker.keyContact ?? "VP Infrastructure / Head of Data Centers / CTO Office"}
-Best contact: ${seeker.contactPhone}
+Phone: ${seeker.contactPhone}
 Duration: 10–15 minutes
 
+${coach}
+Price range across portfolio: ${priceRange}/kWh all-in
+
 OPENING (30 sec):
-"Hi ${contactName}, this is [Your Name] from ${BROKER_NAME}.
-I'm calling because your ${seeker.neededMW} MW power need — specifically ${seeker.keyPain.split(";")[0].toLowerCase()} — is something we can address immediately with a menu of ${suppliers.length} off-market assets.
-Do you have 5 minutes?"
+"Hi ${fn}, this is [Your Name] from ${BROKER_NAME}.
+I'm calling because your ${seeker.neededMW} MW power need — ${painShort.toLowerCase()} — is something we can address right now with a menu of ${suppliers.length} off-market assets.
+Five minutes?"
 
 VALUE HOOK (75 sec):
-"We have brokerage access to ${suppliers.length} operational or near-operational power sites:
+"We have exclusive brokerage access to ${suppliers.length} operational or near-operational power sites:
 
-${topThree}
-${suppliers.length > 3 ? `...and ${suppliers.length - 3} more. Total: ${totalAvailMW} MW available.` : `Total: ${totalAvailMW} MW across all sites.`}
+${siteLines}
+${suppliers.length > 5 ? `  ...and ${suppliers.length - 5} more. Total: ${totalMW} MW available.` : `Total: ${totalMW} MW across all sites.`}
 
-Price range: ${priceRange}/kWh all-in — ${profile.tier === "miner" ? "within your post-halving AI co-location target" : "competitive with what hyperscalers are paying for fast-track renewable capacity"}.
-All sites: 12–18 months to energization. No grid queue. Motivated sellers — urgency works in your favor on price."
+Price range: ${priceRange}/kWh all-in — ${profile.tier === "miner" ? "within your post-halving AI co-location target" : "competitive with what hyperscalers are currently paying for fast-track capacity"}.
+All sites: 12–18 months to energization. No grid queue. Motivated sellers — timing pressure works in your favor on price."
 
 PAIN ACKNOWLEDGMENT (45 sec):
-"I understand your constraint: ${seeker.keyPain.split(";")[0]}.
-Traditional utility paths are 3-5 years minimum. What I'm offering is a menu of existing permitted assets with motivated sellers — you pick the site that fits your engineering and commercial criteria."
+"I understand the constraint: ${painShort}.
+Traditional utility paths are 3–5 years minimum. I'm offering a menu of existing permitted assets — you pick the site that fits your engineering and commercial criteria."
 
-ASK (30 sec):
-"Can I send you a confidential two-page teaser for each of the ${suppliers.length} sites under a single NCND today?
-One agreement, ${suppliers.length} options — takes 15 minutes to review."
+ASK:
+"Can I send you a confidential site teaser for each of the ${suppliers.length} assets under a single NCND today?
+One agreement, ${suppliers.length} options — 15 minutes to review."
 
 OBJECTIONS:
 Q: "We have an existing pipeline"
-A: "These are off-market — almost certainly not in your pipeline. One NCND to access ${suppliers.length} sites is low friction. Worst case: you rule them out. Best case: one fills your 2026 deployment gap."
+A: "These are off-market — almost certainly not in your current pipeline. One NCND to access ${suppliers.length} sites is minimal friction."
 
-Q: "We need more than ${totalAvailMW} MW total"
-A: "The ${suppliers.length} sites listed are the initial tranche. We have additional assets in diligence — let's discuss the full capacity roadmap on a call."
+Q: "We need more than ${totalMW} MW total"
+A: "These ${suppliers.length} sites are the initial tranche. We have additional assets in diligence — let's map the full roadmap on a call."
 
 Q: "What's your fee?"
-A: "Success-based, paid by the power provider when the deal closes. Zero cost to your team until a transaction closes."
+A: "Success-based, paid by the power provider at closing. Zero cost to your team."
 
 CLOSE:
 "I'll send the NCND and site teasers to [email] today.
 When would you have 45 minutes to walk through the site menu with our commercial team?"
-[Write down: name, email, callback date/time]
+[Note: name, email, callback date/time]
 
 ---
-DISCLAIMER: Script is a guidance tool. Verify all representations. Engage legal counsel before commitments.`;
+Script is a guidance tool only. Verify all representations. Engage legal counsel before any commitment.`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// LEGACY 1:1 functions (kept for backward compatibility / single selection)
+// LEGACY 1:1 wrappers
 // ─────────────────────────────────────────────────────────────────────────────
 export function generateOutreachToSupplier(
   supplier: Supplier,
