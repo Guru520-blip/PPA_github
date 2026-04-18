@@ -47,5 +47,31 @@ export const DEAL_STATUSES: DealStatus[] = [
   "Matched",
   "Outreach Sent",
   "NDA",
+  "Diligence",
   "Closing",
 ];
+
+// Probability of close by stage — used for pipeline forecast (Zeigo/LevelTen standard)
+export const STAGE_PROBABILITY: Record<DealStatus, number> = {
+  Sourced: 5,
+  Matched: 15,
+  "Outreach Sent": 25,
+  NDA: 45,
+  Diligence: 70,
+  Closing: 90,
+};
+
+// Estimated annual revenue per MW at a given ¢/kWh (8,760 hrs/yr)
+export function annualRevenuePerMW(centsPerKwh: number): number {
+  return (centsPerKwh / 100) * 8760 * 1000; // $ per MW-year
+}
+
+// Total contract value in $M
+export function dealValueM(mw: number, centsPerKwh: number, years = 10): number {
+  return (annualRevenuePerMW(centsPerKwh) * mw * years) / 1_000_000;
+}
+
+// Broker fee in $M (default 2% of contract value)
+export function brokerFeeM(mw: number, centsPerKwh: number, years = 10, feePct = 2): number {
+  return (dealValueM(mw, centsPerKwh, years) * feePct) / 100;
+}

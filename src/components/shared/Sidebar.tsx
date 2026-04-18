@@ -2,12 +2,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Home, Zap, Users, GitMerge, Mail, FileText, Briefcase, Bolt
+  Home, Zap, Users, GitMerge, Mail, FileText, Briefcase, Bolt, BarChart2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Dashboard", icon: Home },
+  { href: "/market", label: "Market Intel", icon: BarChart2 },
   { href: "/suppliers", label: "Suppliers", icon: Zap },
   { href: "/seekers", label: "Seekers", icon: Users },
   { href: "/matches", label: "Match Engine", icon: GitMerge },

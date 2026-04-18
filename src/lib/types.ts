@@ -52,7 +52,7 @@ export interface MatchResult {
   priceRationale: string;
 }
 
-export type DealStatus = "Sourced" | "Matched" | "Outreach Sent" | "NDA" | "Closing";
+export type DealStatus = "Sourced" | "Matched" | "Outreach Sent" | "NDA" | "Diligence" | "Closing";
 
 export interface PipelineDeal {
   id: string;
@@ -66,6 +66,10 @@ export interface PipelineDeal {
   updatedAt: string;
   mw: number;
   centsPerKwh: number;
+  contractYears?: number;    // PPA term (default 10)
+  probability?: number;      // close probability % (auto by stage)
+  nextAction?: string;       // next CRM step
+  brokerFeePct?: number;     // broker fee % of deal value (default 2)
 }
 
 export type OutreachTemplate = "cold-email" | "linkedin" | "call-script";

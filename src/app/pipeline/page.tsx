@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { PipelineDeal, DealStatus } from "@/lib/types";
-import { loadPipeline, updateDeal, removeDeal, DEAL_STATUSES } from "@/lib/pipeline";
+import { loadPipeline, updateDeal, removeDeal, DEAL_STATUSES, STAGE_PROBABILITY, dealValueM, brokerFeeM } from "@/lib/pipeline";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Briefcase, Trash2, StickyNote, ChevronRight, TrendingUp } from "lucide-react";
+import { Briefcase, Trash2, StickyNote, ChevronRight, TrendingUp, DollarSign } from "lucide-react";
 import { Toast, useToast } from "@/components/ui/toast";
 
 const STATUS_COLORS: Record<DealStatus, string> = {
@@ -12,6 +12,7 @@ const STATUS_COLORS: Record<DealStatus, string> = {
   Matched: "border-blue-600/50 bg-blue-950/20",
   "Outreach Sent": "border-yellow-600/50 bg-yellow-950/20",
   NDA: "border-purple-600/50 bg-purple-950/20",
+  Diligence: "border-orange-600/50 bg-orange-950/20",
   Closing: "border-green-600/50 bg-green-950/20",
 };
 
@@ -20,6 +21,7 @@ const STATUS_HEADER_COLORS: Record<DealStatus, string> = {
   Matched: "bg-blue-900/60 text-blue-300",
   "Outreach Sent": "bg-yellow-900/60 text-yellow-300",
   NDA: "bg-purple-900/60 text-purple-300",
+  Diligence: "bg-orange-900/60 text-orange-300",
   Closing: "bg-green-900/60 text-green-300",
 };
 
@@ -60,6 +62,11 @@ export default function PipelinePage() {
 
   const totalMW = deals.reduce((s, d) => s + d.mw, 0);
   const closingMW = deals.filter((d) => d.status === "Closing").reduce((s, d) => s + d.mw, 0);
+  const totalPipelineValueM = deals.reduce((s, d) => s + dealValueM(d.mw, d.centsPerKwh, d.contractYears ?? 10), 0);
+  const weightedForecastM = deals.reduce((s, d) => {
+    const prob = d.probability ?? STAGE_PROBABILITY[d.status] ?? 10;
+    return s + (brokerFeeM(d.mw, d.centsPerKwh, d.contractYears ?? 10, d.brokerFeePct ?? 2) * prob) / 100;
+  }, 0);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -89,9 +96,11 @@ export default function PipelinePage() {
         </div>
       ) : (
         <>
-          <div className="flex items-center gap-6 text-sm text-gray-400 border-t border-gray-800 pt-4">
-            <span className="flex items-center gap-1.5"><TrendingUp className="h-4 w-4 text-blue-400" />{deals.length} total deals · {totalMW} MW</span>
+          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400 border-t border-gray-800 pt-4">
+            <span className="flex items-center gap-1.5"><TrendingUp className="h-4 w-4 text-blue-400" />{deals.length} deals · {totalMW} MW</span>
             <span className="flex items-center gap-1.5 text-green-400"><TrendingUp className="h-4 w-4" />{closingMW} MW in closing</span>
+            <span className="flex items-center gap-1.5 text-purple-300"><DollarSign className="h-4 w-4" />Pipeline value: ${totalPipelineValueM.toFixed(0)}M (10-yr contracts)</span>
+            <span className="flex items-center gap-1.5 text-yellow-400"><DollarSign className="h-4 w-4" />Probability-wtd broker forecast: ${weightedForecastM.toFixed(1)}M</span>
           </div>
 
           {/* Kanban */}
@@ -147,11 +156,18 @@ function DealCard({ deal, isEditingNote, noteText, onStatusChange, onRemove, onE
           <p className="text-xs font-semibold text-white leading-tight">{deal.supplierName.split("–")[0].trim()}</p>
           <p className="text-[10px] text-gray-400">→ {deal.seekerName.split("–")[0].trim()}</p>
         </div>
-        <div className="flex gap-2 text-[10px] text-gray-400">
-          <span>{deal.mw} MW</span>
-          <span>·</span>
-          <span>{deal.centsPerKwh}¢/kWh</span>
+        <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-gray-400">
+          <span>{deal.mw} MW · {deal.centsPerKwh}¢/kWh</span>
+          <span className="text-purple-400">${dealValueM(deal.mw, deal.centsPerKwh, deal.contractYears ?? 10).toFixed(0)}M</span>
+          <span className={`font-semibold ${(deal.probability ?? STAGE_PROBABILITY[deal.status]) >= 70 ? "text-green-400" : (deal.probability ?? STAGE_PROBABILITY[deal.status]) >= 40 ? "text-yellow-400" : "text-gray-500"}`}>
+            {deal.probability ?? STAGE_PROBABILITY[deal.status]}% close
+          </span>
         </div>
+        {deal.nextAction && (
+          <p className="text-[9px] text-blue-400 flex items-center gap-1">
+            <ChevronRight className="h-2.5 w-2.5 shrink-0" />Next: {deal.nextAction}
+          </p>
+        )}
 
         {isEditingNote ? (
           <div className="space-y-1">

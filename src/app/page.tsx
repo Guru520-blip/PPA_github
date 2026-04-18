@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Zap, Users, GitMerge, ArrowRight, TrendingUp, Globe, AlertTriangle } from "lucide-react";
+import { Zap, Users, GitMerge, ArrowRight, TrendingUp, Globe, AlertTriangle, BarChart2 } from "lucide-react";
 import { loadPipeline } from "@/lib/pipeline";
 import { PipelineDeal } from "@/lib/types";
 import suppliersData from "@/data/suppliers.json";
@@ -67,10 +67,18 @@ export default function HomePage() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard icon={<Zap className="h-5 w-5 text-yellow-400" />} label="Suppliers" value={suppliersData.length.toString()} sub="in database" />
-        <StatCard icon={<Users className="h-5 w-5 text-blue-400" />} label="Seekers" value={seekersData.length.toString()} sub="in database" />
+        <StatCard icon={<Zap className="h-5 w-5 text-yellow-400" />} label="Suppliers" value={suppliersData.length.toString()} sub={`${(suppliersData as {availableMW:number}[]).reduce((s,x)=>s+x.availableMW,0).toLocaleString()} MW tracked`} />
+        <StatCard icon={<Users className="h-5 w-5 text-blue-400" />} label="Seekers" value={seekersData.length.toString()} sub={`${(seekersData as {neededMW:number}[]).reduce((s,x)=>s+x.neededMW,0).toLocaleString()} MW demand`} />
         <StatCard icon={<GitMerge className="h-5 w-5 text-green-400" />} label="Active Deals" value={statusCounts.active.toString()} sub="in pipeline" />
         <StatCard icon={<TrendingUp className="h-5 w-5 text-purple-400" />} label="Pipeline MW" value={statusCounts.totalMW > 0 ? `${statusCounts.totalMW} MW` : "—"} sub="total contracted" />
+      </div>
+
+      <div className="rounded-xl border border-blue-800/30 bg-blue-950/20 p-4 flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold text-white flex items-center gap-2"><BarChart2 className="h-4 w-4 text-blue-400" />Market Intelligence Available</p>
+          <p className="text-xs text-gray-400 mt-0.5">PPA price index by region · public reference transactions · regulatory alert calendar · market thesis</p>
+        </div>
+        <Link href="/market"><Button variant="outline" size="sm" className="gap-1.5 text-xs shrink-0">View Market Intel <ArrowRight className="h-3 w-3" /></Button></Link>
       </div>
 
       <div>
