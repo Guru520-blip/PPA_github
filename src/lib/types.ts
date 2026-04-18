@@ -15,6 +15,8 @@ export interface Supplier {
   keyContact?: string;
   keyContactLinkedIn?: string;
   notes: string;
+  urgencyScore: number;    // 1-10: how urgently supplier needs offtake deal
+  startupFriendly: number; // 1-10: likelihood to engage with a startup broker
 }
 
 export interface Seeker {
@@ -34,6 +36,8 @@ export interface Seeker {
   keyContactLinkedIn?: string;
   keyContact2?: string;
   notes: string;
+  urgencyScore: number;    // 1-10: urgency of power procurement need
+  startupFriendly: number; // 1-10: openness to working with startup brokers
 }
 
 export interface MatchResult {

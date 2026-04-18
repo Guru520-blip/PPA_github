@@ -10,18 +10,23 @@ function regionOverlap(supplierRegion: string, seekerRegions: string[]): boolean
   const sr = supplierRegion.toLowerCase();
   return seekerRegions.some((r) => {
     const rr = r.toLowerCase();
-    // Broad regional matching
+    if (sr === rr) return true;
+    // Texas sub-regions — any Texas region matches any other Texas region
     if (sr.includes("texas") && rr.includes("texas")) return true;
     if (sr.includes("permian") && (rr.includes("permian") || rr.includes("texas"))) return true;
-    if (sr.includes("paraguay") && rr.includes("paraguay")) return true;
-    if (sr.includes("ethiopia") && rr.includes("ethiopia")) return true;
-    if (sr.includes("iceland") && rr.includes("iceland")) return true;
-    if (sr.includes("north dakota") && rr.includes("north dakota")) return true;
+    if (rr.includes("permian") && sr.includes("texas")) return true;
+    // North America
     if (sr.includes("bakken") && (rr.includes("bakken") || rr.includes("north dakota"))) return true;
-    if (sr.includes("alberta") && rr.includes("alberta")) return true;
-    if (sr.includes("south") && rr.includes("south")) return true;
-    // International/global fallback — any overlap in country name
-    return sr === rr;
+    if (rr.includes("bakken") && sr.includes("north dakota")) return true;
+    if (sr.includes("alberta") && (rr.includes("alberta") || rr.includes("canada"))) return true;
+    if (sr.includes("quebec") && (rr.includes("quebec") || rr.includes("canada"))) return true;
+    if (sr.includes("appalachia") && (rr.includes("appalachia") || rr.includes("pennsylvania"))) return true;
+    if (sr.includes("pennsylvania") && (rr.includes("pennsylvania") || rr.includes("appalachia"))) return true;
+    // Word-level broad matching for global regions — extract meaningful words and check overlap
+    const stopwords = new Set(["usa", "the", "and", "for", "east", "west", "south", "north"]);
+    const srWords = sr.split(/[\s,/-]+/).filter(w => w.length >= 4 && !stopwords.has(w));
+    const rrWords = rr.split(/[\s,/-]+/).filter(w => w.length >= 4 && !stopwords.has(w));
+    return srWords.some(w => rrWords.some(rw => rw.includes(w) || w.includes(rw)));
   });
 }
 
