@@ -1,7 +1,7 @@
 import { Supplier, Seeker, OutreachTemplate, BUYER_PRICING } from "./types";
 
 const BROKER_NAME = "PowerMatch Advisors";
-const BROKER_EMAIL = "deals@powermatch.io";
+const BROKER_SIGNATURE = `Alex Chen\nPowerMatch Advisors\nalex@powermatch.io | +1 (212) 555-0190`;
 
 function firstName(contact: string | undefined): string {
   return contact?.split("–")[0].split("—")[0].trim().split(/\s+/)[0] ?? "there";
@@ -34,6 +34,75 @@ function urgencyTrigger(supplier: Supplier): string {
   if (t.includes("substation"))
     return "Stranded substation carrying costs increase each quarter without an anchor tenant — each month of vacancy erodes asset book value";
   return "Grid interconnection queues are running 36–60 months — existing permitted infrastructure is the only fast-track path to capacity before 2028";
+}
+
+// ─── Seeker-specific opener (shows research, avoids "we have a solution") ─
+function seekerOpener(seeker: Seeker): string {
+  const n = seeker.name.toLowerCase();
+  if (/hyperscaler|cloud/i.test(seeker.type)) {
+    if (n.includes("microsoft"))
+      return "Your public commitments on data center capacity through 2027 are clear — the real bottleneck is permitted infrastructure that doesn't require a four-year interconnection queue. That's the specific problem we work on.";
+    if (n.includes("google"))
+      return "CFE-aligned capacity at the scale your Gemini infrastructure requires is genuinely difficult to source on an 18-month timeline. We work specifically in the gap between what the grid can offer and what your deployment schedule demands.";
+    if (n.includes("meta") || n.includes("facebook"))
+      return "The infrastructure build-out for your next-generation training clusters is moving faster than most utility timelines can accommodate — off-market, permitted capacity is the only realistic path at that pace.";
+    if (n.includes("amazon") || n.includes("aws"))
+      return "AWS capacity commitments from your most recent earnings signal expansion that traditional procurement can't keep up with. The teams moving fastest are sourcing off-market, before assets ever reach a broker database.";
+    return "Scaling data center capacity at the pace your team is targeting runs directly into the 36–60 month interconnection queue. The only realistic path to energization before 2027 is off-market, already-permitted infrastructure.";
+  }
+  if (/miner|mining|btc|crypto/i.test(seeker.type)) {
+    if (n.includes("cleanspark"))
+      return "The AI compute hosting pivot you've outlined publicly is the right move — but the operators executing fastest are the ones who've locked BTM power before the market reprices. That window is narrowing.";
+    if (n.includes("core scientific") || n.includes("iren") || n.includes("terawulf") || n.includes("applied digital"))
+      return "Your pivot from BTC mining to AI hosting is well-positioned commercially — the constraint isn't capital, it's fixed-rate power without grid exposure. BTM assets are being contracted faster than they're surfacing.";
+    return "The post-halving shift to AI compute hosting has created a genuine BTM power bottleneck — operators moving fastest are locking structures now, before the pricing window closes on the best assets.";
+  }
+  if (/hpc|data.?center|compute|colocation/i.test(seeker.type))
+    return "AI compute demand is outpacing HPC procurement timelines across the board. The operators closing facilities today started sourcing off-market assets 12 months before their competitors did — that timing gap is what we help close.";
+  return "Power procurement for large-scale compute has fundamentally changed — the teams moving fastest are bypassing the interconnection queue entirely through off-market, already-permitted infrastructure.";
+}
+
+// ─── Supplier-specific opener (empathetic industry insight, not urgency threat) ─
+function supplierOpener(supplier: Supplier): string {
+  const t = supplier.type.toLowerCase();
+  const r = supplier.region.toLowerCase();
+  if (t.includes("btm") && r.includes("permian"))
+    return "The Permian BTM market has shifted considerably — what was a regulatory nuisance two years ago is now a sought-after acquisition target for AI operators, if the right industrial offtaker is in place before enforcement tightens further.";
+  if (t.includes("btm") && r.includes("bakken"))
+    return "Bakken flare gas has gone from an afterthought to a priority acquisition target — AI infrastructure operators need exactly what you have: stranded gas, existing infrastructure, no interconnection queue, and a seller with timeline pressure.";
+  if (t.includes("btm") && r.includes("appalachia"))
+    return "The Appalachian Basin's EPA methane fee exposure is creating urgency that most operators underestimate — but it's also creating real leverage for disciplined sellers who move before the market gets crowded.";
+  if (t.includes("hydro") && r.includes("paraguay"))
+    return "The Law 6.207 tariff window has generated more serious buyer interest than most Paraguayan asset owners realize. The challenge is separating counterparties with genuine board approval from those still in committee — that's what I do.";
+  if (t.includes("hydro") && r.includes("ethiopia"))
+    return "GERD's reservoir surplus is drawing serious attention from buyers who understand the 2026 window for USD-denominated agreements. The operators I work with have committed capex and move quickly.";
+  if (t.includes("hydro") && r.includes("iceland"))
+    return "With aluminum smelter contracts rolling off, your position in Iceland is precisely what the AI infrastructure market is looking for — the carbon profile, the geography, and the energization timeline all align with what buyers need right now.";
+  if (t.includes("hydro") && (r.includes("malaysia") || r.includes("bhutan") || r.includes("kenya")))
+    return "Asian and East African hydro assets are attracting serious buyer attention from operators who've exhausted the North American and European off-market inventories. Your asset is in the right place at the right time.";
+  if (t.includes("curtailment"))
+    return "Curtailment-zone assets that were difficult to monetize two years ago are now among the most sought-after industrial sites in this market — the buyer profile has completely changed with AI compute demand and the economics have followed.";
+  if (t.includes("substation") || t.includes("nuclear"))
+    return "Stranded transmission infrastructure and nuclear-adjacent power are in a different category from what buyers were willing to consider 18 months ago — the combination of ESG premium and timeline certainty makes these genuinely attractive at the right structure.";
+  return "Off-market power infrastructure in your position — existing permits, no grid queue, motivated seller — has become one of the most difficult assets to source in this market, which means your negotiating leverage with qualified buyers is real.";
+}
+
+// ─── Subject lines (human, curiosity-inducing — not product menus) ─────────
+function seekerSubject(suppliers: Supplier[], seeker: Seeker): string {
+  const regions = Array.from(new Set(suppliers.map(s => s.region.split(",")[0].trim()))).slice(0, 2).join(" / ");
+  if (/hyperscaler|cloud/i.test(seeker.type))
+    return `${seeker.neededMW} MW CFE-aligned — ${regions} — off-market, no queue`;
+  if (/miner|mining|btc|crypto/i.test(seeker.type))
+    return `${seeker.neededMW} MW BTM power — ${regions} — fixed-rate, no grid exposure`;
+  return `${seeker.neededMW} MW off-market — ${regions} — 12–18 mo energization`;
+}
+
+function supplierSubject(seekers: Seeker[], supplier: Supplier): string {
+  const totalMW = seekers.reduce((s, sk) => s + sk.neededMW, 0);
+  const shortBuyer = seekers.length === 1
+    ? `${seekers[0].neededMW} MW buyer, ${seekers[0].type}`
+    : `${seekers.length} buyers — ${totalMW} MW combined`;
+  return `${shortBuyer} — ${supplier.region} — intro`;
 }
 
 // ─── Buyer pool description — NO namedropping in cold email ───────────────
@@ -132,25 +201,24 @@ export function generateOutreachToSupplierMulti(
   const buyerDesc = buyerPoolDescription(seekers);
 
   if (template === "cold-email") {
-    return `Subject: ${seekers.length} Qualified Power Buyers — ${supplier.region} — Intro
+    const opener = supplierOpener(supplier);
+    const subject = supplierSubject(seekers, supplier);
+
+    return `Subject: ${subject}
 
 Hi ${fn},
 
-${urgency}.
+${opener}
 
-We represent ${buyerDesc} — ${totalMW} MW combined requirement — each board-approved with committed deployment capital. Your ${supplier.availableMW} MW ${supplier.region} asset matches the full group by capacity, geography, and timeline.
+I represent ${buyerDesc} — ${totalMW} MW of combined requirement, each with board approval and committed deployment capital in place. Your ${supplier.availableMW} MW ${supplier.region} asset is a match across capacity, geography, and timeline for the full group.
 
-We work across multiple counterparties simultaneously, which means you review all buyer profiles before selecting a preferred party — preserving your pricing leverage through every stage.
+Here's what's different about how I work: you see all buyer profiles before you select a counterparty. No exclusivity until you've chosen who you want to engage — your pricing leverage stays intact throughout. Terms are structured within the range of recent comparable transactions; specifics follow once we've had a conversation.
 
-Terms are structured within the range of comparable recent transactions; specifics follow under a single NCND.
+Worth 15 minutes this week to walk through who we're representing?
 
-Worth 15 minutes this week to review the buyer profiles?
+${BROKER_SIGNATURE}
 
-${BROKER_NAME}
-${BROKER_EMAIL}
-
----
-Informational introduction only. All details require independent verification. Engage legal counsel before any commitment.`;
+[Informational only. All details subject to independent verification.]`;
   }
 
   if (template === "linkedin") {
@@ -160,19 +228,18 @@ Informational introduction only. All details require independent verification. E
     }).join("\n");
     return `Hi ${fn},
 
-Reaching out specifically about your ${supplier.region} position — ${urgency.split("—")[0].trim()}.
+I focus specifically on placing off-market power assets with qualified industrial buyers — your ${supplier.region} position is exactly the kind of asset I work with.
 
-We represent ${seekers.length} board-approved power buyers with ${totalMW} MW combined. Two examples:
+I'm currently representing ${seekers.length} buyers (${totalMW} MW combined) who are board-approved and moving quickly:
 
 ${top2}
-${seekers.length > 2 ? `→ +${seekers.length - 2} more qualified operator${seekers.length - 2 > 1 ? "s" : ""}` : ""}
+${seekers.length > 2 ? `→ +${seekers.length - 2} more` : ""}
 
-Your ${supplier.availableMW} MW matches all of them. NCND + buyer profiles ready to send today — no exclusivity required until you've selected a preferred counterparty.
+Your ${supplier.availableMW} MW is a match across capacity, location, and timeline. You'd review all buyer profiles before selecting anyone — no exclusivity until you're ready.
 
-15-minute call this week?
+Worth a 15-minute call this week?
 
-${BROKER_NAME} | ${BROKER_EMAIL}
-[Subject to independent verification.]`;
+Alex Chen — PowerMatch Advisors`;
   }
 
   // call-script
@@ -244,31 +311,30 @@ export function generateOutreachToSeekerMulti(
   const painShort = seeker.keyPain.split(";")[0].split(".")[0];
 
   if (template === "cold-email") {
-    const tierContext = profile.tier === "hyperscaler"
-      ? "All sites are renewable or low-carbon — CFE-aligned and ESG-reportable."
+    const tierHook = profile.tier === "hyperscaler"
+      ? `All ${suppliers.length} sites are renewable or low-carbon — CFE-compliant and ESG-reportable, with no additionality complications.`
       : profile.tier === "miner"
-      ? "BTM structures available — no grid exposure, flexible load scheduling for AI co-location margins."
-      : "Existing permitted infrastructure — your compute fleet is live before competitors finish their interconnection application.";
+      ? `All are BTM structures — no grid exposure, load scheduling flexibility built in, and none of the interconnection risk that's been repricing conventional assets.`
+      : `Each site has existing permits and infrastructure already in place — you're looking at 12–18 months to energization, not the 3–5 years a greenfield or queued interconnection would require.`;
 
-    return `Subject: Off-Market Power Menu — ${suppliers.length} Sites — ${totalMW} MW — No Grid Queue
+    const opener = seekerOpener(seeker);
+    const subject = seekerSubject(suppliers, seeker);
+
+    return `Subject: ${subject}
 
 Hi ${fn},
 
-${painShort} — we have a direct solution.
+${opener}
 
-We hold exclusive brokerage mandates on ${suppliers.length} off-market power assets: ${portfolioDesc}. Total capacity: ${totalMW} MW. Each site has existing permits and motivated sellers — no interconnection queue, 12–18 months to energization.
+I'm currently representing the owners of ${portfolioDesc} — ${totalMW} MW of existing, permitted capacity. None of it is in a broker database; these assets are being placed privately with a short list of qualified operators. Your ${seeker.neededMW} MW requirement is covered with redundancy across the portfolio. ${tierHook}
 
-${tierContext}
+Pricing is in line with recent comparable transactions — I share specifics once we've had a brief conversation and confirmed mutual interest.
 
-Pricing is competitive with current market transactions; specifics are shared under NDA. Your ${seeker.neededMW} MW need is covered with redundancy across the portfolio.
+I can put together a one-page overview on each site — no formal paperwork at this stage. Happy to get on a 15-minute call this week if the timing works.
 
-A single NCND unlocks confidential site teasers for all ${suppliers.length} assets. Are you the right contact for infrastructure decisions, or should I reach your facilities lead?
+${BROKER_SIGNATURE}
 
-${BROKER_NAME}
-${BROKER_EMAIL}
-
----
-Informational introduction only. All details require independent verification. Engage legal counsel before any commitment.`;
+[Informational only. All details subject to independent verification.]`;
   }
 
   if (template === "linkedin") {
@@ -276,25 +342,24 @@ Informational introduction only. All details require independent verification. E
       `→ ${s.name} — ${s.availableMW} MW | ${s.region} | ${s.type}`
     ).join("\n");
     const tierHook = profile.tier === "hyperscaler"
-      ? "All renewable/low-carbon — CFE-aligned."
+      ? "All renewable or low-carbon — CFE-compliant, no additionality issues."
       : profile.tier === "miner"
-      ? "BTM structures available — no grid exposure, ideal for AI co-location economics."
-      : "Existing permitted infrastructure — 12–18 months to energization, no queue.";
+      ? "BTM structures — no grid exposure, flexible load scheduling."
+      : "Existing permits, no interconnection queue — 12–18 months to energization.";
     return `Hi ${fn},
 
-${seeker.neededMW} MW power requirement, ${painShort.toLowerCase()} — we may have a direct solution.
+I work specifically on off-market power sourcing for operators in your position — ${seeker.neededMW} MW at a pace the grid can't accommodate.
 
-We hold exclusive access to ${suppliers.length} off-market power sites (${totalMW} MW total):
+I have access to ${suppliers.length} assets right now (${totalMW} MW total) that aren't in any database:
 
 ${top2}
-${suppliers.length > 2 ? `→ +${suppliers.length - 2} more site${suppliers.length - 2 > 1 ? "s" : ""}` : ""}
+${suppliers.length > 2 ? `→ +${suppliers.length - 2} more` : ""}
 
-${tierHook} Motivated sellers across all sites — your timeline pressure becomes pricing leverage.
+${tierHook} Sellers are motivated — timeline pressure works in your favor on pricing.
 
-A single NCND covers all site teasers. Worth a 20-minute intro call?
+Happy to send a one-pager on each site. Would a brief call this week make sense?
 
-${BROKER_NAME} | ${BROKER_EMAIL}
-[Subject to independent verification.]`;
+Alex Chen — PowerMatch Advisors`;
   }
 
   // call-script
