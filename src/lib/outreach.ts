@@ -75,7 +75,7 @@ function supplierOpener(supplier: Supplier): string {
   if (t.includes("hydro") && r.includes("paraguay"))
     return "The Law 6.207 tariff window has generated more serious buyer interest than most Paraguayan asset owners realize. The challenge is separating counterparties with genuine board approval from those still in committee — that's what I do.";
   if (t.includes("hydro") && r.includes("ethiopia"))
-    return "GERD's reservoir surplus is drawing serious attention from buyers who understand the 2026 window for USD-denominated agreements. The operators I work with have committed capex and move quickly.";
+    return "GERD's reservoir surplus is drawing serious attention from buyers who understand the 2026 window for USD-denominated agreements. The operators I'm currently representing are actively allocating capital and move on compressed timelines.";
   if (t.includes("hydro") && r.includes("iceland"))
     return "With aluminum smelter contracts rolling off, your position in Iceland is precisely what the AI infrastructure market is looking for — the carbon profile, the geography, and the energization timeline all align with what buyers need right now.";
   if (t.includes("hydro") && (r.includes("malaysia") || r.includes("bhutan") || r.includes("kenya")))
@@ -136,10 +136,16 @@ function verifiedPortfolioClaims(suppliers: Supplier[]): string {
 function seekerSubject(suppliers: Supplier[], seeker: Seeker): string {
   const regions = Array.from(new Set(suppliers.map(s => s.region.split(",")[0].trim()))).slice(0, 2).join(" / ");
   if (/hyperscaler|cloud/i.test(seeker.type))
-    return `${seeker.neededMW} MW CFE-aligned — ${regions} — off-market, no queue`;
+    return `${seeker.neededMW} MW CFE-aligned — ${regions} — off-market`;
   if (/miner|mining|btc|crypto/i.test(seeker.type))
     return `${seeker.neededMW} MW BTM power — ${regions} — fixed-rate, no grid exposure`;
-  return `${seeker.neededMW} MW off-market — ${regions} — 12–18 mo energization`;
+  // Derive timeline from actual verified data — never hardcode
+  const months = suppliers.map(s => s.estimatedMonthsToEnergization).filter((m): m is number => typeof m === "number");
+  if (months.length > 0 && months.length === suppliers.length) {
+    const lo = Math.min(...months);
+    return `${seeker.neededMW} MW off-market — ${regions} — est. ${lo}–${lo + 6}mo energization`;
+  }
+  return `${seeker.neededMW} MW off-market power — ${regions}`;
 }
 
 function supplierSubject(seekers: Seeker[], supplier: Supplier): string {
@@ -219,6 +225,23 @@ function publicTicker(name: string): string {
   return "";
 }
 
+// ─── Capital commitment claim — only assert what's verifiable per seeker data ─
+// Public filings = safe to cite. Private companies = stay silent.
+function seekerCapitalClaim(seekers: Seeker[]): string {
+  const allCommitted = seekers.length > 0 && seekers.every(s => s.capexCommitted === true);
+  const allListed = seekers.length > 0 && seekers.every(s => publicTicker(s.name) !== "");
+  const someCommitted = seekers.some(s => s.capexCommitted === true);
+  if (allCommitted)
+    return " — capital deployment publicly disclosed in investor filings";
+  if (allListed)
+    return " — each publicly listed with active infrastructure procurement mandates";
+  if (someCommitted) {
+    const n = seekers.filter(s => s.capexCommitted === true).length;
+    return ` — ${n} with publicly disclosed mandates, others confirmed by management`;
+  }
+  return ""; // private / unverified → make no claim
+}
+
 // ─── Pricing coaching — FOR CALL SCRIPTS ONLY, never in cold outreach ─────
 function callScriptPricingCoach(supplier: Supplier, seekers: Seeker[]): string {
   const profile = BUYER_PRICING[seekers[0]?.type] ?? BUYER_PRICING["Hybrid Compute"];
@@ -255,7 +278,7 @@ Hi ${fn},
 
 ${opener}
 
-I represent ${buyerDesc} — ${totalMW} MW of combined requirement, each with board approval and committed deployment capital in place. Your ${supplier.availableMW} MW ${supplier.region} asset is a match across capacity, geography, and timeline for the full group.
+I represent ${buyerDesc} — ${totalMW} MW of combined requirement${seekerCapitalClaim(seekers)}. Your ${supplier.availableMW} MW ${supplier.region} asset is a match across capacity, geography, and timeline for the full group.
 
 Here's what's different about how I work: you see all buyer profiles before you select a counterparty. No exclusivity until you've chosen who you want to engage — your pricing leverage stays intact throughout. Terms are structured within the range of recent comparable transactions; specifics follow once we've had a conversation.
 
@@ -275,7 +298,7 @@ ${BROKER_SIGNATURE}
 
 I focus specifically on placing off-market power assets with qualified industrial buyers — your ${supplier.region} position is exactly the kind of asset I work with.
 
-I'm currently representing ${seekers.length} buyers (${totalMW} MW combined) who are board-approved and moving quickly:
+I'm currently representing ${seekers.length} buyers (${totalMW} MW combined)${seekerCapitalClaim(seekers)}:
 
 ${top2}
 ${seekers.length > 2 ? `→ +${seekers.length - 2} more` : ""}
@@ -310,7 +333,7 @@ VALUE HOOK (60 sec):
 "Our active buyer pool includes:
 ${seekerLines}${seekers.length > 5 ? `\n  ...and ${seekers.length - 5} more. Combined demand: ${totalMW} MW.` : `\nCombined demand: ${totalMW} MW.`}
 
-Each is board-approved with committed capex. You review all profiles before committing — that's your pricing leverage."
+You review all profiles before committing — that's your pricing leverage."
 
 PAIN ACKNOWLEDGMENT (45 sec):
 "I know your challenge: ${supplier.keyPain.split(";")[0]}.
@@ -378,7 +401,7 @@ Hi ${fn},
 
 ${opener}
 
-I'm currently representing the owners of ${portfolioDesc} — ${totalMW} MW of operational or near-operational capacity. None of it is in a broker database; these assets are being placed privately with a short list of qualified operators. Your ${seeker.neededMW} MW requirement is covered with redundancy across the portfolio. ${tierHook}${claimsLine}
+I'm representing the owners of ${portfolioDesc} — ${totalMW} MW of operational or near-operational capacity, placed through a private matching process rather than a public marketplace. Your ${seeker.neededMW} MW requirement is covered with redundancy across the portfolio. ${tierHook}${claimsLine}
 
 Pricing is in line with recent comparable transactions — I share specifics once we've had a brief conversation and confirmed mutual interest.
 
@@ -445,7 +468,7 @@ ${siteLines}
 ${suppliers.length > 5 ? `  ...and ${suppliers.length - 5} more. Total: ${totalMW} MW available.` : `Total: ${totalMW} MW across all sites.`}
 
 Price range: ${priceRange}/kWh all-in — ${profile.tier === "miner" ? "within your post-halving AI co-location target" : "competitive with what hyperscalers are currently paying for fast-track capacity"}.
-All sites: 12–18 months to energization. No grid queue. Motivated sellers — timing pressure works in your favor on price."
+${(() => { const ms = suppliers.map(s => s.estimatedMonthsToEnergization).filter((m): m is number => typeof m === "number"); return ms.length > 0 ? `Energization timeline: ${Math.min(...ms)}–${Math.max(...ms) + 6} months per sellers (confirm in diligence). ` : ""; })()}No new interconnection queue required. Motivated sellers — timing pressure works in your favor on price."
 
 PAIN ACKNOWLEDGMENT (45 sec):
 "I understand the constraint: ${painShort}.

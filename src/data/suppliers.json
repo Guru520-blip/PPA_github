@@ -20,7 +20,8 @@
     "startupFriendly": 6,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 18
+    "estimatedMonthsToEnergization": 18,
+    "newBrokerFit": 6
   },
   {
     "id": 2,
@@ -42,7 +43,8 @@
     "startupFriendly": 9,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 6
+    "estimatedMonthsToEnergization": 6,
+    "newBrokerFit": 9
   },
   {
     "id": 3,
@@ -64,7 +66,8 @@
     "startupFriendly": 7,
     "permitStatus": "Seller-stated",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 18
+    "estimatedMonthsToEnergization": 18,
+    "newBrokerFit": 6
   },
   {
     "id": 4,
@@ -86,7 +89,8 @@
     "startupFriendly": 8,
     "permitStatus": "Not verified",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 8
   },
   {
     "id": 5,
@@ -108,7 +112,8 @@
     "startupFriendly": 8,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 9
+    "estimatedMonthsToEnergization": 9,
+    "newBrokerFit": 8
   },
   {
     "id": 6,
@@ -130,7 +135,8 @@
     "startupFriendly": 6,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 6
   },
   {
     "id": 7,
@@ -152,7 +158,8 @@
     "startupFriendly": 7,
     "permitStatus": "Not verified",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 7
   },
   {
     "id": 8,
@@ -174,7 +181,8 @@
     "startupFriendly": 7,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 18
+    "estimatedMonthsToEnergization": 18,
+    "newBrokerFit": 6
   },
   {
     "id": 9,
@@ -196,7 +204,8 @@
     "startupFriendly": 5,
     "permitStatus": "Not verified",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 4
   },
   {
     "id": 10,
@@ -218,7 +227,8 @@
     "startupFriendly": 6,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 6
   },
   {
     "id": 11,
@@ -240,7 +250,8 @@
     "startupFriendly": 7,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 18
+    "estimatedMonthsToEnergization": 18,
+    "newBrokerFit": 7
   },
   {
     "id": 12,
@@ -261,7 +272,8 @@
     "startupFriendly": 7,
     "permitStatus": "Seller-stated",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 24
+    "estimatedMonthsToEnergization": 24,
+    "newBrokerFit": 6
   },
   {
     "id": 13,
@@ -283,7 +295,8 @@
     "startupFriendly": 5,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 18
+    "estimatedMonthsToEnergization": 18,
+    "newBrokerFit": 4
   },
   {
     "id": 14,
@@ -305,7 +318,8 @@
     "startupFriendly": 8,
     "permitStatus": "Not verified",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 8
   },
   {
     "id": 15,
@@ -327,7 +341,8 @@
     "startupFriendly": 7,
     "permitStatus": "Not verified",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 14
+    "estimatedMonthsToEnergization": 14,
+    "newBrokerFit": 7
   },
   {
     "id": 16,
@@ -349,7 +364,8 @@
     "startupFriendly": 6,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 18
+    "estimatedMonthsToEnergization": 18,
+    "newBrokerFit": 3
   },
   {
     "id": 17,
@@ -371,7 +387,8 @@
     "startupFriendly": 7,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 7
   },
   {
     "id": 18,
@@ -393,7 +410,8 @@
     "startupFriendly": 8,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 18
+    "estimatedMonthsToEnergization": 18,
+    "newBrokerFit": 8
   },
   {
     "id": 19,
@@ -415,7 +433,8 @@
     "startupFriendly": 7,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 7
   },
   {
     "id": 20,
@@ -437,7 +456,8 @@
     "startupFriendly": 8,
     "permitStatus": "Not verified",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 8
   },
   {
     "id": 21,
@@ -459,7 +479,8 @@
     "startupFriendly": 7,
     "permitStatus": "Not verified",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 7
   },
   {
     "id": 22,
@@ -481,7 +502,8 @@
     "startupFriendly": 7,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 7
   },
   {
     "id": 23,
@@ -503,7 +525,8 @@
     "startupFriendly": 6,
     "permitStatus": "Seller-stated",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 24
+    "estimatedMonthsToEnergization": 24,
+    "newBrokerFit": 4
   },
   {
     "id": 24,
@@ -525,7 +548,8 @@
     "startupFriendly": 7,
     "permitStatus": "Confirmed",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 7
   },
   {
     "id": 25,
@@ -547,6 +571,7 @@
     "startupFriendly": 8,
     "permitStatus": "Not verified",
     "noInterconnectionQueue": true,
-    "estimatedMonthsToEnergization": 12
+    "estimatedMonthsToEnergization": 12,
+    "newBrokerFit": 8
   }
 ]

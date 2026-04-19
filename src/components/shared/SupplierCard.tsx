@@ -47,6 +47,15 @@ export function SupplierCard({ supplier, onGenerateOutreach, onMatch, compact, t
             <span className={`text-[9px] px-1.5 py-0.5 rounded border font-medium ${urgency.cls}`}>
               <Flame className="h-2.5 w-2.5 inline mr-0.5" />{urgency.label} · {engagementPct}%
             </span>
+            {supplier.newBrokerFit !== undefined && (
+              <span className={`text-[9px] px-1.5 py-0.5 rounded border font-medium ${
+                supplier.newBrokerFit >= 8 ? "text-green-400 border-green-700/50 bg-green-950/30"
+                : supplier.newBrokerFit >= 6 ? "text-yellow-400 border-yellow-700/50 bg-yellow-950/30"
+                : "text-gray-500 border-gray-700/50 bg-gray-900/30"
+              }`} title="Likelihood this company engages a new/boutique broker (1-10)">
+                Broker fit: {supplier.newBrokerFit}/10
+              </span>
+            )}
           </div>
         </div>
         <div className="flex flex-wrap gap-3 text-sm text-gray-500 dark:text-gray-400 mt-1">

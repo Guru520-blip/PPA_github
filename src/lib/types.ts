@@ -21,6 +21,7 @@ export interface Supplier {
   permitStatus?: "Confirmed" | "Seller-stated" | "Not verified";
   noInterconnectionQueue?: boolean;   // true = confirmed no new queue needed
   estimatedMonthsToEnergization?: number; // point estimate; range shown as N to N+6
+  newBrokerFit?: number;             // 1-10: realistic probability of engaging a new/boutique broker
 }
 
 export interface Seeker {
@@ -42,6 +43,9 @@ export interface Seeker {
   notes: string;
   urgencyScore: number;    // 1-10: urgency of power procurement need
   startupFriendly: number; // 1-10: openness to working with startup brokers
+  // ── Engagement intelligence ────────────────────────────────────────────────
+  newBrokerFit?: number;    // 1-10: realistic probability of engaging a new/boutique broker
+  capexCommitted?: boolean; // true = capital deployment publicly disclosed in investor filings
 }
 
 export interface MatchResult {

@@ -7,7 +7,7 @@ import { Supplier, Seeker } from "@/lib/types";
 import { matchSuppliersToSeeker } from "@/lib/matching";
 import { SeekerCard } from "@/components/shared/SeekerCard";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, SlidersHorizontal, RefreshCw, TrendingUp } from "lucide-react";
+import { Search, RefreshCw, ListFilter, SlidersHorizontal, Filter, TrendingUp } from "lucide-react";
 
 const seekers = seekersData as Seeker[];
 const suppliers = suppliersData as Supplier[];
@@ -17,7 +17,8 @@ const ALL_REGIONS = ["All", ...Array.from(new Set(seekers.flatMap((s) => s.prefe
 type SortMode = "engagement" | "urgency" | "mw" | "az";
 
 function engagementScore(s: Seeker) {
-  return s.urgencyScore * 0.6 + s.startupFriendly * 0.4;
+  const fit = s.newBrokerFit ?? s.startupFriendly;
+  return s.urgencyScore * 0.5 + fit * 0.3 + s.startupFriendly * 0.2;
 }
 
 export default function SeekersPage() {
@@ -28,7 +29,14 @@ export default function SeekersPage() {
   const [minMW, setMinMW] = useState(0);
   const [view, setView] = useState<"grid" | "table">("grid");
   const [sortMode, setSortMode] = useState<SortMode>("engagement");
+  const [workingList, setWorkingList] = useState(false);
+  const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const [rankKey, setRankKey] = useState(0);
+
+  function handleRefresh() {
+    setLastRefreshed(new Date());
+    setRankKey(k => k + 1);
+  }
 
   const topSuppliersBySeeker = useMemo(() => {
     const map = new Map<number, { id: number; name: string; score: number; type: string }[]>();
@@ -46,24 +54,50 @@ export default function SeekersPage() {
       const matchType = typeFilter === "All" || s.type === typeFilter;
       const matchRegion = regionFilter === "All" || s.preferredRegions.includes(regionFilter);
       const matchMW = s.neededMW >= minMW;
-      return matchSearch && matchType && matchRegion && matchMW;
+      const matchWorking = !workingList || (s.newBrokerFit ?? s.startupFriendly) >= 7;
+      return matchSearch && matchType && matchRegion && matchMW && matchWorking;
     });
     return base.sort((a, b) => {
+      if (workingList) {
+        const aScore = a.urgencyScore * (a.newBrokerFit ?? a.startupFriendly);
+        const bScore = b.urgencyScore * (b.newBrokerFit ?? b.startupFriendly);
+        return bScore - aScore;
+      }
       if (sortMode === "engagement") return engagementScore(b) - engagementScore(a);
       if (sortMode === "urgency") return b.urgencyScore - a.urgencyScore;
       if (sortMode === "mw") return b.neededMW - a.neededMW;
       return a.name.localeCompare(b.name);
     });
-  }, [search, typeFilter, regionFilter, minMW, sortMode]);
+  }, [search, typeFilter, regionFilter, minMW, sortMode, workingList, rankKey]);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-white">Power Seekers</h1>
-          <p className="text-gray-400 text-sm mt-0.5">Hyperscalers, miners pivoting to AI, hybrid compute — ranked by engagement probability</p>
+          <p className="text-gray-400 text-sm mt-0.5">
+            {workingList
+              ? `Working List — ${filtered.length} realistic targets for a new broker, ranked by urgency × fit`
+              : "Hyperscalers, miners pivoting to AI, hybrid compute — ranked by engagement probability"}
+          </p>
+          {lastRefreshed && (
+            <p className="text-[11px] text-gray-600 mt-0.5">Last refreshed: {lastRefreshed.toLocaleTimeString()}</p>
+          )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 shrink-0">
+          <Button
+            size="sm"
+            variant={workingList ? "default" : "outline"}
+            onClick={() => setWorkingList(w => !w)}
+            className={workingList ? "bg-green-700 hover:bg-green-600 border-green-600" : ""}
+          >
+            <ListFilter className="h-3.5 w-3.5 mr-1.5" />
+            Working List
+          </Button>
+          <Button size="sm" variant="outline" onClick={handleRefresh} title="Refresh urgency scores">
+            <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
+            Refresh
+          </Button>
           <Button size="sm" variant={view === "grid" ? "default" : "outline"} onClick={() => setView("grid")}>Grid</Button>
           <Button size="sm" variant={view === "table" ? "default" : "outline"} onClick={() => setView("table")}>Table</Button>
         </div>
