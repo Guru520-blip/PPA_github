@@ -17,6 +17,10 @@ export interface Supplier {
   notes: string;
   urgencyScore: number;    // 1-10: how urgently supplier needs offtake deal
   startupFriendly: number; // 1-10: likelihood to engage with a startup broker
+  // ── Verified asset claims (only assert in outreach what's confirmed here) ──
+  permitStatus?: "Confirmed" | "Seller-stated" | "Not verified";
+  noInterconnectionQueue?: boolean;   // true = confirmed no new queue needed
+  estimatedMonthsToEnergization?: number; // point estimate; range shown as N to N+6
 }
 
 export interface Seeker {

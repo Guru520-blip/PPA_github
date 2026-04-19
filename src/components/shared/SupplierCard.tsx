@@ -80,6 +80,28 @@ export function SupplierCard({ supplier, onGenerateOutreach, onMatch, compact, t
           <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2">{supplier.notes}</p>
         )}
 
+        {!compact && (supplier.permitStatus || supplier.noInterconnectionQueue || supplier.estimatedMonthsToEnergization) && (
+          <div className="flex flex-wrap gap-1 text-[10px]">
+            {supplier.permitStatus === "Confirmed" && (
+              <span className="px-1.5 py-0.5 rounded border border-green-700/50 bg-green-950/30 text-green-400">Permits verified</span>
+            )}
+            {supplier.permitStatus === "Seller-stated" && (
+              <span className="px-1.5 py-0.5 rounded border border-yellow-700/50 bg-yellow-950/30 text-yellow-400">Permits: seller-stated</span>
+            )}
+            {supplier.permitStatus === "Not verified" && (
+              <span className="px-1.5 py-0.5 rounded border border-gray-700/50 bg-gray-900 text-gray-500">Permits: not verified</span>
+            )}
+            {supplier.noInterconnectionQueue && (
+              <span className="px-1.5 py-0.5 rounded border border-blue-700/50 bg-blue-950/30 text-blue-400">No queue</span>
+            )}
+            {supplier.estimatedMonthsToEnergization && (
+              <span className="px-1.5 py-0.5 rounded border border-orange-700/50 bg-orange-950/30 text-orange-400">
+                ~{supplier.estimatedMonthsToEnergization}–{supplier.estimatedMonthsToEnergization + 6}mo
+              </span>
+            )}
+          </div>
+        )}
+
         <div className="space-y-1 text-xs text-gray-500 dark:text-gray-400">
           <div className="flex items-center gap-2">
             <Mail className="h-3 w-3 shrink-0" />

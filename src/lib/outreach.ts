@@ -87,6 +87,51 @@ function supplierOpener(supplier: Supplier): string {
   return "Off-market power infrastructure in your position — existing permits, no grid queue, motivated seller — has become one of the most difficult assets to source in this market, which means your negotiating leverage with qualified buyers is real.";
 }
 
+// ─── Verified portfolio claims — only assert what's in the data ──────────
+// This is the core integrity function: we never claim "existing permits",
+// "no interconnection queue", or a specific energization timeline unless
+// the corresponding Supplier fields are populated. Unknown = we stay silent.
+function verifiedPortfolioClaims(suppliers: Supplier[]): string {
+  const n = suppliers.length;
+  const confirmed = suppliers.filter(s => s.permitStatus === "Confirmed").length;
+  const sellerStated = suppliers.filter(s => s.permitStatus === "Seller-stated").length;
+  const allNoQueue = n > 0 && suppliers.every(s => s.noInterconnectionQueue === true);
+  const months = suppliers
+    .map(s => s.estimatedMonthsToEnergization)
+    .filter((m): m is number => typeof m === "number");
+
+  const parts: string[] = [];
+
+  // Permit claim — honest per-portfolio status
+  if (n === 1) {
+    const s = suppliers[0];
+    if (s.permitStatus === "Confirmed") parts.push("generation permits in place (verified by the seller and available for your diligence)");
+    else if (s.permitStatus === "Seller-stated") parts.push("permits in place per seller (documentation available under NDA for your independent verification)");
+    // "Not verified" → no permit claim made
+  } else if (n > 1) {
+    if (confirmed === n) parts.push(`generation permits verified on all ${n} sites`);
+    else if (confirmed + sellerStated === n) parts.push(`permits are in place or seller-stated across all ${n} sites, subject to your diligence`);
+    else if (confirmed > 0) parts.push(`permits verified on ${confirmed} of ${n} sites; remainder pending your diligence`);
+  }
+
+  // Interconnection queue — only assert when ALL suppliers confirm
+  if (allNoQueue) parts.push("no new grid interconnection queue required");
+
+  // Energization timeline — use actual field values, disclose as estimate
+  if (months.length > 0 && months.length === n) {
+    const lo = Math.min(...months);
+    const hi = Math.max(...months) + 6; // point estimate + 6mo upper band
+    parts.push(`estimated ${lo}–${hi} months to energization per sellers (subject to diligence)`);
+  }
+
+  if (!parts.length) return "";
+  // Join naturally as a sentence
+  const joined = parts.length === 1
+    ? parts[0]
+    : parts.slice(0, -1).join(", ") + "; " + parts[parts.length - 1];
+  return joined.charAt(0).toUpperCase() + joined.slice(1) + ".";
+}
+
 // ─── Subject lines (human, curiosity-inducing — not product menus) ─────────
 function seekerSubject(suppliers: Supplier[], seeker: Seeker): string {
   const regions = Array.from(new Set(suppliers.map(s => s.region.split(",")[0].trim()))).slice(0, 2).join(" / ");
@@ -311,11 +356,18 @@ export function generateOutreachToSeekerMulti(
   const painShort = seeker.keyPain.split(";")[0].split(".")[0];
 
   if (template === "cold-email") {
+    // Profile/ESG hooks — these are structural facts about the asset TYPE, not verification claims
     const tierHook = profile.tier === "hyperscaler"
-      ? `All ${suppliers.length} sites are renewable or low-carbon — CFE-compliant and ESG-reportable, with no additionality complications.`
+      ? `All sites are renewable or low-carbon — positioned for CFE and ESG reporting alignment.`
       : profile.tier === "miner"
-      ? `All are BTM structures — no grid exposure, load scheduling flexibility built in, and none of the interconnection risk that's been repricing conventional assets.`
-      : `Each site has existing permits and infrastructure already in place — you're looking at 12–18 months to energization, not the 3–5 years a greenfield or queued interconnection would require.`;
+      ? `All are BTM structures — no grid exposure, load-scheduling flexibility built in by asset design.`
+      : `Existing operational infrastructure — not greenfield.`;
+
+    // Only asserts what Supplier fields confirm; stays silent on what's not verified
+    const verified = verifiedPortfolioClaims(suppliers);
+    const claimsLine = verified
+      ? ` Verified claim set for this portfolio: ${verified}`
+      : ` Specific permit status and timelines are confirmed per site and shared with you during diligence.`;
 
     const opener = seekerOpener(seeker);
     const subject = seekerSubject(suppliers, seeker);
@@ -326,7 +378,7 @@ Hi ${fn},
 
 ${opener}
 
-I'm currently representing the owners of ${portfolioDesc} — ${totalMW} MW of existing, permitted capacity. None of it is in a broker database; these assets are being placed privately with a short list of qualified operators. Your ${seeker.neededMW} MW requirement is covered with redundancy across the portfolio. ${tierHook}
+I'm currently representing the owners of ${portfolioDesc} — ${totalMW} MW of operational or near-operational capacity. None of it is in a broker database; these assets are being placed privately with a short list of qualified operators. Your ${seeker.neededMW} MW requirement is covered with redundancy across the portfolio. ${tierHook}${claimsLine}
 
 Pricing is in line with recent comparable transactions — I share specifics once we've had a brief conversation and confirmed mutual interest.
 
@@ -334,7 +386,7 @@ I can put together a one-page overview on each site — no formal paperwork at t
 
 ${BROKER_SIGNATURE}
 
-[Informational only. All details subject to independent verification.]`;
+[Informational only. All claims subject to your independent verification.]`;
   }
 
   if (template === "linkedin") {
@@ -342,10 +394,12 @@ ${BROKER_SIGNATURE}
       `→ ${s.name} — ${s.availableMW} MW | ${s.region} | ${s.type}`
     ).join("\n");
     const tierHook = profile.tier === "hyperscaler"
-      ? "All renewable or low-carbon — CFE-compliant, no additionality issues."
+      ? "All renewable or low-carbon — positioned for CFE/ESG alignment."
       : profile.tier === "miner"
-      ? "BTM structures — no grid exposure, flexible load scheduling."
-      : "Existing permits, no interconnection queue — 12–18 months to energization.";
+      ? "BTM structures — no grid exposure, flexible load scheduling by design."
+      : "Operational or near-operational assets — not greenfield.";
+    const verified = verifiedPortfolioClaims(suppliers);
+    const claimsLine = verified ? `\nPortfolio claim set (subject to your diligence): ${verified}` : "";
     return `Hi ${fn},
 
 I work specifically on off-market power sourcing for operators in your position — ${seeker.neededMW} MW at a pace the grid can't accommodate.
@@ -355,7 +409,7 @@ I have access to ${suppliers.length} assets right now (${totalMW} MW total) that
 ${top2}
 ${suppliers.length > 2 ? `→ +${suppliers.length - 2} more` : ""}
 
-${tierHook} Sellers are motivated — timeline pressure works in your favor on pricing.
+${tierHook} Sellers are motivated — timeline pressure works in your favor on pricing.${claimsLine}
 
 Happy to send a one-pager on each site. Would a brief call this week make sense?
 
