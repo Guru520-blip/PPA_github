@@ -278,11 +278,11 @@ Hi ${fn},
 
 ${opener}
 
-I represent ${buyerDesc} — ${totalMW} MW of combined requirement${seekerCapitalClaim(seekers)}. Your ${supplier.availableMW} MW ${supplier.region} asset is a match across capacity, geography, and timeline for the full group.
+I'm representing ${buyerDesc} — ${totalMW} MW of combined requirement${seekerCapitalClaim(seekers)}. Your ${supplier.availableMW} MW ${supplier.region} asset matches the group on capacity, geography, and timeline.
 
-Here's what's different about how I work: you see all buyer profiles before you select a counterparty. No exclusivity until you've chosen who you want to engage — your pricing leverage stays intact throughout. Terms are structured within the range of recent comparable transactions; specifics follow once we've had a conversation.
+Here's how I work: you review all buyer profiles before selecting a counterparty. No formal exclusivity until you choose who to engage — your pricing leverage stays intact. Terms within the range of recent comparable transactions; specifics follow a brief conversation.
 
-Worth 15 minutes this week to walk through who we're representing?
+Worth 15 minutes this week to walk through the buyer pool?
 
 ${BROKER_SIGNATURE}
 
@@ -403,9 +403,9 @@ ${opener}
 
 I'm representing the owners of ${portfolioDesc} — ${totalMW} MW of operational or near-operational capacity, placed through a private matching process rather than a public marketplace. Your ${seeker.neededMW} MW requirement is covered with redundancy across the portfolio. ${tierHook}${claimsLine}
 
-Pricing is in line with recent comparable transactions — I share specifics once we've had a brief conversation and confirmed mutual interest.
+Pricing is in line with recent comparable transactions — specifics follow a brief conversation once mutual interest is confirmed.
 
-I can put together a one-page overview on each site — no formal paperwork at this stage. Happy to get on a 15-minute call this week if the timing works.
+Worth 15 minutes this week to walk through which sites fit your deployment footprint?
 
 ${BROKER_SIGNATURE}
 

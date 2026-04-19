@@ -5,6 +5,7 @@ import suppliersData from "@/data/suppliers.json";
 import seekersData from "@/data/seekers.json";
 import { Supplier, Seeker, OutreachTemplate } from "@/lib/types";
 import { generateOutreachToSupplierMulti, generateOutreachToSeekerMulti } from "@/lib/outreach";
+import { scoreOutreachEmail, type OutreachScore } from "@/lib/outreachScorer";
 import {
   generateSeekerSequence, generateSupplierSequence,
   SEEKER_PERSONAS, SUPPLIER_PERSONAS, TOUCH_LABELS,
@@ -173,6 +174,7 @@ function OutreachContent() {
   const [sequenceTouch, setSequenceTouch] = useState<SequenceTouch>("email1");
   const [showTokens, setShowTokens] = useState(false);
   const [showObjections, setShowObjections] = useState(false);
+  const [showScoreBreakdown, setShowScoreBreakdown] = useState(false);
 
   const supplier = suppliers.find((s) => s.id === supplierId) ?? suppliers[0];
   const seeker = seekers.find((s) => s.id === seekerId) ?? seekers[0];
@@ -215,6 +217,8 @@ function OutreachContent() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [supplierId, seekerId, recipient, template, selectedCounterIds, mode, seekerPersona, supplierPersona, sequenceTouch]);
+
+  const score: OutreachScore = useMemo(() => scoreOutreachEmail(generated), [generated]);
 
   function toggleCounter(id: number) {
     setSelectedCounterIds((prev) => {
@@ -445,6 +449,89 @@ function OutreachContent() {
               </Button>
             </div>
           </div>
+          {template === "cold-email" && mode === "quick" && score.total > 0 && (
+            <div className={`rounded-xl border p-4 ${
+              score.total >= 95 ? "border-green-700/60 bg-green-950/30"
+              : score.total >= 90 ? "border-green-800/50 bg-green-950/20"
+              : score.total >= 80 ? "border-yellow-700/50 bg-yellow-950/20"
+              : score.total >= 70 ? "border-orange-700/50 bg-orange-950/20"
+              : "border-red-700/50 bg-red-950/20"
+            }`}>
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className={`text-3xl font-bold tabular-nums ${
+                    score.total >= 95 ? "text-green-300"
+                    : score.total >= 90 ? "text-green-400"
+                    : score.total >= 80 ? "text-yellow-400"
+                    : score.total >= 70 ? "text-orange-400"
+                    : "text-red-400"
+                  }`}>{score.total}<span className="text-base text-gray-500">/100</span></div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded border ${
+                        score.grade === "A+" ? "text-green-300 border-green-600 bg-green-950/40"
+                        : score.grade === "A" ? "text-green-400 border-green-700 bg-green-950/30"
+                        : score.grade.startsWith("B") ? "text-yellow-400 border-yellow-700 bg-yellow-950/30"
+                        : score.grade === "C" ? "text-orange-400 border-orange-700 bg-orange-950/30"
+                        : "text-red-400 border-red-700 bg-red-950/30"
+                      }`}>{score.grade}</span>
+                      <span className="text-xs text-white font-medium">{score.label}</span>
+                    </div>
+                    <p className="text-[10px] text-gray-500 mt-0.5">
+                      {score.passCount} passed · {score.failCount} failed · 6 dimensions (Facts 25 · Personalization 20 · Subject 15 · Structure 15 · Tone 15 · Value 10)
+                    </p>
+                  </div>
+                </div>
+                <Button size="sm" variant="outline" onClick={() => setShowScoreBreakdown(!showScoreBreakdown)} className="text-xs shrink-0">
+                  {showScoreBreakdown ? "Hide" : "Show"} breakdown
+                </Button>
+              </div>
+
+              {score.topIssues.length > 0 && score.total < 100 && (
+                <div className="mt-3 pt-3 border-t border-gray-800/60">
+                  <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1.5 font-semibold">Top improvement priorities</p>
+                  <ul className="space-y-1">
+                    {score.topIssues.map((tip, i) => (
+                      <li key={i} className="flex gap-2 text-[11px] text-gray-300">
+                        <span className="text-orange-400 shrink-0">›</span>
+                        <span className="leading-snug">{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {showScoreBreakdown && (
+                <div className="mt-3 pt-3 border-t border-gray-800/60 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {score.dimensions.map((d) => {
+                    const pct = d.score / d.weight;
+                    return (
+                      <div key={d.name} className="rounded-md bg-gray-950/60 border border-gray-800 p-2.5">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-xs font-medium text-white">{d.name}</span>
+                          <span className={`text-xs font-bold tabular-nums ${
+                            pct >= 0.95 ? "text-green-400" : pct >= 0.8 ? "text-yellow-400" : pct >= 0.6 ? "text-orange-400" : "text-red-400"
+                          }`}>{d.score}/{d.weight}</span>
+                        </div>
+                        <div className="h-1 bg-gray-800 rounded-full overflow-hidden mb-2">
+                          <div className={`h-full ${pct >= 0.95 ? "bg-green-500" : pct >= 0.8 ? "bg-yellow-500" : pct >= 0.6 ? "bg-orange-500" : "bg-red-500"}`} style={{ width: `${pct * 100}%` }} />
+                        </div>
+                        <ul className="space-y-0.5">
+                          {d.checks.map((c, i) => (
+                            <li key={i} className="flex items-start gap-1.5 text-[10px] leading-snug">
+                              <span className={`shrink-0 ${c.passed ? "text-green-400" : "text-red-400"}`}>{c.passed ? "✓" : "✗"}</span>
+                              <span className={c.passed ? "text-gray-400" : "text-gray-300"}>{c.label}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="rounded-xl border border-gray-800 bg-gray-900 p-5 h-[600px] overflow-y-auto">
             <pre className="text-xs text-gray-300 whitespace-pre-wrap font-mono leading-relaxed">{generated}</pre>
           </div>
