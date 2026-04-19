@@ -5,10 +5,16 @@ import suppliersData from "@/data/suppliers.json";
 import seekersData from "@/data/seekers.json";
 import { Supplier, Seeker, OutreachTemplate } from "@/lib/types";
 import { generateOutreachToSupplierMulti, generateOutreachToSeekerMulti } from "@/lib/outreach";
+import {
+  generateSeekerSequence, generateSupplierSequence,
+  SEEKER_PERSONAS, SUPPLIER_PERSONAS, TOUCH_LABELS,
+  PERSONALIZATION_TOKENS, BUYER_OBJECTIONS, SUPPLIER_OBJECTIONS,
+  type SeekerPersona, type SupplierPersona, type SequenceTouch,
+} from "@/lib/outreachSequences";
 import { matchSeekersToSupplier, matchSuppliersToSeeker } from "@/lib/matching";
 import { Button } from "@/components/ui/button";
 import { Toast, useToast } from "@/components/ui/toast";
-import { Mail, Link2, Phone, Copy, Download, AlertTriangle, Search, ExternalLink, CheckSquare, Square, User } from "lucide-react";
+import { Mail, Link2, Phone, Copy, Download, AlertTriangle, Search, ExternalLink, CheckSquare, Square, User, Layers, Zap } from "lucide-react";
 import { generatePDF } from "@/lib/pdfGenerator";
 
 const suppliers = suppliersData as Supplier[];
@@ -160,6 +166,13 @@ function OutreachContent() {
   const [generated, setGenerated] = useState("");
   const [selectedCounterIds, setSelectedCounterIds] = useState<Set<number>>(new Set());
   const [showScout, setShowScout] = useState(false);
+  // Sequence mode
+  const [mode, setMode] = useState<"quick" | "sequence">("quick");
+  const [seekerPersona, setSeekerPersona] = useState<SeekerPersona>("S1");
+  const [supplierPersona, setSupplierPersona] = useState<SupplierPersona>("P1");
+  const [sequenceTouch, setSequenceTouch] = useState<SequenceTouch>("email1");
+  const [showTokens, setShowTokens] = useState(false);
+  const [showObjections, setShowObjections] = useState(false);
 
   const supplier = suppliers.find((s) => s.id === supplierId) ?? suppliers[0];
   const seeker = seekers.find((s) => s.id === seekerId) ?? seekers[0];
@@ -179,6 +192,16 @@ function OutreachContent() {
 
   // Regenerate outreach
   useEffect(() => {
+    if (mode === "sequence") {
+      if (recipient === "supplier") {
+        const sel = topMatches.slice(0, 5).map((m) => m.seeker);
+        setGenerated(generateSupplierSequence(supplier, sel, supplierPersona, sequenceTouch));
+      } else {
+        const sel = topMatches.slice(0, 5).map((m) => m.supplier);
+        setGenerated(generateSeekerSequence(sel, seeker, seekerPersona, sequenceTouch));
+      }
+      return;
+    }
     if (selectedCounterIds.size === 0) {
       setGenerated("Select at least one counterparty to generate outreach.");
       return;
@@ -191,7 +214,7 @@ function OutreachContent() {
       setGenerated(generateOutreachToSeekerMulti(sel, seeker, template));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [supplierId, seekerId, recipient, template, selectedCounterIds]);
+  }, [supplierId, seekerId, recipient, template, selectedCounterIds, mode, seekerPersona, supplierPersona, sequenceTouch]);
 
   function toggleCounter(id: number) {
     setSelectedCounterIds((prev) => {
@@ -232,9 +255,19 @@ function OutreachContent() {
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {toast && <Toast message={toast.message} type={toast.type} onClose={dismiss} />}
 
-      <div>
-        <h1 className="text-2xl font-bold text-white">Outreach Generator</h1>
-        <p className="text-gray-400 text-sm mt-0.5">Multi-party outreach — pitch all matched counterparties in one compelling message</p>
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Outreach Generator</h1>
+          <p className="text-gray-400 text-sm mt-0.5">{mode === "sequence" ? "6-touch sequences · 6 personas · professional energy-market language" : "Multi-party outreach — pitch all matched counterparties in one message"}</p>
+        </div>
+        <div className="flex rounded-lg border border-gray-700 overflow-hidden shrink-0">
+          <button onClick={() => setMode("quick")} className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors ${mode === "quick" ? "bg-gray-700 text-white" : "bg-gray-900 text-gray-400 hover:bg-gray-800"}`}>
+            <Zap className="h-3.5 w-3.5" />Quick
+          </button>
+          <button onClick={() => setMode("sequence")} className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors ${mode === "sequence" ? "bg-blue-700 text-white" : "bg-gray-900 text-gray-400 hover:bg-gray-800"}`}>
+            <Layers className="h-3.5 w-3.5" />Sequence Mode
+          </button>
+        </div>
       </div>
 
       <div className="flex items-start gap-2 rounded-lg bg-blue-900/20 border border-blue-800/40 p-3">
@@ -320,17 +353,55 @@ function OutreachContent() {
             </div>
           </div>
 
-          <div>
-            <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Template Type</label>
-            <div className="mt-1.5 space-y-1.5">
-              {TEMPLATES.map((t) => (
-                <button key={t.value} onClick={() => setTemplate(t.value)}
-                  className={`w-full flex items-center gap-2 py-2 px-3 rounded-md text-sm transition-colors ${template === t.value ? "bg-gray-700 text-white" : "bg-gray-900 text-gray-400 hover:bg-gray-800"}`}>
-                  {t.icon}{t.label}
-                </button>
-              ))}
+          {mode === "quick" && (
+            <div>
+              <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Template Type</label>
+              <div className="mt-1.5 space-y-1.5">
+                {TEMPLATES.map((t) => (
+                  <button key={t.value} onClick={() => setTemplate(t.value)}
+                    className={`w-full flex items-center gap-2 py-2 px-3 rounded-md text-sm transition-colors ${template === t.value ? "bg-gray-700 text-white" : "bg-gray-900 text-gray-400 hover:bg-gray-800"}`}>
+                    {t.icon}{t.label}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {mode === "sequence" && (
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Persona</label>
+                <p className="text-[10px] text-gray-600 mt-0.5">Select the decision-maker profile you are targeting</p>
+                <div className="mt-1.5 space-y-1">
+                  {recipient === "supplier"
+                    ? (Object.entries(SUPPLIER_PERSONAS) as [SupplierPersona, {label: string; focus: string}][]).map(([k, v]) => (
+                      <button key={k} onClick={() => setSupplierPersona(k)}
+                        className={`w-full text-left px-2.5 py-2 rounded-md text-xs transition-colors ${supplierPersona === k ? "bg-blue-800/60 border border-blue-600/40 text-white" : "bg-gray-900 text-gray-400 hover:bg-gray-800"}`}>
+                        <span className="font-semibold text-blue-300">{k}</span> — {v.label}
+                        <p className="text-[9px] text-gray-500 mt-0.5 leading-tight">{v.focus}</p>
+                      </button>
+                    ))
+                    : (Object.entries(SEEKER_PERSONAS) as [SeekerPersona, {label: string; focus: string}][]).map(([k, v]) => (
+                      <button key={k} onClick={() => setSeekerPersona(k)}
+                        className={`w-full text-left px-2.5 py-2 rounded-md text-xs transition-colors ${seekerPersona === k ? "bg-blue-800/60 border border-blue-600/40 text-white" : "bg-gray-900 text-gray-400 hover:bg-gray-800"}`}>
+                        <span className="font-semibold text-blue-300">{k}</span> — {v.label}
+                        <p className="text-[9px] text-gray-500 mt-0.5 leading-tight">{v.focus}</p>
+                      </button>
+                    ))
+                  }
+                </div>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Sequence Touch</label>
+                <select value={sequenceTouch} onChange={e => setSequenceTouch(e.target.value as SequenceTouch)}
+                  className="mt-1.5 w-full bg-gray-800 text-xs text-white rounded-md px-3 py-2 border border-gray-700 outline-none">
+                  {(Object.entries(TOUCH_LABELS) as [SequenceTouch, string][]).map(([k, v]) => (
+                    <option key={k} value={k}>{v}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
 
           <div>
             <div className="flex items-center justify-between">
@@ -377,6 +448,50 @@ function OutreachContent() {
           <div className="rounded-xl border border-gray-800 bg-gray-900 p-5 h-[600px] overflow-y-auto">
             <pre className="text-xs text-gray-300 whitespace-pre-wrap font-mono leading-relaxed">{generated}</pre>
           </div>
+
+          {mode === "sequence" && (
+            <div className="space-y-3">
+              {/* Personalization tokens */}
+              <div className="rounded-lg border border-gray-800 bg-gray-900/60">
+                <button onClick={() => setShowTokens(!showTokens)} className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-medium text-gray-300 hover:text-white">
+                  <span>Personalization Tokens (12 quick-source variables)</span>
+                  <span className="text-gray-500">{showTokens ? "▲" : "▼"}</span>
+                </button>
+                {showTokens && (
+                  <div className="border-t border-gray-800 p-3 grid grid-cols-1 md:grid-cols-2 gap-1.5">
+                    {PERSONALIZATION_TOKENS.map(t => (
+                      <div key={t.token} className="flex items-start gap-2 text-[10px]">
+                        <code className="text-blue-400 shrink-0 font-mono">{t.token}</code>
+                        <div>
+                          <span className="text-white">{t.label}</span>
+                          <p className="text-gray-500">{t.source} · e.g. {t.example}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Objection rebuttals */}
+              <div className="rounded-lg border border-gray-800 bg-gray-900/60">
+                <button onClick={() => setShowObjections(!showObjections)} className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-medium text-gray-300 hover:text-white">
+                  <span>Objection Rebuttals (5 {recipient === "seeker" ? "buyer" : "supplier"} objections)</span>
+                  <span className="text-gray-500">{showObjections ? "▲" : "▼"}</span>
+                </button>
+                {showObjections && (
+                  <div className="border-t border-gray-800 p-3 space-y-3">
+                    {(recipient === "seeker" ? BUYER_OBJECTIONS : SUPPLIER_OBJECTIONS).map((o, i) => (
+                      <div key={i} className="text-[10px] space-y-1">
+                        <p className="text-yellow-300 font-semibold">Q: &ldquo;{o.objection}&rdquo;</p>
+                        <p className="text-gray-400">A1: {o.rebuttal1}</p>
+                        <p className="text-gray-400">A2: {o.rebuttal2}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
