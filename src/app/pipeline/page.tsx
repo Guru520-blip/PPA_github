@@ -2,9 +2,11 @@
 import { useState, useEffect } from "react";
 import { PipelineDeal, DealStatus } from "@/lib/types";
 import { loadPipeline, updateDeal, removeDeal, DEAL_STATUSES, STAGE_PROBABILITY, dealValueM, brokerFeeM } from "@/lib/pipeline";
+import { exportPipelineCSV } from "@/lib/diligence";
+import { DiligenceChecklist } from "@/components/shared/DiligenceChecklist";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Briefcase, Trash2, StickyNote, ChevronRight, TrendingUp, DollarSign } from "lucide-react";
+import { Briefcase, Trash2, StickyNote, ChevronRight, TrendingUp, DollarSign, Download } from "lucide-react";
 import { Toast, useToast } from "@/components/ui/toast";
 
 const STATUS_COLORS: Record<DealStatus, string> = {
@@ -72,9 +74,16 @@ export default function PipelinePage() {
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {toast && <Toast message={toast.message} type={toast.type} onClose={dismiss} />}
 
-      <div>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2"><Briefcase className="h-6 w-6" />Pipeline Tracker</h1>
-        <p className="text-gray-400 text-sm mt-0.5">Track deals from sourced to closing. Stored locally in your browser.</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-white flex items-center gap-2"><Briefcase className="h-6 w-6" />Pipeline Tracker</h1>
+          <p className="text-gray-400 text-sm mt-0.5">Track deals from sourced to closing. Stored locally in your browser.</p>
+        </div>
+        {deals.length > 0 && (
+          <Button size="sm" variant="outline" onClick={() => exportPipelineCSV(deals, dealValueM, brokerFeeM, (s) => STAGE_PROBABILITY[s as DealStatus] ?? 10)} className="gap-1.5 text-xs shrink-0">
+            <Download className="h-3.5 w-3.5" />Export CSV
+          </Button>
+        )}
       </div>
 
       {/* Summary */}
@@ -205,6 +214,8 @@ function DealCard({ deal, isEditingNote, noteText, onStatusChange, onRemove, onE
             </button>
           )}
         </div>
+
+        {deal.status === "Diligence" && <DiligenceChecklist dealId={deal.id} />}
 
         <select
           value={deal.status}

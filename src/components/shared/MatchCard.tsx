@@ -3,7 +3,7 @@ import { MatchResult } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, TrendingUp, DollarSign, Info } from "lucide-react";
-import { addDeal } from "@/lib/pipeline";
+import { addDeal, dealValueM, brokerFeeM } from "@/lib/pipeline";
 
 interface Props {
   match: MatchResult;
@@ -64,13 +64,19 @@ export function MatchCard({ match, onDealCreated, onOutreach }: Props) {
           <span className="text-xs bg-gray-800 px-2 py-0.5 rounded-full">{supplier.type}</span>
         </div>
 
-        {/* Dynamic price recommendation */}
+        {/* Dynamic price recommendation + deal value */}
         <div className="rounded-md bg-blue-950/30 border border-blue-800/40 p-2.5 space-y-1">
-          <div className="flex items-center gap-1.5">
-            <DollarSign className="h-3.5 w-3.5 text-blue-400 shrink-0" />
-            <span className="text-xs font-semibold text-blue-300">
-              Suggested: {suggestedPriceCents}¢/kWh for {seeker.type}
-            </span>
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <div className="flex items-center gap-1.5">
+              <DollarSign className="h-3.5 w-3.5 text-blue-400 shrink-0" />
+              <span className="text-xs font-semibold text-blue-300">
+                {suggestedPriceCents}¢/kWh — {seeker.type}
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px]">
+              <span className="text-purple-300 font-mono">${dealValueM(Math.min(supplier.availableMW, seeker.neededMW), suggestedPriceCents, 10).toFixed(0)}M deal</span>
+              <span className="text-yellow-400 font-mono">${brokerFeeM(Math.min(supplier.availableMW, seeker.neededMW), suggestedPriceCents, 10).toFixed(1)}M fee</span>
+            </div>
           </div>
           <p className="text-[10px] text-blue-400/80 leading-relaxed">{priceRationale}</p>
         </div>
