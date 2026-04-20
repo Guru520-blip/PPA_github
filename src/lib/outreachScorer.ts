@@ -202,7 +202,7 @@ function scoreStructure(email: string): ScoreDimension {
   const pc = paragraphCount(body);
 
   // Count CTAs
-  const ctaMatches = (email.match(/15.minute|quick call|brief call|\bcall this week\b|one-page|one-pager|send you|happy to send/gi) ?? []).length;
+  const ctaMatches = (email.match(/15.minute|quick call|brief call|\bcall this week\b|one-page|one-pager|happy to send|worth.*minutes\?/gi) ?? []).length;
 
   const checks: ScoreCheck[] = [
     {

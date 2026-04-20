@@ -9,8 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { FileText, Download, AlertTriangle } from "lucide-react";
 import { Toast, useToast } from "@/components/ui/toast";
 
-const suppliers = suppliersData as Supplier[];
-const seekers = seekersData as Seeker[];
+function docRankScore(e: { urgencyScore: number; newBrokerFit?: number; startupFriendly: number }) {
+  return e.urgencyScore * (e.newBrokerFit ?? e.startupFriendly);
+}
+const suppliers = [...(suppliersData as Supplier[])].sort((a, b) => docRankScore(b) - docRankScore(a));
+const seekers = [...(seekersData as Seeker[])].sort((a, b) => docRankScore(b) - docRankScore(a));
 
 const DOCS: { id: DocTemplate; title: string; description: string; pages: string }[] = [
   { id: "site-teaser", title: "Site Teaser", description: "2-page confidential asset summary with non-circumvention disclaimer. Includes capacity, pricing, region, and opportunity overview.", pages: "~2 pages" },

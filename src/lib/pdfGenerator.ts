@@ -90,13 +90,14 @@ export async function generatePDF(
     body(`MW Required: ${seeker?.neededMW ?? 0} MW`);
     body(`Use Case: High-density compute (AI/HPC/Data Center)`);
     body(`Preferred Regions: ${seeker?.preferredRegions?.join(", ") ?? ""}`);
-    body(`Deployment Timeline: Target operational within 12–18 months of PPA execution`);
+    const estMonths = supplier?.estimatedMonthsToEnergization;
+    body(`Deployment Timeline: ${estMonths ? `Est. ${estMonths}–${estMonths + 6} months to energization per seller (subject to diligence)` : "Subject to diligence — confirm with seller during technical review"}`);
     line();
     h2("Indicative Deal Terms");
     body("Contract Type: Power Purchase Agreement (PPA) or Gas Supply + BTM Generation Agreement");
     body("Term: 7–15 years, with renewal options");
     body("Load Profile: Flexible/interruptible with demand response capability (adds grid value)");
-    body("Pricing Mechanism: Fixed or indexed, below 5¢/kWh all-in target");
+    body(`Pricing Mechanism: Fixed or indexed; indicative all-in: ${cents > 0 ? `${cents}¢/kWh (subject to final diligence and negotiation)` : "to be confirmed during diligence"}`);
     body("Force Majeure / Curtailment: Standard provisions; flexible compute tolerates partial curtailment");
     line();
     h2("Next Steps");
@@ -119,7 +120,7 @@ export async function generatePDF(
     body(`Facilitated by: PowerMatch Advisors ("Broker")`);
     line();
     h2("1. Intent");
-    body(`The parties hereby express their mutual intent to negotiate in good faith toward a Power Purchase Agreement for approximately ${mw} MW of power capacity in ${region} at an all-in price not to exceed ${cents + 1}¢/kWh.`);
+    body(`The parties hereby express their mutual intent to negotiate in good faith toward a Power Purchase Agreement for approximately ${mw} MW of power capacity in ${region}. Pricing shall be negotiated based on current market conditions; indicative range per seller: ${cents > 0 ? `${cents}–${(cents + 1).toFixed(1)}¢/kWh all-in` : "[to be confirmed in term sheet]"}.`);
     h2("2. Exclusivity Period");
     body("The Power Provider agrees to grant the Offtaker exclusive negotiating rights for a period of ninety (90) days from the date of this LOI ('Exclusivity Period'). During this period, Provider will not solicit, negotiate, or enter into competing agreements for the same capacity block without written consent of Offtaker.");
     h2("3. Good Faith Obligations");

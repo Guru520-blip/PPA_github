@@ -11,8 +11,11 @@ import { GitMerge, Users, Zap, CheckSquare, Square } from "lucide-react";
 import { Toast, useToast } from "@/components/ui/toast";
 import { Suspense } from "react";
 
-const suppliers = suppliersData as Supplier[];
-const seekers = seekersData as Seeker[];
+function matchRankScore(e: { urgencyScore: number; newBrokerFit?: number; startupFriendly: number }) {
+  return e.urgencyScore * (e.newBrokerFit ?? e.startupFriendly);
+}
+const suppliers = [...(suppliersData as Supplier[])].sort((a, b) => matchRankScore(b) - matchRankScore(a));
+const seekers = [...(seekersData as Seeker[])].sort((a, b) => matchRankScore(b) - matchRankScore(a));
 
 function MatchesContent() {
   const searchParams = useSearchParams();

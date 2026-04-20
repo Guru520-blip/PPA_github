@@ -432,12 +432,12 @@ ${BROKER_SIGNATURE}
 
 I work specifically on off-market power sourcing for operators in your position — ${seeker.neededMW} MW at a pace the grid can't accommodate.
 
-I have access to ${suppliers.length} assets right now (${totalMW} MW total) that aren't in any database:
+I'm representing the owners of ${suppliers.length} assets (${totalMW} MW total) placed through a private matching process:
 
 ${top2}
 ${suppliers.length > 2 ? `→ +${suppliers.length - 2} more` : ""}
 
-${tierHook} Sellers are motivated — timeline pressure works in your favor on pricing.${claimsLine}
+${tierHook} Each asset has a defined allocation window — early engagement typically translates to better structure and pricing.${claimsLine}
 
 Happy to send a one-pager on each site. Would a brief call this week make sense?
 
