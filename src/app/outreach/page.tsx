@@ -18,8 +18,12 @@ import { Toast, useToast } from "@/components/ui/toast";
 import { Mail, Link2, Phone, Copy, Download, AlertTriangle, Search, ExternalLink, CheckSquare, Square, User, Layers, Zap } from "lucide-react";
 import { generatePDF } from "@/lib/pdfGenerator";
 
-const suppliers = suppliersData as Supplier[];
-const seekers = seekersData as Seeker[];
+function outreachRankScore(e: { urgencyScore: number; newBrokerFit?: number; startupFriendly: number }) {
+  return e.urgencyScore * (e.newBrokerFit ?? e.startupFriendly);
+}
+
+const suppliers = [...(suppliersData as Supplier[])].sort((a, b) => outreachRankScore(b) - outreachRankScore(a));
+const seekers = [...(seekersData as Seeker[])].sort((a, b) => outreachRankScore(b) - outreachRankScore(a));
 
 const TEMPLATES: { value: OutreachTemplate; label: string; icon: React.ReactNode }[] = [
   { value: "cold-email", label: "Cold Email", icon: <Mail className="h-4 w-4" /> },
@@ -302,7 +306,7 @@ function OutreachContent() {
               <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Supplier (Recipient)</label>
               <select value={supplierId} onChange={(e) => setSupplierId(Number(e.target.value))}
                 className="mt-1.5 w-full bg-gray-800 text-sm text-white rounded-md px-3 py-2 border border-gray-700 outline-none">
-                {suppliers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+                {suppliers.map((s) => <option key={s.id} value={s.id}>{s.name} – {s.type} (U:{s.urgencyScore})</option>)}
               </select>
               <div className="mt-2 rounded-md bg-gray-900 p-2 text-xs text-gray-400 space-y-0.5">
                 <p><span className="text-gray-300">Region:</span> {supplier.region}</p>
@@ -315,7 +319,7 @@ function OutreachContent() {
               <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">Seeker (Recipient)</label>
               <select value={seekerId} onChange={(e) => setSeekerId(Number(e.target.value))}
                 className="mt-1.5 w-full bg-gray-800 text-sm text-white rounded-md px-3 py-2 border border-gray-700 outline-none">
-                {seekers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+                {seekers.map((s) => <option key={s.id} value={s.id}>{s.name} – {s.type} (U:{s.urgencyScore})</option>)}
               </select>
               <div className="mt-2 rounded-md bg-gray-900 p-2 text-xs text-gray-400 space-y-0.5">
                 <p><span className="text-gray-300">Type:</span> {seeker.type}</p>
