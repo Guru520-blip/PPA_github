@@ -5,14 +5,16 @@ import suppliersData from "@/data/suppliers.json";
 import seekersData from "@/data/seekers.json";
 import { Supplier, Seeker } from "@/lib/types";
 import { matchSuppliersToSeeker } from "@/lib/matching";
+import { rankSeekers, type Strategy, STRATEGY_LABELS } from "@/lib/prospectRanker";
 import { SeekerCard } from "@/components/shared/SeekerCard";
 import { Button } from "@/components/ui/button";
-import { Search, RefreshCw, ListFilter, SlidersHorizontal, Filter, TrendingUp } from "lucide-react";
+import { Search, RefreshCw, ListFilter, SlidersHorizontal, Filter, TrendingUp, Zap } from "lucide-react";
 
-const seekers = seekersData as Seeker[];
 const suppliers = suppliersData as Supplier[];
-const ALL_TYPES = ["All", ...Array.from(new Set(seekers.map((s) => s.type)))];
-const ALL_REGIONS = ["All", ...Array.from(new Set(seekers.flatMap((s) => s.preferredRegions)))];
+const allSeekers = seekersData as Seeker[];
+const ALL_TYPES = ["All", ...Array.from(new Set(allSeekers.map((s) => s.type)))];
+const ALL_REGIONS = ["All", ...Array.from(new Set(allSeekers.flatMap((s) => s.preferredRegions)))];
+const DISPLAY_COUNT = 25;
 
 type SortMode = "engagement" | "urgency" | "mw" | "az";
 
@@ -30,6 +32,7 @@ export default function SeekersPage() {
   const [view, setView] = useState<"grid" | "table">("grid");
   const [sortMode, setSortMode] = useState<SortMode>("engagement");
   const [workingList, setWorkingList] = useState(false);
+  const [strategy, setStrategy] = useState<Strategy>("default");
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const [rankKey, setRankKey] = useState(0);
 
@@ -38,18 +41,22 @@ export default function SeekersPage() {
     setRankKey(k => k + 1);
   }
 
+  const rankedPool = useMemo(() => {
+    return rankSeekers(allSeekers, { strategy, date: new Date(), seed: rankKey });
+  }, [strategy, rankKey]);
+
   const topSuppliersBySeeker = useMemo(() => {
     const map = new Map<number, { id: number; name: string; score: number; type: string }[]>();
-    seekers.forEach((sk) => {
+    rankedPool.slice(0, DISPLAY_COUNT).forEach((sk) => {
       const matches = matchSuppliersToSeeker(sk, suppliers).slice(0, 3);
       map.set(sk.id, matches.map((m) => ({ id: m.supplier.id, name: m.supplier.name, score: m.score, type: m.supplier.type })));
     });
     return map;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rankKey]);
+  }, [rankedPool]);
 
   const filtered = useMemo(() => {
-    const base = seekers.filter((s) => {
+    const base = rankedPool.filter((s) => {
       const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) || s.type.toLowerCase().includes(search.toLowerCase());
       const matchType = typeFilter === "All" || s.type === typeFilter;
       const matchRegion = regionFilter === "All" || s.preferredRegions.includes(regionFilter);
@@ -57,18 +64,21 @@ export default function SeekersPage() {
       const matchWorking = !workingList || (s.newBrokerFit ?? s.startupFriendly) >= 7;
       return matchSearch && matchType && matchRegion && matchMW && matchWorking;
     });
-    return base.sort((a, b) => {
-      if (workingList) {
-        const aScore = a.urgencyScore * (a.newBrokerFit ?? a.startupFriendly);
-        const bScore = b.urgencyScore * (b.newBrokerFit ?? b.startupFriendly);
-        return bScore - aScore;
-      }
-      if (sortMode === "engagement") return engagementScore(b) - engagementScore(a);
+
+    if (workingList) return base.sort((a, b) => {
+      const aScore = a.urgencyScore * (a.newBrokerFit ?? a.startupFriendly);
+      const bScore = b.urgencyScore * (b.newBrokerFit ?? b.startupFriendly);
+      return bScore - aScore;
+    }).slice(0, DISPLAY_COUNT);
+
+    if (sortMode !== "engagement") return base.sort((a, b) => {
       if (sortMode === "urgency") return b.urgencyScore - a.urgencyScore;
       if (sortMode === "mw") return b.neededMW - a.neededMW;
       return a.name.localeCompare(b.name);
-    });
-  }, [search, typeFilter, regionFilter, minMW, sortMode, workingList, rankKey]);
+    }).slice(0, DISPLAY_COUNT);
+
+    return base.slice(0, DISPLAY_COUNT);
+  }, [rankedPool, search, typeFilter, regionFilter, minMW, sortMode, workingList]);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -77,14 +87,26 @@ export default function SeekersPage() {
           <h1 className="text-2xl font-bold text-white">Power Seekers</h1>
           <p className="text-gray-400 text-sm mt-0.5">
             {workingList
-              ? `Working List — ${filtered.length} realistic targets for a new broker, ranked by urgency × fit`
-              : "Hyperscalers, miners pivoting to AI, hybrid compute — ranked by engagement probability"}
+              ? `Working List — ${filtered.length} realistic targets, ranked by urgency × fit`
+              : `Top ${DISPLAY_COUNT} of ${allSeekers.length} prospects — re-ranked on Refresh by strategy + live market signals`}
           </p>
           {lastRefreshed && (
-            <p className="text-[11px] text-gray-600 mt-0.5">Last refreshed: {lastRefreshed.toLocaleTimeString()}</p>
+            <p className="text-[11px] text-gray-600 mt-0.5">
+              Re-ranked: {lastRefreshed.toLocaleTimeString()} · Strategy: {STRATEGY_LABELS[strategy].split("—")[0].trim()}
+            </p>
           )}
         </div>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 shrink-0 flex-wrap justify-end">
+          <select
+            value={strategy}
+            onChange={(e) => { setStrategy(e.target.value as Strategy); handleRefresh(); }}
+            className="bg-purple-900/40 text-sm text-purple-200 rounded-md px-3 py-1.5 border border-purple-700/50 outline-none"
+            title="Strategy changes which prospect types surface at the top"
+          >
+            {Object.entries(STRATEGY_LABELS).map(([k, v]) => (
+              <option key={k} value={k}>{v.split("—")[0].trim()}</option>
+            ))}
+          </select>
           <Button
             size="sm"
             variant={workingList ? "default" : "outline"}
@@ -94,7 +116,7 @@ export default function SeekersPage() {
             <ListFilter className="h-3.5 w-3.5 mr-1.5" />
             Working List
           </Button>
-          <Button size="sm" variant="outline" onClick={handleRefresh} title="Refresh urgency scores">
+          <Button size="sm" variant="outline" onClick={handleRefresh} title="Re-rank pool with current market signals">
             <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
             Refresh
           </Button>
@@ -127,14 +149,11 @@ export default function SeekersPage() {
           <span className="text-xs text-white w-16">{minMW} MW</span>
         </div>
         <select value={sortMode} onChange={(e) => setSortMode(e.target.value as SortMode)} className="bg-gray-800 text-sm text-white rounded-md px-3 py-1.5 border border-gray-700 outline-none">
-          <option value="engagement">Sort: Engagement Rank</option>
+          <option value="engagement">Sort: Strategy Rank</option>
           <option value="urgency">Sort: Urgency Only</option>
           <option value="mw">Sort: MW (High)</option>
           <option value="az">Sort: A–Z</option>
         </select>
-        <Button size="sm" variant="outline" onClick={() => setRankKey((k) => k + 1)} className="gap-1.5 text-xs border-blue-700/50 text-blue-400 hover:bg-blue-900/20">
-          <RefreshCw className="h-3.5 w-3.5" />Re-rank
-        </Button>
         <Button size="sm" variant="ghost" onClick={() => { setSearch(""); setTypeFilter("All"); setRegionFilter("All"); setMinMW(0); }}>
           <Filter className="h-3.5 w-3.5 mr-1" />Clear
         </Button>
@@ -142,7 +161,10 @@ export default function SeekersPage() {
 
       <div className="flex items-center gap-3 text-sm text-gray-400">
         <TrendingUp className="h-4 w-4 text-blue-400" />
-        <span>{filtered.length} of {seekers.length} seekers — sorted by startup engagement probability (urgency × 60% + broker accessibility × 40%)</span>
+        <span>{filtered.length} shown · pool of {allSeekers.length} · </span>
+        <span className="flex items-center gap-1 text-purple-400 text-xs">
+          <Zap className="h-3 w-3" />{STRATEGY_LABELS[strategy]}
+        </span>
       </div>
 
       {view === "grid" ? (
@@ -176,7 +198,10 @@ export default function SeekersPage() {
                 const top = topSuppliersBySeeker.get(s.id)?.[0];
                 return (
                   <tr key={s.id} className={`border-t border-gray-800 hover:bg-gray-900 transition-colors ${i % 2 === 0 ? "bg-gray-950" : "bg-gray-900/50"}`}>
-                    <td className="px-4 py-3 font-medium text-white">{s.name}</td>
+                    <td className="px-4 py-3 font-medium text-white">
+                      {s.name}
+                      {s.signalNote && <p className="text-[10px] text-purple-400 mt-0.5 truncate max-w-[160px]">{s.signalNote}</p>}
+                    </td>
                     <td className="px-4 py-3 text-gray-400 text-xs">{s.type}</td>
                     <td className="px-4 py-3 text-right text-white font-semibold">{s.neededMW} MW</td>
                     <td className="px-4 py-3 text-gray-400 text-xs">{s.preferredRegions.slice(0, 2).join(", ")}{s.preferredRegions.length > 2 ? ` +${s.preferredRegions.length - 2}` : ""}</td>

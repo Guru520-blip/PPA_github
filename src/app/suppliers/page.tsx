@@ -5,18 +5,19 @@ import suppliersData from "@/data/suppliers.json";
 import seekersData from "@/data/seekers.json";
 import { Supplier, Seeker } from "@/lib/types";
 import { matchSeekersToSupplier } from "@/lib/matching";
+import { rankSuppliers, type Strategy, STRATEGY_LABELS } from "@/lib/prospectRanker";
 import { SupplierCard } from "@/components/shared/SupplierCard";
 import { Button } from "@/components/ui/button";
-import { Search, RefreshCw, ListFilter, SlidersHorizontal, TrendingUp, Filter } from "lucide-react";
+import { Search, RefreshCw, ListFilter, SlidersHorizontal, TrendingUp, Filter, Zap } from "lucide-react";
 
-const suppliers = suppliersData as Supplier[];
+const allSuppliers = suppliersData as Supplier[];
 const seekers = seekersData as Seeker[];
-const ALL_REGIONS = ["All", ...Array.from(new Set(suppliers.map((s) => s.region)))];
-const ALL_TYPES = ["All", ...Array.from(new Set(suppliers.map((s) => s.type)))];
+const ALL_REGIONS = ["All", ...Array.from(new Set(allSuppliers.map((s) => s.region.split(",")[0].trim())))];
+const ALL_TYPES = ["All", ...Array.from(new Set(allSuppliers.map((s) => s.type)))];
+const DISPLAY_COUNT = 25;
 
 type SortMode = "engagement" | "urgency" | "price" | "mw" | "az";
 
-// Composite score: urgency × broker-fit. Both 1-10; product gives 1-100 priority ranking.
 function engagementScore(s: Supplier) {
   const fit = s.newBrokerFit ?? s.startupFriendly;
   return s.urgencyScore * 0.5 + fit * 0.3 + s.startupFriendly * 0.2;
@@ -31,47 +32,57 @@ export default function SuppliersPage() {
   const [view, setView] = useState<"grid" | "table">("grid");
   const [sortMode, setSortMode] = useState<SortMode>("engagement");
   const [workingList, setWorkingList] = useState(false);
+  const [strategy, setStrategy] = useState<Strategy>("default");
   const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const [rankKey, setRankKey] = useState(0);
 
   function handleRefresh() {
-    setLastRefreshed(new Date());
+    const now = new Date();
+    setLastRefreshed(now);
     setRankKey(k => k + 1);
   }
 
+  // Dynamic ranked pool — re-runs on every Refresh click
+  const rankedPool = useMemo(() => {
+    return rankSuppliers(allSuppliers, { strategy, date: new Date(), seed: rankKey });
+  }, [strategy, rankKey]);
+
   const topSeekersBySupplier = useMemo(() => {
     const map = new Map<number, { id: number; name: string; score: number; type: string }[]>();
-    suppliers.forEach((sup) => {
+    rankedPool.slice(0, DISPLAY_COUNT).forEach((sup) => {
       const matches = matchSeekersToSupplier(sup, seekers).slice(0, 3);
       map.set(sup.id, matches.map((m) => ({ id: m.seeker.id, name: m.seeker.name, score: m.score, type: m.seeker.type })));
     });
     return map;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rankKey]);
+  }, [rankedPool]);
 
   const filtered = useMemo(() => {
-    const base = suppliers.filter((s) => {
+    const base = rankedPool.filter((s) => {
       const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) || s.region.toLowerCase().includes(search.toLowerCase());
-      const matchRegion = regionFilter === "All" || s.region === regionFilter;
+      const matchRegion = regionFilter === "All" || s.region.includes(regionFilter);
       const matchType = typeFilter === "All" || s.type === typeFilter;
       const matchPrice = s.estimatedAllInCents <= maxPrice;
       const matchWorking = !workingList || (s.newBrokerFit ?? s.startupFriendly) >= 7;
       return matchSearch && matchRegion && matchType && matchPrice && matchWorking;
     });
-    return base.sort((a, b) => {
-      if (workingList) {
-        // In working list mode: sort by urgency × brokerFit composite
-        const aScore = a.urgencyScore * (a.newBrokerFit ?? a.startupFriendly);
-        const bScore = b.urgencyScore * (b.newBrokerFit ?? b.startupFriendly);
-        return bScore - aScore;
-      }
-      if (sortMode === "engagement") return engagementScore(b) - engagementScore(a);
+
+    if (workingList) return base.sort((a, b) => {
+      const aScore = a.urgencyScore * (a.newBrokerFit ?? a.startupFriendly);
+      const bScore = b.urgencyScore * (b.newBrokerFit ?? b.startupFriendly);
+      return bScore - aScore;
+    }).slice(0, DISPLAY_COUNT);
+
+    if (sortMode !== "engagement") return base.sort((a, b) => {
       if (sortMode === "urgency") return b.urgencyScore - a.urgencyScore;
       if (sortMode === "price") return a.estimatedAllInCents - b.estimatedAllInCents;
       if (sortMode === "mw") return b.availableMW - a.availableMW;
       return a.name.localeCompare(b.name);
-    });
-  }, [search, regionFilter, typeFilter, maxPrice, sortMode, workingList, rankKey]);
+    }).slice(0, DISPLAY_COUNT);
+
+    // Default: preserve ranker order (already scored)
+    return base.slice(0, DISPLAY_COUNT);
+  }, [rankedPool, search, regionFilter, typeFilter, maxPrice, sortMode, workingList]);
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -80,14 +91,26 @@ export default function SuppliersPage() {
           <h1 className="text-2xl font-bold text-white">Power Suppliers</h1>
           <p className="text-gray-400 text-sm mt-0.5">
             {workingList
-              ? `Working List — ${filtered.length} realistic targets for a new broker, ranked by urgency × fit`
-              : "BTM gas, surplus hydro, curtailment zones — ranked by startup engagement probability"}
+              ? `Working List — ${filtered.length} realistic targets, ranked by urgency × fit`
+              : `Top ${DISPLAY_COUNT} of ${allSuppliers.length} prospects — re-ranked on Refresh by strategy + live market signals`}
           </p>
           {lastRefreshed && (
-            <p className="text-[11px] text-gray-600 mt-0.5">Last refreshed: {lastRefreshed.toLocaleTimeString()}</p>
+            <p className="text-[11px] text-gray-600 mt-0.5">
+              Re-ranked: {lastRefreshed.toLocaleTimeString()} · Strategy: {STRATEGY_LABELS[strategy].split("—")[0].trim()}
+            </p>
           )}
         </div>
-        <div className="flex gap-2 shrink-0">
+        <div className="flex gap-2 shrink-0 flex-wrap justify-end">
+          <select
+            value={strategy}
+            onChange={(e) => { setStrategy(e.target.value as Strategy); handleRefresh(); }}
+            className="bg-purple-900/40 text-sm text-purple-200 rounded-md px-3 py-1.5 border border-purple-700/50 outline-none"
+            title="Strategy changes which prospect types surface at the top"
+          >
+            {Object.entries(STRATEGY_LABELS).map(([k, v]) => (
+              <option key={k} value={k}>{v.split("—")[0].trim()}</option>
+            ))}
+          </select>
           <Button
             size="sm"
             variant={workingList ? "default" : "outline"}
@@ -97,7 +120,7 @@ export default function SuppliersPage() {
             <ListFilter className="h-3.5 w-3.5 mr-1.5" />
             Working List
           </Button>
-          <Button size="sm" variant="outline" onClick={handleRefresh} title="Refresh urgency scores">
+          <Button size="sm" variant="outline" onClick={handleRefresh} title="Re-rank pool with current market signals">
             <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
             Refresh
           </Button>
@@ -130,15 +153,12 @@ export default function SuppliersPage() {
           <span className="text-xs text-white w-8">{maxPrice}¢</span>
         </div>
         <select value={sortMode} onChange={(e) => setSortMode(e.target.value as SortMode)} className="bg-gray-800 text-sm text-white rounded-md px-3 py-1.5 border border-gray-700 outline-none">
-          <option value="engagement">Sort: Engagement Rank</option>
+          <option value="engagement">Sort: Strategy Rank</option>
           <option value="urgency">Sort: Urgency Only</option>
           <option value="price">Sort: Price (Low)</option>
           <option value="mw">Sort: MW (High)</option>
           <option value="az">Sort: A–Z</option>
         </select>
-        <Button size="sm" variant="outline" onClick={() => setRankKey((k) => k + 1)} className="gap-1.5 text-xs border-blue-700/50 text-blue-400 hover:bg-blue-900/20">
-          <RefreshCw className="h-3.5 w-3.5" />Re-rank
-        </Button>
         <Button size="sm" variant="ghost" onClick={() => { setSearch(""); setRegionFilter("All"); setTypeFilter("All"); setMaxPrice(6); }}>
           <Filter className="h-3.5 w-3.5 mr-1" />Clear
         </Button>
@@ -146,7 +166,10 @@ export default function SuppliersPage() {
 
       <div className="flex items-center gap-3 text-sm text-gray-400">
         <TrendingUp className="h-4 w-4 text-blue-400" />
-        <span>{filtered.length} of {suppliers.length} suppliers — sorted by startup engagement probability (urgency × 60% + accessibility × 40%)</span>
+        <span>{filtered.length} shown · pool of {allSuppliers.length} · </span>
+        <span className="flex items-center gap-1 text-purple-400 text-xs">
+          <Zap className="h-3 w-3" />{STRATEGY_LABELS[strategy]}
+        </span>
       </div>
 
       {view === "grid" ? (
@@ -172,7 +195,7 @@ export default function SuppliersPage() {
                 <th className="text-right px-4 py-3">MW</th>
                 <th className="text-right px-4 py-3">¢/kWh</th>
                 <th className="text-right px-4 py-3">Rank</th>
-                <th className="text-left px-4 py-3">Top Match</th>
+                <th className="text-left px-4 py-3">Signal</th>
                 <th className="text-left px-4 py-3">Actions</th>
               </tr>
             </thead>
@@ -181,8 +204,11 @@ export default function SuppliersPage() {
                 const top = topSeekersBySupplier.get(s.id)?.[0];
                 return (
                   <tr key={s.id} className={`border-t border-gray-800 hover:bg-gray-900 transition-colors ${i % 2 === 0 ? "bg-gray-950" : "bg-gray-900/50"}`}>
-                    <td className="px-4 py-3 font-medium text-white">{s.name}</td>
-                    <td className="px-4 py-3 text-gray-400 text-xs">{s.region}</td>
+                    <td className="px-4 py-3 font-medium text-white">
+                      {s.name}
+                      {s.signalNote && <p className="text-[10px] text-purple-400 mt-0.5 truncate max-w-[160px]">{s.signalNote}</p>}
+                    </td>
+                    <td className="px-4 py-3 text-gray-400 text-xs">{s.region.split(",")[0]}</td>
                     <td className="px-4 py-3 text-gray-400 text-xs">{s.type}</td>
                     <td className="px-4 py-3 text-right text-white">{s.availableMW}</td>
                     <td className="px-4 py-3 text-right">

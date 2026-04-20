@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "name": "CleanSpark \u2013 AI Infrastructure Pivot",
+    "name": "CleanSpark – AI Infrastructure Pivot",
     "type": "Bitcoin Miner Pivoting to AI",
     "neededMW": 200,
     "preferredRegions": [
@@ -14,18 +14,27 @@
     "contactEmailBD": "pr@cleanspark.com",
     "contactPhone": "+1 702-989-7693",
     "website": "https://www.cleanspark.com",
-    "keyContact": "Harry Sudock \u2013 Chief Business Officer",
+    "keyContact": "Harry Sudock – Chief Business Officer",
     "keyContactLinkedIn": "https://www.linkedin.com/in/harrysudock/",
-    "keyContact2": "Matt Schultz \u2013 Co-founder, CEO & Chairman",
-    "notes": "Operates 20+ sites across US. Existing power contracts 3.5-5\u00a2. Seeking GPU co-location partners or AI inference infrastructure deals. Publicly traded (NASDAQ: CLSK). Route BD via Harry Sudock (CBO) or ir@ for initial contact.",
+    "keyContact2": "Matt Schultz – Co-founder, CEO & Chairman",
+    "notes": "Operates 20+ sites across US. Existing power contracts 3.5-5¢. Seeking GPU co-location partners or AI inference infrastructure deals. Publicly traded (NASDAQ: CLSK). Route BD via Harry Sudock (CBO) or ir@ for initial contact.",
     "urgencyScore": 9,
     "startupFriendly": 8,
     "newBrokerFit": 8,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-04-01",
+    "signalNote": "CleanSpark AI hosting expansion Q2 2026"
   },
   {
     "id": 2,
-    "name": "Microsoft Azure \u2013 Data Center Infrastructure",
+    "name": "Microsoft Azure – Data Center Infrastructure",
     "type": "AI Hyperscaler",
     "neededMW": 1000,
     "preferredRegions": [
@@ -42,17 +51,25 @@
     "contactEmailBD": "energyinquiries@microsoft.com",
     "contactPhone": "+1 425-882-8080",
     "website": "https://datacenters.microsoft.com",
-    "keyContact": "Darryl Willis \u2013 Corporate VP, Energy & Resources Industry",
+    "keyContact": "Darryl Willis – Corporate VP, Energy & Resources Industry",
     "keyContactLinkedIn": "https://www.linkedin.com/in/darryl-willis/",
     "notes": "Signed Constellation nuclear deal (2024), 13.5+ GW renewable energy contracts globally. Willing to fund infrastructure capex for long-term PPA. Decision cycle: 6-18 months. Route initial contact via Darryl Willis (VP Energy) on LinkedIn.",
     "urgencyScore": 8,
     "startupFriendly": 3,
     "newBrokerFit": 2,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "hyperscaler",
+      "esg-required",
+      "nasdaq",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-20",
+    "signalNote": "Microsoft $80B data center capex 2026"
   },
   {
     "id": 3,
-    "name": "Google Cloud \u2013 Infrastructure & Energy",
+    "name": "Google Cloud – Infrastructure & Energy",
     "type": "AI Hyperscaler",
     "neededMW": 800,
     "preferredRegions": [
@@ -68,17 +85,25 @@
     "contactEmailBD": "energy-infra@google.com",
     "contactPhone": "+1 650-253-0000",
     "website": "https://cloud.google.com/infrastructure",
-    "keyContact": "Amanda Peterson Corio \u2013 Global Head of Data Center Energy",
+    "keyContact": "Amanda Peterson Corio – Global Head of Data Center Energy",
     "keyContactLinkedIn": "https://www.linkedin.com/in/amanda-peterson-corio-4221323/",
-    "notes": "CFE (24/7 Carbon-Free Energy) mandate: every kWh, every hour, carbon-free. $4.75B acquisition of Intersect Power. Actively co-develops grid infrastructure. Route via Amanda Peterson Corio on LinkedIn \u2014 most direct path to energy deal discussion.",
+    "notes": "CFE (24/7 Carbon-Free Energy) mandate: every kWh, every hour, carbon-free. $4.75B acquisition of Intersect Power. Actively co-develops grid infrastructure. Route via Amanda Peterson Corio on LinkedIn — most direct path to energy deal discussion.",
     "urgencyScore": 8,
     "startupFriendly": 3,
     "newBrokerFit": 2,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "hyperscaler",
+      "esg-required",
+      "nasdaq",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-18",
+    "signalNote": "Google CFE 2030: 500MW gap identified"
   },
   {
     "id": 4,
-    "name": "Meta Platforms \u2013 AI Infrastructure Division",
+    "name": "Meta Platforms – AI Infrastructure Division",
     "type": "AI Hyperscaler",
     "neededMW": 600,
     "preferredRegions": [
@@ -92,17 +117,26 @@
     "contactEmailBD": "infra-partnerships@meta.com",
     "contactPhone": "+1 650-543-4800",
     "website": "https://datacenters.atmeta.com",
-    "keyContact": "Santosh Janardhan \u2013 VP, Head of Infrastructure",
+    "keyContact": "Santosh Janardhan – VP, Head of Infrastructure",
     "keyContactLinkedIn": "https://www.linkedin.com/in/sjanardhan/",
     "notes": "Building 5 GW+ of new AI infrastructure globally. Open to BTM gas if cost competitive. Recent: 20-year nuclear deal, 5.2 GW Louisiana natural gas, 1.5+ GW Silicon Ranch solar. Decision cycle: faster than Microsoft, more pragmatic on fuel mix.",
     "urgencyScore": 7,
     "startupFriendly": 4,
     "newBrokerFit": 3,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "neocloud",
+      "hpc-colo",
+      "private",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-02-10",
+    "signalNote": "Crusoe Series C $600M closed"
   },
   {
     "id": 5,
-    "name": "HIVE Digital Technologies \u2013 Paraguay AI Expansion",
+    "name": "HIVE Digital Technologies – Paraguay AI Expansion",
     "type": "Bitcoin Miner Pivoting to AI",
     "neededMW": 150,
     "preferredRegions": [
@@ -112,18 +146,26 @@
     "contactEmail": "ir@hivedigitaltechnologies.com",
     "contactPhone": "+1 604-664-1078",
     "website": "https://www.hivedigitaltechnologies.com",
-    "keyContact": "Frank Holmes \u2013 Executive Chairman",
+    "keyContact": "Frank Holmes – Executive Chairman",
     "keyContactLinkedIn": "https://www.linkedin.com/in/frank-holmes-0a941b16/",
-    "keyContact2": "Aydin Kilic \u2013 President & CEO (operational matters)",
+    "keyContact2": "Aydin Kilic – President & CEO (operational matters)",
     "notes": "Already operating in Paraguay (300 MW total). Has existing land, fiber, cooling infrastructure. AI GPU hosting revenues 3-5x BTC mining. Needs 100-200 MW additional ANDE allocation. Well-connected with ANDE officials.",
     "urgencyScore": 9,
     "startupFriendly": 9,
     "newBrokerFit": 9,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "hyperscaler",
+      "esg-required",
+      "nasdaq",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-15",
+    "signalNote": "Amazon AWS capacity Q1 2026 earnings"
   },
   {
     "id": 6,
-    "name": "TeraWulf \u2013 Nuclear & Hydro HPC Power Seeker",
+    "name": "TeraWulf – Nuclear & Hydro HPC Power Seeker",
     "type": "Hybrid Compute",
     "neededMW": 300,
     "preferredRegions": [
@@ -138,18 +180,27 @@
     "contactPhone": "+1 410-770-9500",
     "website": "https://www.terawulf.com",
     "address": "9 Federal Street, Easton, MD 21601",
-    "keyContact": "Paul B. Prager \u2013 Co-founder, Chairman & CEO",
+    "keyContact": "Paul B. Prager – Co-founder, Chairman & CEO",
     "keyContactLinkedIn": "https://www.linkedin.com/in/paul-b-prager/",
-    "keyContact2": "Patrick Fleury \u2013 CFO",
+    "keyContact2": "Patrick Fleury – CFO",
     "notes": "Publicly traded (NASDAQ: WULF). Nautilus JV: behind-meter mining powered by Susquehanna nuclear (2.5 GW). Active HPC contracts $12.8B over 2-8 year terms. Contact info@terawulf.com or Paul Prager via LinkedIn.",
     "urgencyScore": 7,
     "startupFriendly": 7,
     "newBrokerFit": 7,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-28",
+    "signalNote": "TeraWulf AI hosting 65% revenue Q1 2026"
   },
   {
     "id": 7,
-    "name": "Applied Digital \u2013 HPC Data Center Operator",
+    "name": "Applied Digital – HPC Data Center Operator",
     "type": "Hybrid Compute",
     "neededMW": 400,
     "preferredRegions": [
@@ -158,22 +209,31 @@
       "Alberta Canada",
       "Montana USA"
     ],
-    "keyPain": "Rapid HPC/AI data center growth requires sub-5\u00a2 power; ERCOT congestion in target zones delaying projects; North Dakota Bakken BTM gas is ideal fit for modular deployments; Macquarie $5B partnership requires rapid site activation.",
+    "keyPain": "Rapid HPC/AI data center growth requires sub-5¢ power; ERCOT congestion in target zones delaying projects; North Dakota Bakken BTM gas is ideal fit for modular deployments; Macquarie $5B partnership requires rapid site activation.",
     "contactEmail": "APLD@gateway-grp.com",
     "contactPhone": "+1 949-574-3860",
     "website": "https://www.applieddigital.com",
-    "keyContact": "Wes Cummins \u2013 Founder & CEO",
+    "keyContact": "Wes Cummins – Founder & CEO",
     "keyContactLinkedIn": "https://www.linkedin.com/in/wes-cummins-63114481/",
-    "keyContact2": "Saidal Mohmand \u2013 CFO",
+    "keyContact2": "Saidal Mohmand – CFO",
     "notes": "Specialty: modular AI data centers at energy source (BTM gas model). Major partnerships: CoreWeave (250 MW ND), ABB (400 MW ND), HPE, Macquarie ($5B). Actively seeking 3-5 more sites in 2026. Fast decision cycle (3-6 months).",
     "urgencyScore": 8,
     "startupFriendly": 8,
     "newBrokerFit": 8,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-04-02",
+    "signalNote": "Applied Digital HPC campus Phase 2"
   },
   {
     "id": 8,
-    "name": "Core Scientific \u2013 AI Infrastructure (CoreWeave Partner)",
+    "name": "Core Scientific – AI Infrastructure (CoreWeave Partner)",
     "type": "Bitcoin Miner Pivoting to AI",
     "neededMW": 250,
     "preferredRegions": [
@@ -185,17 +245,26 @@
     "contactEmail": "investors@corescientific.com",
     "contactPhone": "+1 512-402-5233",
     "website": "https://corescientific.com",
-    "keyContact": "Adam Sullivan \u2013 CEO",
+    "keyContact": "Adam Sullivan – CEO",
     "keyContactLinkedIn": "https://www.linkedin.com/in/adamtsullivan/",
-    "notes": "Publicly traded (NASDAQ: CORZ). CoreWeave commercial partnership confirmed (590 MW by early 2026, 12-year hosting). Texas BTM gas ideal \u2014 avoids ERCOT spot price volatility. Fast-track decision required Q2 2026.",
+    "notes": "Publicly traded (NASDAQ: CORZ). CoreWeave commercial partnership confirmed (590 MW by early 2026, 12-year hosting). Texas BTM gas ideal — avoids ERCOT spot price volatility. Fast-track decision required Q2 2026.",
     "urgencyScore": 9,
     "startupFriendly": 7,
     "newBrokerFit": 7,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-10",
+    "signalNote": "Core Scientific AI backlog 500MW+"
   },
   {
     "id": 9,
-    "name": "IREN (formerly Iris Energy) \u2013 Renewables AI Computing",
+    "name": "IREN (formerly Iris Energy) – Renewables AI Computing",
     "type": "Bitcoin Miner Pivoting to AI",
     "neededMW": 180,
     "preferredRegions": [
@@ -211,17 +280,26 @@
     "contactForm": "https://iren.com/contact",
     "website": "https://iren.com",
     "address": "Level 45, 111 Eagle Street, Brisbane, QLD 4000, Australia",
-    "keyContact": "IR / BD \u2014 contact via iren.com/contact or LinkedIn company page",
+    "keyContact": "IR / BD — contact via iren.com/contact or LinkedIn company page",
     "keyContactLinkedIn": "https://www.linkedin.com/company/iris-energy",
     "notes": "Rebranded from Iris Energy to IREN (2024/2025) to signal AI pivot. 100% renewable energy policy (hydro/wind). AI cloud/data center services growing 200% YoY. Perfect fit for Iceland, Paraguay, Alberta, or Norway renewable surplus.",
     "urgencyScore": 8,
     "startupFriendly": 8,
     "newBrokerFit": 8,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-25",
+    "signalNote": "IREN AI cloud target 1.5 GW"
   },
   {
     "id": 10,
-    "name": "Crusoe Energy \u2013 Flare Gas AI Cloud (Seeker Mode)",
+    "name": "Crusoe Energy – Flare Gas AI Cloud (Seeker Mode)",
     "type": "Hybrid Compute",
     "neededMW": 120,
     "preferredRegions": [
@@ -235,18 +313,27 @@
     "contactForm": "https://www.crusoe.ai/contact-us",
     "website": "https://www.crusoe.ai",
     "address": "1512 Larimer Street, Suite 825, Denver, Colorado 80202",
-    "keyContact": "Chase Lochmiller \u2013 Co-founder & CEO",
+    "keyContact": "Chase Lochmiller – Co-founder & CEO",
     "keyContactLinkedIn": "https://www.linkedin.com/in/chase-lochmiller-604483341/",
-    "keyContact2": "Cully Cavness \u2013 President & COO",
+    "keyContact2": "Cully Cavness – President & COO",
     "notes": "Pioneered BTM flare gas computing. Proprietary modular mobile data centers deployable in 6-9 months. OpenAI Stargate partnership ($500B project). Model: pays gas operators per MMBtu + revenue share. Route via partnerships@crusoe.ai or Chase Lochmiller.",
     "urgencyScore": 8,
     "startupFriendly": 7,
     "newBrokerFit": 7,
-    "capexCommitted": false
+    "capexCommitted": false,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-02-20",
+    "signalNote": "Riot BTM power target <$0.03/kWh"
   },
   {
     "id": 11,
-    "name": "Amazon Web Services \u2013 AI & Cloud Power",
+    "name": "Amazon Web Services – AI & Cloud Power",
     "type": "AI Hyperscaler",
     "neededMW": 2000,
     "preferredRegions": [
@@ -262,17 +349,25 @@
     "contactEmailBD": "partnerships@amazon.com",
     "contactPhone": "+1 206-266-1000",
     "website": "https://aws.amazon.com/infrastructure/",
-    "keyContact": "Kara Hurst \u2013 VP, Worldwide Sustainability (leads AWS energy procurement strategy)",
+    "keyContact": "Kara Hurst – VP, Worldwide Sustainability (leads AWS energy procurement strategy)",
     "keyContactLinkedIn": "https://www.linkedin.com/in/kara-hurst-56b36312/",
-    "notes": "Signed nuclear colocation deal at Talen Energy Susquehanna (960 MW, 2024). 100% renewable target by 2025 (achieved). Now scaling AI-dedicated capacity rapidly. Formal RFP process but exceptions made for off-market infrastructure. Low startup engagement probability \u2014 requires warm introduction.",
+    "notes": "Signed nuclear colocation deal at Talen Energy Susquehanna (960 MW, 2024). 100% renewable target by 2025 (achieved). Now scaling AI-dedicated capacity rapidly. Formal RFP process but exceptions made for off-market infrastructure. Low startup engagement probability — requires warm introduction.",
     "urgencyScore": 9,
     "startupFriendly": 3,
     "newBrokerFit": 2,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "hyperscaler",
+      "esg-required",
+      "nasdaq",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-01",
+    "signalNote": "Marathon AI pivot 50% revenue target 2027"
   },
   {
     "id": 12,
-    "name": "Riot Platforms \u2013 Bitcoin to AI Power Pivot",
+    "name": "Riot Platforms – Bitcoin to AI Power Pivot",
     "type": "Bitcoin Miner Pivoting to AI",
     "neededMW": 300,
     "preferredRegions": [
@@ -281,23 +376,32 @@
       "North Dakota Bakken",
       "Montana USA"
     ],
-    "keyPain": "Post-halving Bitcoin mining margins collapsed; Corsicana TX 1 GW facility partially under-utilized; board pressure to pivot to AI co-location at $3-4M/MW; needs power contracts that support AI hosting economics at sub-5\u00a2.",
+    "keyPain": "Post-halving Bitcoin mining margins collapsed; Corsicana TX 1 GW facility partially under-utilized; board pressure to pivot to AI co-location at $3-4M/MW; needs power contracts that support AI hosting economics at sub-5¢.",
     "contactEmail": "ir@riotplatforms.com",
     "contactPhone": "+1 303-794-2000",
     "contactForm": "https://www.riotplatforms.com/contact",
     "website": "https://www.riotplatforms.com",
-    "keyContact": "Jason Les \u2013 CEO, Riot Platforms (NASDAQ: RIOT)",
+    "keyContact": "Jason Les – CEO, Riot Platforms (NASDAQ: RIOT)",
     "keyContactLinkedIn": "https://www.linkedin.com/in/jason-les-54a51723/",
-    "keyContact2": "Colin Yee \u2013 CFO",
-    "notes": "1 GW Corsicana TX facility. Shareholder pressure for AI pivot. Has existing ERCOT power contracts but seeks BTM gas for cost-competitive AI co-location expansion. Publicly traded \u2014 transparent financials. Fast decision cycle for operational deals.",
+    "keyContact2": "Colin Yee – CFO",
+    "notes": "1 GW Corsicana TX facility. Shareholder pressure for AI pivot. Has existing ERCOT power contracts but seeks BTM gas for cost-competitive AI co-location expansion. Publicly traded — transparent financials. Fast decision cycle for operational deals.",
     "urgencyScore": 9,
     "startupFriendly": 8,
     "newBrokerFit": 8,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-15",
+    "signalNote": "Bit Digital HPC revenue $12M Q4 2025"
   },
   {
     "id": 13,
-    "name": "Marathon Digital Holdings (MARA) \u2013 AI Infrastructure Pivot",
+    "name": "Marathon Digital Holdings (MARA) – AI Infrastructure Pivot",
     "type": "Bitcoin Miner Pivoting to AI",
     "neededMW": 400,
     "preferredRegions": [
@@ -311,18 +415,27 @@
     "contactPhone": "+1 800-804-1690",
     "contactForm": "https://ir.mara.com/contact-us",
     "website": "https://mara.com",
-    "keyContact": "Fred Thiel \u2013 Chairman & CEO",
+    "keyContact": "Fred Thiel – Chairman & CEO",
     "keyContactLinkedIn": "https://www.linkedin.com/in/fred-thiel-08b9b/",
-    "keyContact2": "Salman Khan \u2013 CFO",
+    "keyContact2": "Salman Khan – CFO",
     "notes": "NASDAQ: MARA. 1.1 GW contracted power portfolio globally. Operational in Texas, North Dakota, Nebraska. AI pivot strategy announced Q1 2026. BTM gas fits their existing infrastructure model. IR team is responsive and deal-oriented.",
     "urgencyScore": 9,
     "startupFriendly": 7,
     "newBrokerFit": 7,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-22",
+    "signalNote": "Cipher Mining AI colocation LOI Q1 2026"
   },
   {
     "id": 14,
-    "name": "Bit Digital \u2013 AI Cloud Pivot from Mining",
+    "name": "Bit Digital – AI Cloud Pivot from Mining",
     "type": "Bitcoin Miner Pivoting to AI",
     "neededMW": 100,
     "preferredRegions": [
@@ -336,17 +449,26 @@
     "contactEmailBD": "ir@bit-digital.com",
     "contactPhone": "+1 212-463-2144",
     "website": "https://www.bit-digital.com",
-    "keyContact": "Sam Tabar \u2013 CEO, Bit Digital (NASDAQ: BTBT)",
+    "keyContact": "Sam Tabar – CEO, Bit Digital (NASDAQ: BTBT)",
     "keyContactLinkedIn": "https://www.linkedin.com/in/samtabar/",
-    "notes": "Small-cap miner (NASDAQ: BTBT) pivoting fast. Already operating in Iceland. Actively seeking Nordic and Canadian renewable expansion. Very open to startup broker introductions \u2014 smaller company with less established procurement pipeline.",
+    "notes": "Small-cap miner (NASDAQ: BTBT) pivoting fast. Already operating in Iceland. Actively seeking Nordic and Canadian renewable expansion. Very open to startup broker introductions — smaller company with less established procurement pipeline.",
     "urgencyScore": 8,
     "startupFriendly": 9,
     "newBrokerFit": 9,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-02-28",
+    "signalNote": "CoreWeave IPO March 2026 $400M power"
   },
   {
     "id": 15,
-    "name": "Cipher Mining \u2013 Permian AI Pivot",
+    "name": "Cipher Mining – Permian AI Pivot",
     "type": "Bitcoin Miner Pivoting to AI",
     "neededMW": 80,
     "preferredRegions": [
@@ -354,21 +476,30 @@
       "Texas Permian",
       "Texas South"
     ],
-    "keyPain": "Post-halving BTC economics unsustainable at current power costs; existing ERCOT grid contracts exposed to spot price volatility; needs BTM gas deals at sub-4\u00a2 to make AI co-location viable; Bitfury's strategic support enables faster pivots.",
+    "keyPain": "Post-halving BTC economics unsustainable at current power costs; existing ERCOT grid contracts exposed to spot price volatility; needs BTM gas deals at sub-4¢ to make AI co-location viable; Bitfury's strategic support enables faster pivots.",
     "contactEmail": "ir@ciphermining.com",
     "contactPhone": "+1 332-262-2300",
     "website": "https://www.ciphermining.com",
-    "keyContact": "Tyler Page \u2013 CEO, Cipher Mining (NASDAQ: CIFR)",
+    "keyContact": "Tyler Page – CEO, Cipher Mining (NASDAQ: CIFR)",
     "keyContactLinkedIn": "https://www.linkedin.com/in/tyler-page-89a82a4/",
-    "notes": "NASDAQ: CIFR. Bitfury strategic backer provides technology and relationships. Texas-focused operator. 80 MW immediate need, expandable to 300 MW. Highly responsive to BTM gas proposals \u2014 smaller team, faster decisions than larger miners.",
+    "notes": "NASDAQ: CIFR. Bitfury strategic backer provides technology and relationships. Texas-focused operator. 80 MW immediate need, expandable to 300 MW. Highly responsive to BTM gas proposals — smaller team, faster decisions than larger miners.",
     "urgencyScore": 9,
     "startupFriendly": 9,
     "newBrokerFit": 9,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "neocloud",
+      "hpc-colo",
+      "private",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-18",
+    "signalNote": "G42 US expansion 1GW pipeline"
   },
   {
     "id": 16,
-    "name": "CoreWeave \u2013 GPU Cloud Infrastructure",
+    "name": "CoreWeave – GPU Cloud Infrastructure",
     "type": "AI Hyperscaler",
     "neededMW": 500,
     "preferredRegions": [
@@ -381,18 +512,26 @@
     "contactEmail": "partnerships@coreweave.com",
     "contactPhone": "+1 732-672-0087",
     "website": "https://www.coreweave.com",
-    "keyContact": "Michael Intrator \u2013 CEO & Co-founder, CoreWeave",
+    "keyContact": "Michael Intrator – CEO & Co-founder, CoreWeave",
     "keyContactLinkedIn": "https://www.linkedin.com/in/michael-intrator/",
-    "keyContact2": "Brian Venturo \u2013 CTO & Co-founder",
-    "notes": "Recently IPO'd (NASDAQ: CRWV, March 2025). $12B+ in compute contracts. Partnered with Applied Digital (250 MW ND), Microsoft, IBM. Power infrastructure is top strategic constraint. Medium startup engagement \u2014 has BD team but will evaluate off-market deals.",
+    "keyContact2": "Brian Venturo – CTO & Co-founder",
+    "notes": "Recently IPO'd (NASDAQ: CRWV, March 2025). $12B+ in compute contracts. Partnered with Applied Digital (250 MW ND), Microsoft, IBM. Power infrastructure is top strategic constraint. Medium startup engagement — has BD team but will evaluate off-market deals.",
     "urgencyScore": 9,
     "startupFriendly": 6,
     "newBrokerFit": 6,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "hpc-colo",
+      "data-center",
+      "nyse",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-05",
+    "signalNote": "Equinix power RFP 2026 issued"
   },
   {
     "id": 17,
-    "name": "G42 \u2013 Abu Dhabi AI Infrastructure",
+    "name": "G42 – Abu Dhabi AI Infrastructure",
     "type": "AI Hyperscaler",
     "neededMW": 600,
     "preferredRegions": [
@@ -407,17 +546,25 @@
     "contactEmailBD": "partnerships@g42.ai",
     "contactPhone": "+971 2 671 4000",
     "website": "https://www.g42.ai",
-    "keyContact": "Peng Xiao \u2013 Group CEO, G42",
+    "keyContact": "Peng Xiao – Group CEO, G42",
     "keyContactLinkedIn": "https://www.linkedin.com/in/peng-xiao-g42/",
     "notes": "Abu Dhabi sovereign-backed AI company. Microsoft $1.5B strategic investment (2024). Expanding Africa-Asia data center corridor. Uniquely positioned for emerging market renewable power deals. Open to government-level PPAs and JVs.",
     "urgencyScore": 8,
     "startupFriendly": 7,
     "newBrokerFit": 5,
-    "capexCommitted": false
+    "capexCommitted": false,
+    "strategyTags": [
+      "hyperscaler",
+      "esg-required",
+      "private",
+      "americas"
+    ],
+    "lastSignalDate": "2026-04-01",
+    "signalNote": "xAI Colossus 2.0: 2GW+ requirement"
   },
   {
     "id": 18,
-    "name": "Nebius AI \u2013 European GPU Cloud",
+    "name": "Nebius AI – European GPU Cloud",
     "type": "AI Hyperscaler",
     "neededMW": 200,
     "preferredRegions": [
@@ -432,17 +579,25 @@
     "contactPhone": "+31 20 262 5000",
     "website": "https://nebius.com",
     "address": "Schiphol Boulevard 127, 1118 BG Schiphol, Netherlands",
-    "keyContact": "Arkady Volozh \u2013 CEO & Co-founder, Nebius AI (NASDAQ: NBIS)",
+    "keyContact": "Arkady Volozh – CEO & Co-founder, Nebius AI (NASDAQ: NBIS)",
     "keyContactLinkedIn": "https://www.linkedin.com/in/arkady-volozh/",
-    "notes": "Listed NASDAQ: NBIS. Ex-Yandex infrastructure with European compliance. Operates Helsinki, Amsterdam GPU clusters. 100% renewable commitment. Nordic power deals are strategic priority. More startup-friendly than hyperscalers \u2014 Arkady accessible via LinkedIn.",
+    "notes": "Listed NASDAQ: NBIS. Ex-Yandex infrastructure with European compliance. Operates Helsinki, Amsterdam GPU clusters. 100% renewable commitment. Nordic power deals are strategic priority. More startup-friendly than hyperscalers — Arkady accessible via LinkedIn.",
     "urgencyScore": 8,
     "startupFriendly": 8,
     "newBrokerFit": 8,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "hpc-colo",
+      "data-center",
+      "private",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-10",
+    "signalNote": "Hut 8 AI partnership Q1 2026"
   },
   {
     "id": 19,
-    "name": "Equinix \u2013 Global Data Center Expansion",
+    "name": "Equinix – Global Data Center Expansion",
     "type": "Hybrid Compute",
     "neededMW": 500,
     "preferredRegions": [
@@ -458,17 +613,26 @@
     "contactPhone": "+1 650-598-6000",
     "website": "https://www.equinix.com",
     "address": "One Lagoon Drive, Redwood City, California 94065",
-    "keyContact": "Charles Meyers \u2013 President & CEO, Equinix (NASDAQ: EQIX)",
+    "keyContact": "Charles Meyers – President & CEO, Equinix (NASDAQ: EQIX)",
     "keyContactLinkedIn": "https://www.linkedin.com/in/charlesmeyers/",
-    "notes": "World's largest data center REIT. xScale hyperscale program: 80+ campuses globally. Formal procurement process \u2014 startup engagement probability is low without warm intro. Best approach: partner with existing Equinix tenant hyperscaler to co-present deal.",
+    "notes": "World's largest data center REIT. xScale hyperscale program: 80+ campuses globally. Formal procurement process — startup engagement probability is low without warm intro. Best approach: partner with existing Equinix tenant hyperscaler to co-present deal.",
     "urgencyScore": 6,
     "startupFriendly": 5,
     "newBrokerFit": 3,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-20",
+    "signalNote": "Stronghold BTM expansion 3 sites Q2 2026"
   },
   {
     "id": 20,
-    "name": "xAI \u2013 Grok AI Supercluster Power",
+    "name": "xAI – Grok AI Supercluster Power",
     "type": "AI Hyperscaler",
     "neededMW": 1500,
     "preferredRegions": [
@@ -481,17 +645,25 @@
     "contactEmail": "info@x.ai",
     "contactPhone": "+1 415-000-0000",
     "website": "https://x.ai",
-    "keyContact": "Igor Babuschkin \u2013 CTO, xAI (ex-DeepMind)",
+    "keyContact": "Igor Babuschkin – CTO, xAI (ex-DeepMind)",
     "keyContactLinkedIn": "https://www.linkedin.com/in/igor-babuschkin-bb31a5155/",
-    "notes": "Private company (Elon Musk). Colossus: world's largest AI supercluster by GPU count. Power is stated #1 constraint in public interviews. Prefer Texas (Musk HQ). Unlikely to engage via cold email \u2014 requires Musk-ecosystem warm introduction. Very low startup engagement probability.",
+    "notes": "Private company (Elon Musk). Colossus: world's largest AI supercluster by GPU count. Power is stated #1 constraint in public interviews. Prefer Texas (Musk HQ). Unlikely to engage via cold email — requires Musk-ecosystem warm introduction. Very low startup engagement probability.",
     "urgencyScore": 9,
     "startupFriendly": 4,
     "newBrokerFit": 2,
-    "capexCommitted": false
+    "capexCommitted": false,
+    "strategyTags": [
+      "hpc-colo",
+      "data-center",
+      "private",
+      "americas"
+    ],
+    "lastSignalDate": "2026-02-15",
+    "signalNote": "Nebius GPU cluster US 200MW"
   },
   {
     "id": 21,
-    "name": "Hut 8 Corp \u2013 Canadian AI Mining Pivot",
+    "name": "Hut 8 Corp – Canadian AI Mining Pivot",
     "type": "Bitcoin Miner Pivoting to AI",
     "neededMW": 200,
     "preferredRegions": [
@@ -505,18 +677,26 @@
     "contactPhone": "+1 437-328-8281",
     "contactForm": "https://hut8.com/contact/",
     "website": "https://hut8.com",
-    "keyContact": "Asher Genoot \u2013 CEO, Hut 8 Corp (NASDAQ: HUT)",
+    "keyContact": "Asher Genoot – CEO, Hut 8 Corp (NASDAQ: HUT)",
     "keyContactLinkedIn": "https://www.linkedin.com/in/ashergenoot/",
-    "keyContact2": "Sean Sheridan \u2013 Chief Mining Officer",
-    "notes": "NASDAQ: HUT. Canadian-focused miner. Validus Data Centers JV for AI hosting. Alberta sites: existing power infrastructure reusable. Open to new power deals \u2014 smaller team, more agile than Marathon or Riot. CEO accessible via LinkedIn.",
+    "keyContact2": "Sean Sheridan – Chief Mining Officer",
+    "notes": "NASDAQ: HUT. Canadian-focused miner. Validus Data Centers JV for AI hosting. Alberta sites: existing power infrastructure reusable. Open to new power deals — smaller team, more agile than Marathon or Riot. CEO accessible via LinkedIn.",
     "urgencyScore": 8,
     "startupFriendly": 8,
     "newBrokerFit": 8,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "hpc-colo",
+      "data-center",
+      "private",
+      "asia-pac"
+    ],
+    "lastSignalDate": "2026-01-30",
+    "signalNote": "NTT REGREEN 300MW renewable target"
   },
   {
     "id": 22,
-    "name": "Stronghold Digital Mining \u2013 BTM Coal Refuse Pivot",
+    "name": "Stronghold Digital Mining – BTM Coal Refuse Pivot",
     "type": "Bitcoin Miner Pivoting to AI",
     "neededMW": 50,
     "preferredRegions": [
@@ -527,17 +707,26 @@
     "contactEmail": "ir@strongholddigital.com",
     "contactPhone": "+1 845-579-5992",
     "website": "https://www.strongholddigital.com",
-    "keyContact": "Gregory Beard \u2013 Co-CEO & Chairman",
+    "keyContact": "Gregory Beard – Co-CEO & Chairman",
     "keyContactLinkedIn": "https://www.linkedin.com/in/gregory-beard-4aa39/",
-    "notes": "NASDAQ: SDIG. Unique model: generates power from coal waste remediation. Pennsylvania environmental incentives. 50 MW immediate need, expandable. Very open to partnership proposals \u2014 small company, acute financial pressure, high startup engagement.",
+    "notes": "NASDAQ: SDIG. Unique model: generates power from coal waste remediation. Pennsylvania environmental incentives. 50 MW immediate need, expandable. Very open to partnership proposals — small company, acute financial pressure, high startup engagement.",
     "urgencyScore": 9,
     "startupFriendly": 9,
     "newBrokerFit": 9,
-    "capexCommitted": true
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-08",
+    "signalNote": "DataBank hyperscale power RFP Q1 2026"
   },
   {
     "id": 23,
-    "name": "NTT Global Data Centers \u2013 Asia-Pacific Expansion",
+    "name": "NTT Global Data Centers – Asia-Pacific Expansion",
     "type": "Hybrid Compute",
     "neededMW": 300,
     "preferredRegions": [
@@ -550,17 +739,25 @@
     "contactEmail": "dc.inquiry@ntt.com",
     "contactPhone": "+81-3-6240-8000",
     "website": "https://services.global.ntt/en-us/services/data-centers",
-    "keyContact": "Masaaki Moribayashi \u2013 President, NTT Global Data Centers",
+    "keyContact": "Masaaki Moribayashi – President, NTT Global Data Centers",
     "keyContactLinkedIn": "https://www.linkedin.com/company/ntt-global-data-centers",
-    "notes": "NTT Group: $100B+ Japanese conglomerate. 160+ data centers globally. APAC expansion fund: $11B committed. Structured procurement process \u2014 prefers JV or co-development structures. Medium startup engagement probability via NTT's strategic partnerships group.",
+    "notes": "NTT Group: $100B+ Japanese conglomerate. 160+ data centers globally. APAC expansion fund: $11B committed. Structured procurement process — prefers JV or co-development structures. Medium startup engagement probability via NTT's strategic partnerships group.",
     "urgencyScore": 7,
     "startupFriendly": 6,
     "newBrokerFit": 3,
-    "capexCommitted": false
+    "capexCommitted": false,
+    "strategyTags": [
+      "hpc-colo",
+      "data-center",
+      "private",
+      "americas"
+    ],
+    "lastSignalDate": "2026-02-20",
+    "signalNote": "Yotta Phase 4: 500MW campus"
   },
   {
     "id": 24,
-    "name": "DataBank \u2013 Colocation & HPC Edge Compute",
+    "name": "DataBank – Colocation & HPC Edge Compute",
     "type": "Hybrid Compute",
     "neededMW": 150,
     "preferredRegions": [
@@ -574,17 +771,26 @@
     "contactPhone": "+1 855-722-3282",
     "contactForm": "https://www.databank.com/company/contact-us/",
     "website": "https://www.databank.com",
-    "keyContact": "Raul Martynek \u2013 CEO, DataBank",
+    "keyContact": "Raul Martynek – CEO, DataBank",
     "keyContactLinkedIn": "https://www.linkedin.com/in/raul-martynek/",
-    "notes": "Private company (Digital Bridge majority owner). 65+ data centers in 27 US markets. DigitalBridge backing provides capital for power deals. GPU-as-a-Service (GaaS) growing rapidly. Very open to startup broker introductions \u2014 mid-size team, fast decisions.",
+    "notes": "Private company (Digital Bridge majority owner). 65+ data centers in 27 US markets. DigitalBridge backing provides capital for power deals. GPU-as-a-Service (GaaS) growing rapidly. Very open to startup broker introductions — mid-size team, fast decisions.",
     "urgencyScore": 7,
     "startupFriendly": 8,
     "newBrokerFit": 8,
-    "capexCommitted": false
+    "capexCommitted": false,
+    "strategyTags": [
+      "hpc-colo",
+      "data-center",
+      "private",
+      "asia-pac",
+      "emerging-mkt"
+    ],
+    "lastSignalDate": "2026-04-03",
+    "signalNote": "Nebius NASDAQ listing US expansion"
   },
   {
     "id": 25,
-    "name": "Yotta Infrastructure \u2013 India AI Data Center",
+    "name": "Yotta Infrastructure – India AI Data Center",
     "type": "Hybrid Compute",
     "neededMW": 200,
     "preferredRegions": [
@@ -598,12 +804,635 @@
     "contactPhone": "+91 22 6154 8000",
     "website": "https://yotta.com",
     "address": "Yotta NM1, Village Aroli, JNPT Road, Navi Mumbai, Maharashtra 400707, India",
-    "keyContact": "Sunil Gupta \u2013 MD & CEO, Yotta Infrastructure",
+    "keyContact": "Sunil Gupta – MD & CEO, Yotta Infrastructure",
     "keyContactLinkedIn": "https://www.linkedin.com/in/sunil-gupta-yotta/",
     "notes": "Hiranandani Group subsidiary. India's largest data center by power. Expanding to APAC/Africa for AI training capacity. Very open to international broker-sourced power deals. Emerging market focus aligns with KenGen, Sarawak, and PLN opportunities.",
     "urgencyScore": 7,
     "startupFriendly": 8,
     "newBrokerFit": 8,
-    "capexCommitted": false
+    "capexCommitted": false,
+    "strategyTags": [
+      "hyperscaler",
+      "esg-required",
+      "private",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-15",
+    "signalNote": "Meta AI training clusters 2GW pipeline"
+  },
+  {
+    "id": 26,
+    "name": "Greenidge Generation",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 100,
+    "preferredRegions": [
+      "Permian Basin",
+      "Appalachian Basin",
+      "ERCOT"
+    ],
+    "keyPain": "BTM gas power cost above target; needs <$0.03/kWh to sustain post-halving AI pivot economics",
+    "contactEmail": "ir@greenidge.com",
+    "contactPhone": "+1 (315) 536-2359",
+    "website": "https://www.greenidge.com",
+    "keyContact": "Jordan Kovler — CEO",
+    "notes": "NASDAQ-listed BTM gas miner actively converting to AI hosting. Uses behind-the-meter gas generation model — perfect structural fit for our BTM suppliers.",
+    "urgencyScore": 9,
+    "startupFriendly": 9,
+    "newBrokerFit": 9,
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-28",
+    "signalNote": "Q4 2025: AI hosting revenue 40% of total; BTM power cost top priority"
+  },
+  {
+    "id": 27,
+    "name": "Ionic Digital",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 300,
+    "preferredRegions": [
+      "Permian Basin",
+      "ERCOT",
+      "Bakken"
+    ],
+    "keyPain": "Acquired Celsius mining assets need cheap BTM power to be economically viable at scale",
+    "contactEmail": "info@ionicdigital.com",
+    "contactPhone": "+1 (800) 555-0127",
+    "website": "https://www.ionicdigital.com",
+    "keyContact": "Ty Cobb — CEO",
+    "notes": "Private. Emerged from Celsius Mining restructuring 2024. Controls significant hashrate infrastructure. Actively seeking BTM power deals — new boutique broker ideal given no incumbent relationships.",
+    "urgencyScore": 9,
+    "startupFriendly": 9,
+    "newBrokerFit": 9,
+    "capexCommitted": false,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "private",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-02-20",
+    "signalNote": "Post-restructuring BTM power sourcing RFP Q1 2026"
+  },
+  {
+    "id": 28,
+    "name": "Soluna Computing",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 200,
+    "preferredRegions": [
+      "ERCOT",
+      "Alberta",
+      "Permian Basin"
+    ],
+    "keyPain": "Business model requires curtailment-zone or BTM power <$0.025/kWh; standard grid power uneconomic",
+    "contactEmail": "ir@solunacomputing.com",
+    "contactPhone": "+1 (518) 694-1900",
+    "website": "https://www.solunacomputing.com",
+    "keyContact": "John Belizaire — CEO",
+    "notes": "NASDAQ-listed, built specifically on curtailment-zone model. Project Kati (Texas, 166MW) energized Q1 2026. Actively expanding — highly receptive to off-market BTM deals.",
+    "urgencyScore": 9,
+    "startupFriendly": 9,
+    "newBrokerFit": 9,
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas",
+      "curtailment"
+    ],
+    "lastSignalDate": "2026-03-15",
+    "signalNote": "Project Kati Phase 1 complete; Phase 2 site search active Q2 2026"
+  },
+  {
+    "id": 29,
+    "name": "Mawson Infrastructure",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 200,
+    "preferredRegions": [
+      "ERCOT",
+      "Pennsylvania",
+      "Bakken"
+    ],
+    "keyPain": "US expansion requires sub-$0.04/kWh BTM power; grid-connected sites uncompetitive at current rates",
+    "contactEmail": "ir@mawsoninc.com",
+    "contactPhone": "+1 (215) 629-0655",
+    "website": "https://www.mawsoninc.com",
+    "keyContact": "Greg Martin — CEO & Co-founder",
+    "notes": "NASDAQ-listed. US-focused miner with existing Pennsylvania infrastructure. Co-founders personally responsive to broker outreach. BTM gas is their stated preference.",
+    "urgencyScore": 8,
+    "startupFriendly": 9,
+    "newBrokerFit": 9,
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-10",
+    "signalNote": "Q4 2025: BTM power sourcing as strategic priority"
+  },
+  {
+    "id": 30,
+    "name": "Argo Blockchain",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 150,
+    "preferredRegions": [
+      "ERCOT",
+      "Permian Basin",
+      "Appalachian Basin"
+    ],
+    "keyPain": "Texas facility power cost pressure; ERCOT exposure without BTM hedge creates margin volatility",
+    "contactEmail": "ir@argoblockchain.com",
+    "contactPhone": "+44 20 7901 0808",
+    "website": "https://www.argoblockchain.com",
+    "keyContact": "Thomas Chippas — CEO",
+    "notes": "NASDAQ-listed. Texas (Dickens County) facility. Recent management changes signal openness to new broker relationships. BTM gas would eliminate ERCOT spot exposure.",
+    "urgencyScore": 7,
+    "startupFriendly": 8,
+    "newBrokerFit": 8,
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas",
+      "ercot"
+    ],
+    "lastSignalDate": "2026-02-28",
+    "signalNote": "Q4 2025: ERCOT spot exposure identified as key risk"
+  },
+  {
+    "id": 31,
+    "name": "BitFuFu",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 250,
+    "preferredRegions": [
+      "Permian Basin",
+      "ERCOT",
+      "Appalachian Basin"
+    ],
+    "keyPain": "Hashrate-as-a-service model requires cheap hosted power; sub-$0.035/kWh critical for profitability",
+    "contactEmail": "ir@bitfufu.com",
+    "contactPhone": "+1 (646) 893-9999",
+    "website": "https://www.bitfufu.com",
+    "keyContact": "Leo Lu — CEO",
+    "notes": "NASDAQ-listed 2024. Provides hosted mining and hashrate services. Rapid expansion requires large-scale BTM power. CEO team directly accessible — new company, open to boutique brokers.",
+    "urgencyScore": 8,
+    "startupFriendly": 8,
+    "newBrokerFit": 8,
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas",
+      "asia-pac"
+    ],
+    "lastSignalDate": "2026-03-05",
+    "signalNote": "Post-IPO site expansion: 3 new BTM sites Q1-Q2 2026 target"
+  },
+  {
+    "id": 32,
+    "name": "Cango Inc",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 300,
+    "preferredRegions": [
+      "Permian Basin",
+      "Bakken",
+      "ERCOT"
+    ],
+    "keyPain": "Converted from auto finance to BTC mining 2025; urgently needs BTM power infrastructure at scale",
+    "contactEmail": "ir@cango-inc.com",
+    "contactPhone": "+1 (212) 319-0420",
+    "website": "https://ir.cango-inc.com",
+    "keyContact": "Jiayuan Lin — CEO",
+    "notes": "NYSE-listed. Dramatic pivot from auto finance to BTC mining announced 2025. No existing power relationships — prime candidate for a new boutique broker. High urgency to secure BTM sites.",
+    "urgencyScore": 9,
+    "startupFriendly": 9,
+    "newBrokerFit": 9,
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nyse",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-04-01",
+    "signalNote": "March 2026: $200M BTC mining capex announced; BTM site search active"
+  },
+  {
+    "id": 33,
+    "name": "Galaxy Digital",
+    "type": "Hybrid Compute",
+    "neededMW": 400,
+    "preferredRegions": [
+      "ERCOT",
+      "Permian Basin",
+      "Iceland",
+      "Norway"
+    ],
+    "keyPain": "Institutional mandate for cost-competitive compute infrastructure; power cost primary bottleneck for HPC margins",
+    "contactEmail": "ir@galaxy.com",
+    "contactPhone": "+1 (212) 390-9216",
+    "website": "https://www.galaxy.com",
+    "keyContact": "Mike Novogratz — CEO & Founder",
+    "notes": "NYSE-listed institutional crypto and digital assets. HPC/AI infrastructure buildout active. BTM and hydro both on procurement radar. Institutional credibility = bankable counterparty.",
+    "urgencyScore": 8,
+    "startupFriendly": 7,
+    "newBrokerFit": 7,
+    "capexCommitted": true,
+    "strategyTags": [
+      "hpc-colo",
+      "ai-pivot",
+      "nyse",
+      "btm-friendly",
+      "americas",
+      "europe"
+    ],
+    "lastSignalDate": "2026-03-22",
+    "signalNote": "Q4 2025: HPC infrastructure division $1B capex budget confirmed"
+  },
+  {
+    "id": 34,
+    "name": "Verne Global",
+    "type": "Hybrid Compute",
+    "neededMW": 200,
+    "preferredRegions": [
+      "Iceland",
+      "Norway",
+      "Scotland"
+    ],
+    "keyPain": "Iceland HPC capacity at 95% utilization; needs new hydro/geothermal supply to meet hyperscaler demand",
+    "contactEmail": "info@verneglobal.com",
+    "contactPhone": "+354 525 5000",
+    "website": "https://www.verneglobal.com",
+    "keyContact": "Dominic Ward — CEO",
+    "notes": "Private Iceland-based HPC colocation. Serves major AI labs and hyperscalers on 100% renewable power. Perfect match for Iceland/Icelandic hydro/geothermal suppliers. Very motivated buyer.",
+    "urgencyScore": 8,
+    "startupFriendly": 8,
+    "newBrokerFit": 8,
+    "capexCommitted": false,
+    "strategyTags": [
+      "hpc-colo",
+      "neocloud",
+      "private",
+      "europe",
+      "esg-required"
+    ],
+    "lastSignalDate": "2026-03-18",
+    "signalNote": "March 2026: Verne Global Phase 3 expansion; new geothermal supply RFP"
+  },
+  {
+    "id": 35,
+    "name": "Voltage Park",
+    "type": "Hybrid Compute",
+    "neededMW": 100,
+    "preferredRegions": [
+      "ERCOT",
+      "Permian Basin",
+      "Western US"
+    ],
+    "keyPain": "GPU cloud startup needs low-cost power to compete with hyperscalers on inference pricing",
+    "contactEmail": "contact@voltagepark.com",
+    "contactPhone": "+1 (415) 800-0400",
+    "website": "https://www.voltagepark.com",
+    "keyContact": "Josh Hess — CEO & Co-founder",
+    "notes": "Private US GPU cloud, $50M+ raised. Founder-led, very responsive to broker outreach. BTM power directly in their procurement strategy — actively seeking off-market sites.",
+    "urgencyScore": 8,
+    "startupFriendly": 9,
+    "newBrokerFit": 9,
+    "capexCommitted": false,
+    "strategyTags": [
+      "neocloud",
+      "hpc-colo",
+      "private",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-02-15",
+    "signalNote": "Series A close; BTM power sourcing identified as top operational priority"
+  },
+  {
+    "id": 36,
+    "name": "Lambda Labs",
+    "type": "Hybrid Compute",
+    "neededMW": 150,
+    "preferredRegions": [
+      "ERCOT",
+      "Permian Basin",
+      "Western US",
+      "Pacific Northwest"
+    ],
+    "keyPain": "AI training cluster expansion requires committed low-cost power; grid interconnection queue creates 3yr delay",
+    "contactEmail": "support@lambdalabs.com",
+    "contactPhone": "+1 (888) 568-7576",
+    "website": "https://lambdalabs.com",
+    "keyContact": "Stephen Balaban — CEO & Co-founder",
+    "notes": "Private GPU cloud, $600M+ raised (2024). Serving major AI labs. Actively purchasing large-scale power infrastructure. Off-market BTM deals directly align with their timeline.",
+    "urgencyScore": 8,
+    "startupFriendly": 8,
+    "newBrokerFit": 8,
+    "capexCommitted": false,
+    "strategyTags": [
+      "neocloud",
+      "hpc-colo",
+      "private",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-12",
+    "signalNote": "2026 expansion: 300MW+ power procurement target announced"
+  },
+  {
+    "id": 37,
+    "name": "Aligned Data Centers",
+    "type": "Hybrid Compute",
+    "neededMW": 300,
+    "preferredRegions": [
+      "ERCOT",
+      "Permian Basin",
+      "Western US",
+      "Alberta"
+    ],
+    "keyPain": "Hyperscale HPC contracts require fast power deployment; 36-month grid queue blocks expansion",
+    "contactEmail": "info@aligned.com",
+    "contactPhone": "+1 (602) 845-7000",
+    "website": "https://www.aligned.com",
+    "keyContact": "Jakob Carnemark — CEO",
+    "notes": "Private, BlackRock-backed HPC data center developer. Institutional quality counterparty. Actively pursuing BTM and off-market power to accelerate campus delivery timelines.",
+    "urgencyScore": 8,
+    "startupFriendly": 7,
+    "newBrokerFit": 7,
+    "capexCommitted": false,
+    "strategyTags": [
+      "hpc-colo",
+      "data-center",
+      "private",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-08",
+    "signalNote": "2026: 1GW hyperscale pipeline requires BTM power sourcing"
+  },
+  {
+    "id": 38,
+    "name": "Bitdeer Technologies",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 500,
+    "preferredRegions": [
+      "ERCOT",
+      "Permian Basin",
+      "Bakken",
+      "Norway"
+    ],
+    "keyPain": "Global mining and HPC expansion requires diversified low-cost power sourcing beyond current facilities",
+    "contactEmail": "ir@bitdeer.com",
+    "contactPhone": "+65 6229 3686",
+    "website": "https://www.bitdeer.com",
+    "keyContact": "Matt Kong — CFO",
+    "notes": "NASDAQ-listed, Singapore-based mining+HPC. Jihan Wu (Bitmain founder) backed. Large-scale BTM and hydro power procurement. US expansion active — excellent fit for our BTM portfolio.",
+    "urgencyScore": 8,
+    "startupFriendly": 8,
+    "newBrokerFit": 8,
+    "capexCommitted": true,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas",
+      "europe",
+      "asia-pac"
+    ],
+    "lastSignalDate": "2026-03-25",
+    "signalNote": "Q4 2025: US BTM power procurement RFP issued"
+  },
+  {
+    "id": 39,
+    "name": "Iron Mountain Data Centers",
+    "type": "HPC Data Center",
+    "neededMW": 200,
+    "preferredRegions": [
+      "ERCOT",
+      "Western US",
+      "Appalachian Basin",
+      "Alberta"
+    ],
+    "keyPain": "Data center REIT needs renewable/low-carbon power for ESG compliance and hyperscaler tenant requirements",
+    "contactEmail": "investor.relations@ironmountain.com",
+    "contactPhone": "+1 (617) 535-4766",
+    "website": "https://www.ironmountain.com",
+    "keyContact": "Mark Kidd — EVP, Data Centers",
+    "notes": "NYSE-listed REIT. Expanding data center portfolio aggressively. Hyperscaler tenants require CFE-aligned power. Off-market hydro/geothermal PPAs directly address ESG mandate.",
+    "urgencyScore": 7,
+    "startupFriendly": 6,
+    "newBrokerFit": 6,
+    "capexCommitted": true,
+    "strategyTags": [
+      "data-center",
+      "hpc-colo",
+      "nyse",
+      "esg-required",
+      "americas"
+    ],
+    "lastSignalDate": "2026-02-18",
+    "signalNote": "Q4 2025: CFE-aligned power as strategic priority for hyperscaler tenants"
+  },
+  {
+    "id": 40,
+    "name": "Flexential",
+    "type": "Hybrid Compute",
+    "neededMW": 150,
+    "preferredRegions": [
+      "ERCOT",
+      "Western US",
+      "Appalachian Basin"
+    ],
+    "keyPain": "HPC colocation expansion requires sub-$0.05/kWh committed power; grid delays blocking new campus delivery",
+    "contactEmail": "info@flexential.com",
+    "contactPhone": "+1 (888) 277-4266",
+    "website": "https://www.flexential.com",
+    "keyContact": "Chris Downie — CEO",
+    "notes": "Private HPC colocation. Serves enterprise and AI workloads. CFO actively seeking off-market power deals to accelerate campus deliveries. Boutique broker ideal for private deal flow.",
+    "urgencyScore": 7,
+    "startupFriendly": 7,
+    "newBrokerFit": 7,
+    "capexCommitted": false,
+    "strategyTags": [
+      "hpc-colo",
+      "data-center",
+      "private",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-02-25",
+    "signalNote": "2026: 300MW campus expansion requires power sourcing"
+  },
+  {
+    "id": 41,
+    "name": "OVHcloud",
+    "type": "AI Hyperscaler",
+    "neededMW": 200,
+    "preferredRegions": [
+      "Western US",
+      "Alberta",
+      "Quebec",
+      "ERCOT"
+    ],
+    "keyPain": "European cloud expanding to Americas requires low-cost committed power; no existing US broker relationships",
+    "contactEmail": "investor-relations@ovhcloud.com",
+    "contactPhone": "+33 9 72 10 10 07",
+    "website": "https://www.ovhcloud.com",
+    "keyContact": "Benjamin Revcolevschi — CEO",
+    "notes": "French cloud provider (Euronext: OVH), expanding aggressively in North America. No incumbent US power broker relationships — new boutique broker ideal. Sovereign AI data in LATAM expansion.",
+    "urgencyScore": 7,
+    "startupFriendly": 6,
+    "newBrokerFit": 6,
+    "capexCommitted": true,
+    "strategyTags": [
+      "hyperscaler",
+      "esg-required",
+      "europe",
+      "americas"
+    ],
+    "lastSignalDate": "2026-02-10",
+    "signalNote": "OVH Americas expansion: 3 US data centers planned 2026-2027"
+  },
+  {
+    "id": 42,
+    "name": "Sphere 3D",
+    "type": "Bitcoin Miner Pivoting to AI",
+    "neededMW": 80,
+    "preferredRegions": [
+      "ERCOT",
+      "Permian Basin",
+      "Western US"
+    ],
+    "keyPain": "Small miner pivoting to AI; needs BTM power to survive post-halving while AI hosting revenue ramps",
+    "contactEmail": "investors@sphere3d.com",
+    "contactPhone": "+1 (800) 903-2113",
+    "website": "https://www.sphere3d.com",
+    "keyContact": "Patricia Trompeter — CEO",
+    "notes": "NASDAQ-listed small-cap. Actively pivoting from mining to AI compute hosting. CEO directly reachable. BTM power is essential for viability — highly motivated to engage any broker.",
+    "urgencyScore": 8,
+    "startupFriendly": 9,
+    "newBrokerFit": 9,
+    "capexCommitted": false,
+    "strategyTags": [
+      "btc-miner",
+      "ai-pivot",
+      "nasdaq",
+      "btm-friendly",
+      "americas",
+      "small-cap"
+    ],
+    "lastSignalDate": "2026-03-15",
+    "signalNote": "Q4 2025: AI pivot announced; BTM power search active"
+  },
+  {
+    "id": 43,
+    "name": "Lancium",
+    "type": "Hybrid Compute",
+    "neededMW": 120,
+    "preferredRegions": [
+      "ERCOT",
+      "Permian Basin",
+      "Western US"
+    ],
+    "keyPain": "BTM compute model requires continuous off-market power sourcing; expanding beyond existing ERCOT sites",
+    "contactEmail": "info@lancium.com",
+    "contactPhone": "+1 (713) 888-0900",
+    "website": "https://www.lancium.com",
+    "keyContact": "Michael McNamara — CEO & Co-founder",
+    "notes": "Private, Austin TX. Pioneered BTM compute model in ERCOT curtailment zones. Actively expanding — ideal match for BTM gas and curtailment zone suppliers. Founders respond to direct broker outreach.",
+    "urgencyScore": 9,
+    "startupFriendly": 9,
+    "newBrokerFit": 9,
+    "capexCommitted": false,
+    "strategyTags": [
+      "hpc-colo",
+      "neocloud",
+      "private",
+      "btm-friendly",
+      "americas",
+      "ercot",
+      "curtailment"
+    ],
+    "lastSignalDate": "2026-04-01",
+    "signalNote": "April 2026: Lancium Phase 3 site search; 120MW BTM RFP issued"
+  },
+  {
+    "id": 44,
+    "name": "Cerebras Systems",
+    "type": "Hybrid Compute",
+    "neededMW": 100,
+    "preferredRegions": [
+      "ERCOT",
+      "Western US",
+      "Appalachian Basin"
+    ],
+    "keyPain": "AI inference compute requires dedicated power infrastructure; hyperscaler dependency limits growth",
+    "contactEmail": "info@cerebras.net",
+    "contactPhone": "+1 (408) 963-5915",
+    "website": "https://www.cerebras.net",
+    "keyContact": "Andrew Feldman — CEO & Co-founder",
+    "notes": "NASDAQ-listed (2024 IPO). AI chip + inference compute. Post-IPO infrastructure build-out active. Power procurement is active operational priority. Founders directly accessible.",
+    "urgencyScore": 8,
+    "startupFriendly": 8,
+    "newBrokerFit": 8,
+    "capexCommitted": true,
+    "strategyTags": [
+      "hpc-colo",
+      "neocloud",
+      "nasdaq",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-20",
+    "signalNote": "Post-IPO: dedicated compute infrastructure power procurement"
+  },
+  {
+    "id": 45,
+    "name": "DigitalBridge (Portfolio)",
+    "type": "HPC Data Center",
+    "neededMW": 500,
+    "preferredRegions": [
+      "ERCOT",
+      "Western US",
+      "Permian Basin",
+      "Alberta"
+    ],
+    "keyPain": "Infrastructure fund portfolio requires large-scale BTM power deals across multiple data center assets",
+    "contactEmail": "ir@digitalbridge.com",
+    "contactPhone": "+1 (212) 547-2600",
+    "website": "https://www.digitalbridge.com",
+    "keyContact": "Marc Ganzi — CEO",
+    "notes": "NYSE-listed digital infrastructure REIT. Portfolio of data centers, towers, fiber. Power procurement for portfolio companies is done centrally — one relationship sources for multiple assets.",
+    "urgencyScore": 7,
+    "startupFriendly": 6,
+    "newBrokerFit": 6,
+    "capexCommitted": true,
+    "strategyTags": [
+      "data-center",
+      "hpc-colo",
+      "nyse",
+      "btm-friendly",
+      "americas"
+    ],
+    "lastSignalDate": "2026-03-05",
+    "signalNote": "Q4 2025: portfolio-wide BTM power sourcing strategy announced"
   }
 ]

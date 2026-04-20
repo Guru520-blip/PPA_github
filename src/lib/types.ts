@@ -22,6 +22,9 @@ export interface Supplier {
   noInterconnectionQueue?: boolean;   // true = confirmed no new queue needed
   estimatedMonthsToEnergization?: number; // point estimate; range shown as N to N+6
   newBrokerFit?: number;             // 1-10: realistic probability of engaging a new/boutique broker
+  strategyTags?: string[];           // e.g. ["btm-gas","permian","esg-premium","fast-track"]
+  lastSignalDate?: string;           // ISO date of most recent verifiable market signal
+  signalNote?: string;               // brief description of the signal
 }
 
 export interface Seeker {
@@ -46,6 +49,9 @@ export interface Seeker {
   // ── Engagement intelligence ────────────────────────────────────────────────
   newBrokerFit?: number;    // 1-10: realistic probability of engaging a new/boutique broker
   capexCommitted?: boolean; // true = capital deployment publicly disclosed in investor filings
+  strategyTags?: string[];  // e.g. ["btc-miner","ai-pivot","nasdaq","btm-friendly"]
+  lastSignalDate?: string;  // ISO date of most recent verifiable market signal
+  signalNote?: string;      // brief description of the signal
 }
 
 export interface MatchResult {

@@ -133,27 +133,32 @@ function verifiedPortfolioClaims(suppliers: Supplier[]): string {
 }
 
 // ─── Subject lines (human, curiosity-inducing — not product menus) ─────────
+function shortRegion(region: string): string {
+  return region.split(",")[0].split("(")[0].trim().split(/\s+/).slice(0, 2).join(" ");
+}
+
 function seekerSubject(suppliers: Supplier[], seeker: Seeker): string {
-  const regions = Array.from(new Set(suppliers.map(s => s.region.split(",")[0].trim()))).slice(0, 2).join(" / ");
+  const regions = Array.from(new Set(suppliers.map(s => shortRegion(s.region)))).slice(0, 2).join("/");
   if (/hyperscaler|cloud/i.test(seeker.type))
     return `${seeker.neededMW} MW CFE-aligned — ${regions} — off-market`;
   if (/miner|mining|btc|crypto/i.test(seeker.type))
-    return `${seeker.neededMW} MW BTM power — ${regions} — fixed-rate, no grid exposure`;
+    return `${seeker.neededMW} MW BTM power — ${regions} — no grid exposure`;
   // Derive timeline from actual verified data — never hardcode
   const months = suppliers.map(s => s.estimatedMonthsToEnergization).filter((m): m is number => typeof m === "number");
   if (months.length > 0 && months.length === suppliers.length) {
     const lo = Math.min(...months);
-    return `${seeker.neededMW} MW off-market — ${regions} — est. ${lo}–${lo + 6}mo energization`;
+    return `${seeker.neededMW} MW off-market — ${regions} — est. ${lo}–${lo + 6}mo`;
   }
   return `${seeker.neededMW} MW off-market power — ${regions}`;
 }
 
 function supplierSubject(seekers: Seeker[], supplier: Supplier): string {
   const totalMW = seekers.reduce((s, sk) => s + sk.neededMW, 0);
+  const region = shortRegion(supplier.region);
   const shortBuyer = seekers.length === 1
     ? `${seekers[0].neededMW} MW buyer, ${seekers[0].type}`
     : `${seekers.length} buyers — ${totalMW} MW combined`;
-  return `${shortBuyer} — ${supplier.region} — intro`;
+  return `${shortBuyer} — ${region} — intro`;
 }
 
 // ─── Buyer pool description — NO namedropping in cold email ───────────────
