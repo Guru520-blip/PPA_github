@@ -87,7 +87,7 @@ export interface PipelineDeal {
 }
 
 export type OutreachTemplate = "cold-email" | "linkedin" | "call-script";
-export type DocTemplate = "site-teaser" | "loi" | "ncnd" | "mfpa" | "ppa-outline";
+export type DocTemplate = "site-teaser" | "blind-teaser" | "loi" | "ncnd" | "mfpa" | "ppa-outline";
 
 // Dynamic pricing intelligence tiers
 export type BuyerTier = "hyperscaler" | "miner" | "hybrid" | "curtailable";

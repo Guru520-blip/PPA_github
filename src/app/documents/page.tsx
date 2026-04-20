@@ -15,8 +15,9 @@ function docRankScore(e: { urgencyScore: number; newBrokerFit?: number; startupF
 const suppliers = [...(suppliersData as Supplier[])].sort((a, b) => docRankScore(b) - docRankScore(a));
 const seekers = [...(seekersData as Seeker[])].sort((a, b) => docRankScore(b) - docRankScore(a));
 
-const DOCS: { id: DocTemplate; title: string; description: string; pages: string }[] = [
-  { id: "site-teaser", title: "Site Teaser", description: "2-page confidential asset summary with non-circumvention disclaimer. Includes capacity, pricing, region, and opportunity overview.", pages: "~2 pages" },
+const DOCS: { id: DocTemplate; title: string; description: string; pages: string; highlight?: boolean }[] = [
+  { id: "blind-teaser", title: "Blind Asset Profile", description: "Pre-NCND one-pager: MW, region, asset type, timeline — fully anonymised. No operator name, no contacts, no pricing. Send this to get the first yes before any paperwork.", pages: "~1 page", highlight: true },
+  { id: "site-teaser", title: "Site Teaser (Named)", description: "2-page confidential asset summary with non-circumvention disclaimer. Includes capacity, pricing, region, and opportunity overview. Send post-NCND.", pages: "~2 pages" },
   { id: "loi", title: "Letter of Intent (LOI)", description: "90-day exclusivity LOI with good-faith negotiation terms, mutual obligations, and broker fee acknowledgment.", pages: "~2 pages" },
   { id: "ncnd", title: "NCND Agreement", description: "Non-Circumvention, Non-Disclosure Agreement protecting broker introductions for 24 months with liquidated damages clause.", pages: "~2 pages" },
   { id: "mfpa", title: "Master Fee Protection (MFPA)", description: "Brokerage fee agreement with per-MW upfront and residual $/MWh options. Defines protected introductions and trigger events.", pages: "~2 pages" },
@@ -94,13 +95,16 @@ export default function DocumentsPage() {
       {/* Document Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {DOCS.map((doc) => (
-          <Card key={doc.id}>
+          <Card key={doc.id} className={doc.highlight ? "border-green-700/60 bg-green-950/10" : ""}>
             <CardHeader className="pb-2">
               <div className="flex items-start justify-between gap-3">
-                <div className="rounded-lg bg-gray-800 p-2">
-                  <FileText className="h-5 w-5 text-blue-400" />
+                <div className={`rounded-lg p-2 ${doc.highlight ? "bg-green-900/40" : "bg-gray-800"}`}>
+                  <FileText className={`h-5 w-5 ${doc.highlight ? "text-green-400" : "text-blue-400"}`} />
                 </div>
-                <span className="text-xs text-gray-500 mt-1">{doc.pages}</span>
+                <div className="flex items-center gap-2 mt-1">
+                  {doc.highlight && <span className="text-[9px] font-semibold uppercase tracking-wider text-green-400 bg-green-900/40 border border-green-700/40 px-1.5 py-0.5 rounded">Send First</span>}
+                  <span className="text-xs text-gray-500">{doc.pages}</span>
+                </div>
               </div>
               <CardTitle className="text-sm mt-2">{doc.title}</CardTitle>
               <CardDescription className="text-xs">{doc.description}</CardDescription>
@@ -109,7 +113,7 @@ export default function DocumentsPage() {
               <Button
                 onClick={() => handleGenerate(doc.id)}
                 disabled={loading === doc.id}
-                className="w-full gap-2"
+                className={`w-full gap-2 ${doc.highlight ? "bg-green-700 hover:bg-green-600" : ""}`}
                 size="sm"
               >
                 {loading === doc.id ? (
@@ -119,7 +123,7 @@ export default function DocumentsPage() {
                 )}
               </Button>
               <p className="mt-2 text-[10px] text-gray-600 text-center">
-                {supplier.name.split("–")[0].trim()} ↔ {seeker.name.split("–")[0].trim()}
+                {doc.id === "blind-teaser" ? `Asset ref: ASSET-${String(supplier.id).padStart(4, "0")} (anonymised)` : `${supplier.name.split("–")[0].trim()} ↔ ${seeker.name.split("–")[0].trim()}`}
               </p>
             </CardContent>
           </Card>

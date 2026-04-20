@@ -62,11 +62,94 @@ export async function generatePDF(
   };
 
   const today = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  // Strips operator-identifying tokens from text for blind profiles
+  const anonymize = (text: string): string => {
+    if (!supplier) return text;
+    const tokens = [supplier.name, supplier.keyContact ?? "", supplier.contactEmail ?? ""]
+      .join(" ").split(/[\s,–—./]+/).filter(t => t.length > 3)
+      .map(t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+    let out = text;
+    tokens.forEach(t => { out = out.replace(new RegExp(t, "gi"), "[Operator]"); });
+    return out;
+  };
+
   const supplierName = supplier?.name ?? "[SUPPLIER NAME]";
   const seekerName = seeker?.name ?? "[SEEKER NAME]";
   const region = supplier?.region ?? "[REGION]";
   const mw = supplier?.availableMW ?? 0;
   const cents = supplier?.estimatedAllInCents ?? 0;
+
+  // ── Blind Teaser — anonymised pre-NCND profile ──────────────────────────
+  if (template === "blind-teaser") {
+    const assetRef = `ASSET-${String(supplier?.id ?? 0).padStart(4, "0")}`;
+    const permitLabel = supplier?.permitStatus === "Confirmed"
+      ? "Generation permits confirmed (documentation available post-NCND)"
+      : supplier?.permitStatus === "Seller-stated"
+      ? "Permits in place per seller — independent verification available under NCND"
+      : "Permit status to be confirmed during diligence";
+    const noQueue = supplier?.noInterconnectionQueue === true
+      ? "No new grid interconnection queue required — existing infrastructure."
+      : "Grid interconnection status: confirm in diligence.";
+    const estMonths = supplier?.estimatedMonthsToEnergization;
+    const timeline = estMonths
+      ? `Est. ${estMonths}–${estMonths + 6} months to energization per seller (subject to diligence)`
+      : "Energization timeline: confirm with seller during technical review";
+
+    const typeHook = (() => {
+      const t = (supplier?.type ?? "").toLowerCase();
+      if (t.includes("btm")) return "Behind-the-meter gas generation — no grid exposure, load-scheduling flexibility, no interconnection queue.";
+      if (t.includes("hydro")) return "Hydroelectric generation — renewable, low-carbon, high capacity factor, suitable for 24/7 CFE requirements.";
+      if (t.includes("curtailment")) return "Curtailment-zone asset — negative pricing events eliminated with anchor industrial load; lowest ¢/kWh tier.";
+      if (t.includes("solar")) return "Solar generation with existing grid connection — proven technology, predictable output, existing permits.";
+      if (t.includes("nuclear")) return "Nuclear-adjacent power with 24/7 baseload profile — ideal for AI/HPC operations with high reliability requirements.";
+      return "Existing operational infrastructure — not greenfield, not in interconnection queue.";
+    })();
+
+    h1(`BLIND ASSET PROFILE — ${assetRef}`);
+    body(`Distributed by: PowerMatch Advisors | Reference Date: ${today}`);
+    body("PRE-NCND DISTRIBUTION — Counterparty identity and exact location disclosed only after NCND execution.");
+    line();
+    h2("Asset Summary");
+    body(`Asset Reference: ${assetRef} (name withheld — disclosed post-NCND)`);
+    body(`General Region: ${region}`);
+    body(`Asset Type: ${supplier?.type ?? "[TYPE]"}`);
+    body(`Available Capacity: ${mw} MW`);
+    body(`Indicative Pricing: Within current market range for ${supplier?.type ?? "this asset type"} in ${region.split(",")[0]} — specific ¢/kWh disclosed post-NCND`);
+    body(noQueue);
+    body(permitLabel);
+    body(`Energization: ${timeline}`);
+    line();
+    h2("Why This Asset");
+    body(typeHook);
+    if (supplier?.keyPain) body(anonymize(supplier.keyPain));
+    if (supplier?.signalNote) body(`Market signal: ${anonymize(supplier.signalNote)}`);
+    line();
+    h2("What You Receive After NCND");
+    body("• Full operator identity and direct decision-maker contacts");
+    body("• Exact asset location and site documentation");
+    body("• Specific ¢/kWh pricing and contract structure");
+    body("• Permit documentation and interconnection details");
+    body("• Diligence package: financials, technical specs, legal status");
+    line();
+    h2("Next Steps");
+    body("1. Execute NCND (2-page standard form — PowerMatch Advisors template or your own)");
+    body("2. Receive full asset profile and operator introduction within 24 hours");
+    body("3. Site visit / technical call within 5 business days of NCND execution");
+    body("4. LOI / Exclusivity (90-day) if mutual interest confirmed");
+    line();
+    h2("Contact");
+    body("PowerMatch Advisors");
+    body("Alex Chen | alex@powermatch.io | +1 (212) 555-0190");
+    body("Reply to this email or call directly — NCND can be executed same day.");
+    newPage();
+    h2("Important Notices");
+    body("This blind profile is distributed on a strictly confidential basis for discussion purposes only. Recipient agrees to hold all information herein in confidence and not to circumvent PowerMatch Advisors in any transaction arising from this introduction.");
+    body("All data presented is sourced from the asset operator and has not been independently verified by PowerMatch Advisors. Recipient must conduct its own due diligence. This document does not constitute legal, financial, or engineering advice.");
+    body("PowerMatch Advisors earns a success-based brokerage fee per the executed MFPA. Fee is disclosed in full prior to any commitment.");
+    doc.save(`blind-profile-${assetRef.toLowerCase()}.pdf`);
+    return;
+  }
 
   if (template === "site-teaser") {
     h1("SITE TEASER — CONFIDENTIAL");

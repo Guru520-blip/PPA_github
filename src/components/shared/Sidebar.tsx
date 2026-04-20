@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Home, Zap, Users, GitMerge, Mail, FileText, Briefcase, Bolt, BarChart2
+  Home, Zap, Users, GitMerge, Mail, FileText, Briefcase, Bolt, BarChart2, Calculator
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +14,7 @@ const navItems = [
   { href: "/matches", label: "Match Engine", icon: GitMerge },
   { href: "/outreach", label: "Outreach", icon: Mail },
   { href: "/documents", label: "Documents", icon: FileText },
+  { href: "/fee-calc", label: "Fee Calculator", icon: Calculator },
   { href: "/pipeline", label: "Pipeline", icon: Briefcase },
 ];
 
